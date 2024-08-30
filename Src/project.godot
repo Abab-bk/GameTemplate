@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 InitUiManager="*res://addons/ds_ui/InitUiManager.cs"
 GTweensGodotUpdater="*res://Scripts/GTweensGodotUpdater.cs"
+ImGuiRoot="*res://addons/imgui-godot/data/ImGuiRoot.tscn"
 
 [display]
 
@@ -38,4 +39,8 @@ naming/scene_name_casing=1
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/ds_ui/plugin.cfg")
+enabled=PackedStringArray("res://addons/ds_ui/plugin.cfg", "res://addons/gdUnit4/plugin.cfg", "res://addons/imgui-godot/plugin.cfg")
+
+[gdunit4]
+
+settings/test/test_lookup_folder="Scripts"

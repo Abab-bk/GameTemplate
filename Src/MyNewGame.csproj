@@ -1,9 +1,10 @@
-<Project Sdk="Godot.NET.Sdk/4.3.0-beta.1">
+<Project Sdk="Godot.NET.Sdk/4.3.0">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net8.0</TargetFramework>
     <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'ios' ">net8.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <RootNamespace>Game</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
@@ -13,5 +14,10 @@
   <ItemGroup>
     <PackageReference Include="GDTask" Version="1.2.2" />
     <PackageReference Include="GTweensGodot" Version="6.0.0" />
+    <PackageReference Include="ImGui.NET" Version="1.91.0.1" />
+
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <PackageReference Include="gdUnit4.api" Version="4.3.*" />
+    <PackageReference Include="gdUnit4.test.adapter" Version="2.*" />
   </ItemGroup>
 </Project>

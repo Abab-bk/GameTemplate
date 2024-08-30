@@ -1,17 +1,10 @@
 <module name="">
-    <bean name="vector2" valueType="1" sep=",">
+    <bean name="Vector2" valueType="1" sep=",">
         <var name="x" type="float"/>
         <var name="y" type="float"/>
-    </bean>
-    <bean name="vector3" valueType="1" sep=",">
-        <var name="x" type="float"/>
-        <var name="y" type="float"/>
-        <var name="z" type="float"/>
-    </bean>
-    <bean name="vector4" valueType="1" sep=",">
-        <var name="x" type="float"/>
-        <var name="y" type="float"/>
-        <var name="z" type="float"/>
-        <var name="w" type="float"/>
-    </bean>
+        <mapper target="all" codeTarget="cs-dotnet-json">
+            <option name="type" value="Godot.Vector2"/>
+            <option name="constructor" value="ExternalTypeUtil.NewVector2"/>
+        </mapper>
+    </bean>    
 </module>
