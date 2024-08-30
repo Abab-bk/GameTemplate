@@ -44,6 +44,7 @@ def main():
     
     if os.path.isfile("Src/project.godot"):
         replace_string_in_file(file_name, search_string, project_name)
+        replace_string_in_file(file_name, search_string, project_name)
 
     input("Press Enter to exit...")
 
