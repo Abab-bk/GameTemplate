@@ -8,7 +8,7 @@ public static class DsUiConfig
     /// <summary>
     /// 生成Ui的命名空间, 必须要设置命名空间!
     /// </summary>
-    public const string UiNamespace = "TSS.Scripts.Ui";
+    public const string UiNamespace = "Game.Scripts.Ui";
 
     /// <summary>
     /// UiManager 打开和关闭 ui 的代码
