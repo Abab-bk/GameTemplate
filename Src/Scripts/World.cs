@@ -26,6 +26,7 @@ public partial class World : Node2D
         switch (to)
         {
             case "PreBoot":
+                Global.World = this;
                 _stateMachine.SetTrigger("ToBooting");
                 break;
             case "Booting":
