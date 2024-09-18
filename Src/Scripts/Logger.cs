@@ -1,5 +1,7 @@
 ﻿using Godot;
 
+namespace Game.Scripts;
+
 /// <summary>
 /// 调试日志输出
 /// </summary>

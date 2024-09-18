@@ -39,7 +39,7 @@ naming/scene_name_casing=1
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/ds_ui/plugin.cfg", "res://addons/gdUnit4/plugin.cfg", "res://addons/imgui-godot/plugin.cfg")
+enabled=PackedStringArray("res://addons/ds_ui/plugin.cfg", "res://addons/gdUnit4/plugin.cfg", "res://addons/imgui-godot/plugin.cfg", "res://addons/imjp94.yafsm/plugin.cfg")
 
 [gdunit4]
 

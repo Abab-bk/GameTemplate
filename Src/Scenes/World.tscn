@@ -1,9 +1,139 @@
-[gd_scene load_steps=2 format=3 uid="uid://d2l6e12gjcdd2"]
+[gd_scene load_steps=24 format=3 uid="uid://d2l6e12gjcdd2"]
 
 [ext_resource type="Script" path="res://Scripts/World.cs" id="1_mqg8e"]
+[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/StateMachinePlayer.gd" id="2_3sjw4"]
+[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/states/StateMachine.gd" id="3_c77lf"]
+[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/states/State.gd" id="4_qdu14"]
+[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/conditions/Condition.gd" id="5_nsxms"]
+[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/transitions/Transition.gd" id="5_u1slw"]
+
+[sub_resource type="Resource" id="Resource_48lo7"]
+script = ExtResource("4_qdu14")
+name = "Entry"
+metadata/graph_offset = Vector2(280, 103)
+
+[sub_resource type="Resource" id="Resource_qetix"]
+script = ExtResource("4_qdu14")
+name = "Booting"
+metadata/graph_offset = Vector2(278.5, 363)
+
+[sub_resource type="Resource" id="Resource_bagdw"]
+script = ExtResource("4_qdu14")
+name = "PreBoot"
+metadata/graph_offset = Vector2(276.5, 243)
+
+[sub_resource type="Resource" id="Resource_necqs"]
+script = ExtResource("4_qdu14")
+name = "InGame"
+metadata/graph_offset = Vector2(697, 363)
+
+[sub_resource type="Resource" id="Resource_a6a5n"]
+script = ExtResource("4_qdu14")
+name = "InitGame"
+metadata/graph_offset = Vector2(493, 363)
+
+[sub_resource type="Resource" id="Resource_8khch"]
+script = ExtResource("4_qdu14")
+name = "End"
+metadata/graph_offset = Vector2(860, 363)
+
+[sub_resource type="Resource" id="Resource_vul0p"]
+script = ExtResource("5_nsxms")
+name = "ToPreBoot"
+
+[sub_resource type="Resource" id="Resource_juy77"]
+script = ExtResource("5_u1slw")
+from = "Entry"
+to = "PreBoot"
+conditions = {
+"ToPreBoot": SubResource("Resource_vul0p")
+}
+priority = 0
+
+[sub_resource type="Resource" id="Resource_hjd1y"]
+script = ExtResource("5_nsxms")
+name = "ToBooting"
+
+[sub_resource type="Resource" id="Resource_gg5q1"]
+script = ExtResource("5_u1slw")
+from = "PreBoot"
+to = "Booting"
+conditions = {
+"ToBooting": SubResource("Resource_hjd1y")
+}
+priority = 0
+
+[sub_resource type="Resource" id="Resource_fw7t7"]
+script = ExtResource("5_nsxms")
+name = "ToInitGame"
+
+[sub_resource type="Resource" id="Resource_uvl1m"]
+script = ExtResource("5_u1slw")
+from = "Booting"
+to = "InitGame"
+conditions = {
+"ToInitGame": SubResource("Resource_fw7t7")
+}
+priority = 0
+
+[sub_resource type="Resource" id="Resource_63v22"]
+script = ExtResource("5_nsxms")
+name = "ToInGame"
+
+[sub_resource type="Resource" id="Resource_lctrq"]
+script = ExtResource("5_u1slw")
+from = "InitGame"
+to = "InGame"
+conditions = {
+"ToInGame": SubResource("Resource_63v22")
+}
+priority = 0
+
+[sub_resource type="Resource" id="Resource_grabc"]
+script = ExtResource("5_nsxms")
+name = "ToEnd"
+
+[sub_resource type="Resource" id="Resource_iy6q5"]
+script = ExtResource("5_u1slw")
+from = "InGame"
+to = "End"
+conditions = {
+"ToEnd": SubResource("Resource_grabc")
+}
+priority = 0
+
+[sub_resource type="Resource" id="Resource_cq4l3"]
+script = ExtResource("3_c77lf")
+states = {
+"Booting": SubResource("Resource_qetix"),
+"End": SubResource("Resource_8khch"),
+"Entry": SubResource("Resource_48lo7"),
+"InGame": SubResource("Resource_necqs"),
+"InitGame": SubResource("Resource_a6a5n"),
+"PreBoot": SubResource("Resource_bagdw")
+}
+transitions = {
+"Booting": {
+"InitGame": SubResource("Resource_uvl1m")
+},
+"Entry": {
+"PreBoot": SubResource("Resource_juy77")
+},
+"InGame": {
+"End": SubResource("Resource_iy6q5")
+},
+"InitGame": {
+"InGame": SubResource("Resource_lctrq")
+},
+"PreBoot": {
+"Booting": SubResource("Resource_gg5q1")
+}
+}
+name = ""
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_mqg8e")
 
-[node name="Node2D" type="Node2D" parent="."]
-unique_name_in_owner = true
+[node name="StateMachinePlayer" type="Node" parent="."]
+script = ExtResource("2_3sjw4")
+state_machine = SubResource("Resource_cq4l3")
