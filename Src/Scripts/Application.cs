@@ -21,6 +21,15 @@ public partial class Application : Node2D
         
         EventBus.RequestQuitGame += () => _stateMachine.SetTrigger("ToEnd");
         EventBus.RequestStartGame += () => _stateMachine.SetTrigger("ToInGame");
+        EventBus.RequestBackToStartMenu += () =>
+        {
+            if (Global.World != null)
+            {
+                Global.World.Destroy();
+            }
+
+            _stateMachine.SetTrigger("ToStartMenu");
+        };
     }
     
     private void OnStateMachineUpdate(string state, float delta)
@@ -46,16 +55,19 @@ public partial class Application : Node2D
 #if IMGUI
                 AddChild(new Debugger());
 #endif
-                if (Environment.GetCommandLineArgs().Contains("--SkipStartMenu"))
-                {
-                    Logger.Log("[Application] Has --SkipStartMenu");
-                    _stateMachine.SetTrigger("ToInGame");
-                    return;
-                }
-
                 _stateMachine.SetTrigger("ToStartMenu");
                 break;
             case "InStartMenu":
+                if (
+                    Environment.GetCommandLineArgs().Contains("--SkipStartMenu") &&
+                    !Global.Flags.Contains("SkippedStartMenu")
+                    )
+                {
+                    Logger.Log("[Application] Has --SkipStartMenu");
+                    Global.Flags.Add("SkippedStartMenu");
+                    _stateMachine.SetTrigger("ToInGame");
+                    return;
+                }
                 UiManager.Open_StartMenu();
                 break;
             case "InGame":

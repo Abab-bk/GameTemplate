@@ -182,6 +182,7 @@ transitions = {
 name = ""
 
 [node name="Application" type="Node2D"]
+process_mode = 3
 script = ExtResource("1_hj4i6")
 
 [node name="StateMachinePlayer" type="Node" parent="."]
