@@ -8,57 +8,81 @@ namespace Game.Scripts;
 public class AppSaver
 {
     public string UserPreferencesPath { get; set; } = "UserPreferences.bin";
+    public string GameSavePath { get; set; } = "GameSave.bin";
     
     public UserPreferences UserPreferences { get; private set; }
+    public GameSave GameSave { get; private set; }
 
     public void Save()
     {
-        Logger.Log("[AppSaver]: Saving UserPreferences...");
         SaveUserPreferences();
+        SaveGameSave();
     }
 
     public void Load()
     {
-        Logger.Log("[AppSaver]: Loading UserPreferences...");
         LoadUserPreferences();
+        LoadGameSave();
     }
-
-    private void SaveUserPreferences()
+    
+    private void SaveItem(ISaveModel saveModel, string savePath, string logName)
     {
         try
         {
-            var bin = MemoryPackSerializer.Serialize(UserPreferences);
-            File.WriteAllBytes(UserPreferencesPath, bin);
-            Logger.Log($"[AppSaver]: Save UserPreferences ok. {UserPreferences}");
+            Logger.Log($"[AppSaver]: Saving {logName}...");
+            var bin = MemoryPackSerializer.Serialize(saveModel);
+            File.WriteAllBytes(savePath, bin);
+            Logger.Log($"[AppSaver]: Save {logName} ok. {saveModel}");
         }
         catch (Exception e)
         {
-            Logger.LogError($"[AppSaver Error]: {e}");
+            Logger.LogError($"[AppSaver Error]: {e} while saving {logName}");
+            throw;
+        }
+    }
+    private void LoadItem<T>(string savePath, string logName) where T : ISaveModel, new()
+    {
+        try
+        {
+            if (File.Exists(savePath))
+            {
+                Logger.Log($"[AppSaver]: Loading {logName}...");
+                var data = File.ReadAllBytes(savePath);
+                var saveModel = MemoryPackSerializer.Deserialize<T>(data);
+                Logger.Log($"[AppSaver]: Load {logName} ok. {saveModel}");
+                return;
+            }
+            Logger.Log($"[AppSaver]: {logName} not exists. Create new one.");
+        }
+        catch (Exception e)
+        {
+            Logger.LogError($"[AppSaver Error]: {e} while loading {logName}");
             throw;
         }
     }
     
+    public void SaveGameSave()
+    {
+        SaveItem(GameSave, GameSavePath, "GameSave");
+    }
+    
+    private void LoadGameSave()
+    {
+        LoadItem<GameSave>(GameSavePath, "GameSave");
+    }
+    
+    public void UnloadGameSave()
+    {
+        GameSave = null;
+    }
+    
+    private void SaveUserPreferences()
+    {
+        SaveItem(UserPreferences, UserPreferencesPath, "UserPreferences");
+    }
+    
     private void LoadUserPreferences()
     {
-        try
-        {
-            if (File.Exists(UserPreferencesPath))
-            {
-                var data = File.ReadAllBytes(UserPreferencesPath);
-                UserPreferences = MemoryPackSerializer.Deserialize<UserPreferences>(data);
-                
-                Logger.Log($"[AppSaver]: Load UserPreferences ok. {UserPreferences}");
-                
-                return;
-            }
-            UserPreferences = new UserPreferences();
-            Logger.Log("[AppSaver]: UserPreferences not exists. Create new one.");
-        }
-        catch (Exception e)
-        {
-            UserPreferences = new UserPreferences();
-            Logger.LogError($"[AppSaver Error]: {e}");
-            throw;
-        }
+        LoadItem<UserPreferences>(UserPreferencesPath, "UserPreferences");
     }
 }

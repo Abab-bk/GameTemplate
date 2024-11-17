@@ -16,6 +16,7 @@ public static class Global
         {
             _appSaver = value;
             EventBus.RequestSaveAppSaver += _appSaver.Save;
+            EventBus.RequestSaveGameSave += _appSaver.SaveGameSave;
         }
     }
 

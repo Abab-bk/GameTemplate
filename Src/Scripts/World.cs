@@ -10,6 +10,8 @@ public partial class World : Node2D
         Global.World = this;
         UiManager.Open_Hud();
 
+        var saveData = Global.AppSaver.GameSave;
+        
         Logger.Log("[World] Ready");
     }
     
@@ -17,6 +19,8 @@ public partial class World : Node2D
     {
         Global.World = null;
         UiManager.Destroy_Hud();
+        
+        Global.AppSaver.UnloadGameSave();
         
         Logger.Log("[World] Destroy");
         QueueFree();

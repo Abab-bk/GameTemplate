@@ -5,7 +5,7 @@ using MemoryPack;
 namespace Game.Scripts.Models;
 
 [MemoryPackable]
-public partial class UserPreferences
+public partial class UserPreferences : ISaveModel
 {
     public Language Language { get; set; } = Language.English;
 
