@@ -32,6 +32,10 @@ public partial class TbConstants
     /// GameName
     /// </summary>
      public string GameName => _data.GameName;
+    /// <summary>
+    /// Resolutions
+    /// </summary>
+     public Godot.Vector2[] Resolutions => _data.Resolutions;
     
     public void ResolveRef(Tables tables)
     {

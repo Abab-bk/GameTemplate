@@ -18,6 +18,7 @@ public sealed partial class Constants : Luban.BeanBase
     public Constants(JsonElement _buf) 
     {
         GameName = _buf.GetProperty("GameName").GetString();
+        { var __json0 = _buf.GetProperty("Resolutions"); int _n0 = __json0.GetArrayLength(); Resolutions = new Godot.Vector2[_n0]; int __index0=0; foreach(JsonElement __e0 in __json0.EnumerateArray()) { Godot.Vector2 __v0;  __v0 = ExternalTypeUtil.NewVector2(Vector2.DeserializeVector2(__e0));  Resolutions[__index0++] = __v0; }   }
     }
 
     public static Constants DeserializeConstants(JsonElement _buf)
@@ -29,6 +30,10 @@ public sealed partial class Constants : Luban.BeanBase
     /// GameName
     /// </summary>
     public readonly string GameName;
+    /// <summary>
+    /// Resolutions
+    /// </summary>
+    public readonly Godot.Vector2[] Resolutions;
    
     public const int __ID__ = 1581691183;
     public override int GetTypeId() => __ID__;
@@ -41,6 +46,7 @@ public sealed partial class Constants : Luban.BeanBase
     {
         return "{ "
         + "GameName:" + GameName + ","
+        + "Resolutions:" + Luban.StringUtil.CollectionToString(Resolutions) + ","
         + "}";
     }
 }

@@ -1,5 +1,15 @@
 [
   {
-    "GameName": "MyNewGame"
+    "GameName": "MyNewGame",
+    "Resolutions": [
+      {
+        "x": 1280,
+        "y": 720
+      },
+      {
+        "x": 1920,
+        "y": 1080
+      }
+    ]
   }
 ]

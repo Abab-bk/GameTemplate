@@ -1,3 +1,4 @@
+using DsUi;
 using Game.Scripts.Classes;
 using Godot;
 
@@ -27,6 +28,10 @@ public partial class World : Node2D
         {
             case "PreBoot":
                 Global.World = this;
+
+                Global.AppSaver = new AppSaver();
+                Global.AppSaver.Load();
+                
                 _stateMachine.SetTrigger("ToBooting");
                 break;
             case "Booting":
