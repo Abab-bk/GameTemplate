@@ -59,3 +59,7 @@ Check static class ```Data``` after your read luban's doc.
 [GdUnit4](https://github.com/MikeSchulze/gdUnit4)
 
 Check ```Src\Scripts\Tests``` folder.
+
+## Skip StarMenu
+
+If u want to skip start menu on run game, add argument: --SkipStartMenu.

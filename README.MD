@@ -29,6 +29,7 @@ Whenever I'm developing a game, always clone this repo.
 - [MemoryPack](https://github.com/Cysharp/MemoryPack).
 - [GTweensGodot](https://github.com/Guillemsc/GTweensGodot)
 - [OnReady](https://github.com/The0ld/cs_onready_plugin)
+- [GDTask](https://github.com/Delsin-Yu/GDTask.Nuget)
 - A util lib by myself.
 
 Please check these links to learn how to use.
