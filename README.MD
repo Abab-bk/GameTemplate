@@ -4,7 +4,9 @@ Whenever I'm developing a game, always clone this repo.
 
 ## Feature
 
-- No clue, maybe excel for data driving?
+- Start menu, settings menu, paused menu.
+- Data driven by luban.
+- Save system.
 
 ## Quick Start
 
@@ -14,16 +16,21 @@ Whenever I'm developing a game, always clone this repo.
 
 - Start coding.
 
+## Usage
+
+[Usage](Doc/Usage.md)
+
 ## Libs
 
 - [ImGui Godot](https://github.com/pkdawson/imgui-godot)
 - [Luban](https://github.com/focus-creative-games/luban)
 - [DsUi](https://github.com/xlljc/Ds_Ui)
 - [GdUnit4](https://github.com/MikeSchulze/gdUnit4)
+- [MemoryPack](https://github.com/Cysharp/MemoryPack).
+- [GTweensGodot](https://github.com/Guillemsc/GTweensGodot)
+- [OnReady](https://github.com/The0ld/cs_onready_plugin)
 - A util lib by myself.
 
 Please check these links to learn how to use.
 
 Don't worry about config, I'v all set.
-
-
