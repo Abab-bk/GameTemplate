@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://d2l6e12gjcdd2"]
+[gd_scene load_steps=31 format=3 uid="uid://d2l6e12gjcdd2"]
 
 [ext_resource type="Script" path="res://Scripts/World.cs" id="1_mqg8e"]
 [ext_resource type="Script" path="res://addons/imjp94.yafsm/src/StateMachinePlayer.gd" id="2_3sjw4"]
@@ -15,17 +15,12 @@ metadata/graph_offset = Vector2(278.5, 363)
 [sub_resource type="Resource" id="Resource_8khch"]
 script = ExtResource("4_qdu14")
 name = "End"
-metadata/graph_offset = Vector2(860, 363)
+metadata/graph_offset = Vector2(880, 223)
 
 [sub_resource type="Resource" id="Resource_48lo7"]
 script = ExtResource("4_qdu14")
 name = "Entry"
 metadata/graph_offset = Vector2(280, 103)
-
-[sub_resource type="Resource" id="Resource_necqs"]
-script = ExtResource("4_qdu14")
-name = "InGame"
-metadata/graph_offset = Vector2(697, 363)
 
 [sub_resource type="Resource" id="Resource_a6a5n"]
 script = ExtResource("4_qdu14")
@@ -36,6 +31,16 @@ metadata/graph_offset = Vector2(493, 363)
 script = ExtResource("4_qdu14")
 name = "PreBoot"
 metadata/graph_offset = Vector2(276.5, 243)
+
+[sub_resource type="Resource" id="Resource_necqs"]
+script = ExtResource("4_qdu14")
+name = "InStartMenu"
+metadata/graph_offset = Vector2(661, 223)
+
+[sub_resource type="Resource" id="Resource_ylm6c"]
+script = ExtResource("4_qdu14")
+name = "InGame"
+metadata/graph_offset = Vector2(695, 403)
 
 [sub_resource type="Resource" id="Resource_fw7t7"]
 script = ExtResource("5_nsxms")
@@ -63,29 +68,16 @@ conditions = {
 }
 priority = 0
 
-[sub_resource type="Resource" id="Resource_grabc"]
-script = ExtResource("5_nsxms")
-name = "ToEnd"
-
-[sub_resource type="Resource" id="Resource_iy6q5"]
-script = ExtResource("5_u1slw")
-from = "InGame"
-to = "End"
-conditions = {
-"ToEnd": SubResource("Resource_grabc")
-}
-priority = 0
-
 [sub_resource type="Resource" id="Resource_63v22"]
 script = ExtResource("5_nsxms")
-name = "ToInGame"
+name = "ToStartMenu"
 
 [sub_resource type="Resource" id="Resource_lctrq"]
 script = ExtResource("5_u1slw")
 from = "InitGame"
-to = "InGame"
+to = "InStartMenu"
 conditions = {
-"ToInGame": SubResource("Resource_63v22")
+"ToStartMenu": SubResource("Resource_63v22")
 }
 priority = 0
 
@@ -102,13 +94,66 @@ conditions = {
 }
 priority = 0
 
+[sub_resource type="Resource" id="Resource_grabc"]
+script = ExtResource("5_nsxms")
+name = "ToEnd"
+
+[sub_resource type="Resource" id="Resource_iy6q5"]
+script = ExtResource("5_u1slw")
+from = "InStartMenu"
+to = "End"
+conditions = {
+"ToEnd": SubResource("Resource_grabc")
+}
+priority = 0
+
+[sub_resource type="Resource" id="Resource_d38yk"]
+script = ExtResource("5_nsxms")
+name = "ToInGame"
+
+[sub_resource type="Resource" id="Resource_672qq"]
+script = ExtResource("5_u1slw")
+from = "InStartMenu"
+to = "InGame"
+conditions = {
+"ToInGame": SubResource("Resource_d38yk")
+}
+priority = 0
+
+[sub_resource type="Resource" id="Resource_dq851"]
+script = ExtResource("5_nsxms")
+name = "ToEnd"
+
+[sub_resource type="Resource" id="Resource_xqvx8"]
+script = ExtResource("5_u1slw")
+from = "InGame"
+to = "End"
+conditions = {
+"ToEnd": SubResource("Resource_dq851")
+}
+priority = 0
+
+[sub_resource type="Resource" id="Resource_mjfeb"]
+script = ExtResource("5_nsxms")
+name = "ToStartMenu"
+
+[sub_resource type="Resource" id="Resource_hdn1y"]
+script = ExtResource("5_u1slw")
+from = "InGame"
+to = "InStartMenu"
+conditions = {
+"ToStartMenu": SubResource("Resource_mjfeb")
+}
+priority = 0
+
 [sub_resource type="Resource" id="Resource_cq4l3"]
 script = ExtResource("3_c77lf")
 states = {
 "Booting": SubResource("Resource_qetix"),
 "End": SubResource("Resource_8khch"),
 "Entry": SubResource("Resource_48lo7"),
-"InGame": SubResource("Resource_necqs"),
+"InGame": SubResource("Resource_ylm6c"),
+"InStartMenu": SubResource("Resource_necqs"),
 "InitGame": SubResource("Resource_a6a5n"),
 "PreBoot": SubResource("Resource_bagdw")
 }
@@ -120,10 +165,15 @@ transitions = {
 "PreBoot": SubResource("Resource_juy77")
 },
 "InGame": {
-"End": SubResource("Resource_iy6q5")
+"End": SubResource("Resource_xqvx8"),
+"InStartMenu": SubResource("Resource_hdn1y")
+},
+"InStartMenu": {
+"End": SubResource("Resource_iy6q5"),
+"InGame": SubResource("Resource_672qq")
 },
 "InitGame": {
-"InGame": SubResource("Resource_lctrq")
+"InStartMenu": SubResource("Resource_lctrq")
 },
 "PreBoot": {
 "Booting": SubResource("Resource_gg5q1")

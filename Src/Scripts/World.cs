@@ -1,6 +1,7 @@
 using DsUi;
 using Game.Scripts.Classes;
 using Godot;
+using GodotTask;
 
 namespace Game.Scripts;
 
@@ -16,6 +17,9 @@ public partial class World : Node2D
         _stateMachine.OnUpdate += OnStateMachineUpdate;
         
         _stateMachine.SetTrigger("ToPreBoot");
+        
+        EventBus.RequestQuitGame += () => _stateMachine.SetTrigger("ToEnd");
+        EventBus.RequestStartGame += () => _stateMachine.SetTrigger("ToInGame");
     }
     
     private void OnStateMachineUpdate(string state, float delta)
@@ -41,11 +45,17 @@ public partial class World : Node2D
 #if IMGUI
                 AddChild(new Debugger());
 #endif
-                _stateMachine.SetTrigger("ToInGame");
+                _stateMachine.SetTrigger("ToStartMenu");
+                break;
+            case "InStartMenu":
+                UiManager.Open_StartMenu();
                 break;
             case "InGame":
+                UiManager.Destroy_StartMenu();
+                
                 break;
             case "End":
+                GetTree().Quit();
                 break;
         }
     }

@@ -30,6 +30,12 @@ public partial class SettingsPanel : Settings
 
         S_ConfirmBtn.Instance.Pressed += () =>
         {
+            _userPreferences.Language = (Language)Enum.Parse(
+                typeof(Language),
+                S_LanguageMenu.Instance.GetPopup().GetItemText(
+                    S_LanguageMenu.Instance.Selected
+                    )
+                );
             _userPreferences.Fullscreen = S_FullscreenCheckbox.Instance.ButtonPressed;
             _userPreferences.VSync = S_VSyncCheckbox.Instance.ButtonPressed;
             
@@ -37,8 +43,12 @@ public partial class SettingsPanel : Settings
             _userPreferences.MusicVolume = (float)S_MusicVolumeSlider.Instance.Value / 100f;
             _userPreferences.SoundVolume = (float)S_SoundVolumeSlider.Instance.Value / 100f;
             
+            EventBus.RequestSaveAppSaver?.Invoke();
+            
             UpdateUi();
         };
+
+        S_CancelBtn.Instance.Pressed += Destroy;
     }
 
     public void Load(UserPreferences userPreferences)
