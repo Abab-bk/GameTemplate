@@ -1,6 +1,8 @@
 using System.Linq;
 using DsUi;
 using Game.Scripts.Classes;
+using Game.Scripts.Enums;
+using Game.Scripts.Models;
 using Godot;
 using Environment = System.Environment;
 
@@ -78,5 +80,24 @@ public partial class Application : Node2D
                 GetTree().Quit();
                 break;
         }
+    }
+    
+    public void ApplyUserPreferences(UserPreferences userPreferences)
+    {
+        AudioServer.SetBusVolumeDb(0, userPreferences.MasterVolume);
+        AudioServer.SetBusVolumeDb(1, userPreferences.SoundVolume);
+        AudioServer.SetBusVolumeDb(2, userPreferences.MusicVolume);
+        
+        if (DisplayServer.WindowGetMode() != userPreferences.GetWindowMode())
+            DisplayServer.WindowSetMode(userPreferences.GetWindowMode());
+        
+        if (DisplayServer.WindowGetVsyncMode() != userPreferences.GetVSyncMode())
+            DisplayServer.WindowSetVsyncMode(userPreferences.GetVSyncMode());
+        
+        if (DisplayServer.WindowGetSize() != userPreferences.Resolution)
+            DisplayServer.WindowSetSize(userPreferences.Resolution);
+        
+        if (TranslationServer.GetLocale() != Utils.GetLanguageLocaleCode(userPreferences.Language))
+            TranslationServer.SetLocale(Utils.GetLanguageLocaleCode(userPreferences.Language));
     }
 }

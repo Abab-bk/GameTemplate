@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.IO;
 using Game.Scripts.Models;
 using MemoryPack;
@@ -25,13 +26,15 @@ public class AppSaver
         LoadGameSave();
     }
     
-    private void SaveItem(ISavableModel saveModel, string savePath, string logName)
+    private void SaveItem<T>(T saveModel, string savePath, string logName) where T : ISavableModel
     {
         try
         {
             Logger.Log($"[AppSaver]: Saving {logName}...");
-            var bin = MemoryPackSerializer.Serialize(saveModel);
-            File.WriteAllBytes(savePath, bin);
+            
+            var writer = new ArrayBufferWriter<byte>();
+            MemoryPackSerializer.Serialize(in writer, in saveModel);
+            File.WriteAllBytes(savePath, writer.WrittenMemory.ToArray());
             Logger.Log($"[AppSaver]: Save {logName} ok. {saveModel}");
         }
         catch (Exception e)
@@ -40,7 +43,7 @@ public class AppSaver
             throw;
         }
     }
-    private void LoadItem<T>(string savePath, string logName) where T : ISavableModel, new()
+    private T LoadItem<T>(string savePath, string logName) where T : ISavableModel, new()
     {
         try
         {
@@ -50,9 +53,10 @@ public class AppSaver
                 var data = File.ReadAllBytes(savePath);
                 var saveModel = MemoryPackSerializer.Deserialize<T>(data);
                 Logger.Log($"[AppSaver]: Load {logName} ok. {saveModel}");
-                return;
+                return saveModel;
             }
             Logger.Log($"[AppSaver]: {logName} not exists. Create new one.");
+            return new T();
         }
         catch (Exception e)
         {
@@ -68,7 +72,11 @@ public class AppSaver
     
     private void LoadGameSave()
     {
-        LoadItem<GameSave>(GameSavePath, "GameSave");
+        GameSave = LoadItem<GameSave>(GameSavePath, "GameSave");
+        GameSave.TryApplyChanged += () =>
+        {
+            // TODO: Apply GameSave
+        };
     }
     
     public void UnloadGameSave()
@@ -83,6 +91,10 @@ public class AppSaver
     
     private void LoadUserPreferences()
     {
-        LoadItem<UserPreferences>(UserPreferencesPath, "UserPreferences");
+        UserPreferences = LoadItem<UserPreferences>(UserPreferencesPath, "UserPreferences");
+        UserPreferences.TryApplyChanged += () =>
+        {
+            Global.Application.ApplyUserPreferences(UserPreferences);
+        };
     }
 }

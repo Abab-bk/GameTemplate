@@ -1,6 +1,7 @@
 using System;
 using Game.Scripts.Enums;
 using Game.Scripts.Models;
+using Godot;
 
 namespace Game.Scripts.Ui.Settings;
 
@@ -43,7 +44,10 @@ public partial class SettingsPanel : Settings
             _userPreferences.MusicVolume = (float)S_MusicVolumeSlider.Instance.Value / 100f;
             _userPreferences.SoundVolume = (float)S_SoundVolumeSlider.Instance.Value / 100f;
             
+            _userPreferences.Resolution = (Vector2I)Data.Constants.Resolutions[S_ResolutionMenu.Instance.Selected];
+            
             EventBus.RequestSaveAppSaver?.Invoke();
+            _userPreferences.Apply();
             
             UpdateUi();
         };
