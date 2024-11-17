@@ -3,6 +3,7 @@
 public static class Global
 {
     public static World World { get; set; }
+    public static Application Application { get; set; }
 
     private static AppSaver _appSaver;
     

@@ -1,53 +1,53 @@
 [gd_scene load_steps=31 format=3 uid="uid://d2l6e12gjcdd2"]
 
-[ext_resource type="Script" path="res://Scripts/World.cs" id="1_mqg8e"]
-[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/StateMachinePlayer.gd" id="2_3sjw4"]
-[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/states/StateMachine.gd" id="3_c77lf"]
-[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/states/State.gd" id="4_qdu14"]
-[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/conditions/Condition.gd" id="5_nsxms"]
-[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/transitions/Transition.gd" id="5_u1slw"]
+[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/StateMachinePlayer.gd" id="1_26g2b"]
+[ext_resource type="Script" path="res://Scripts/Application.cs" id="1_hj4i6"]
+[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/states/StateMachine.gd" id="2_vudpd"]
+[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/states/State.gd" id="3_610ul"]
+[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/conditions/Condition.gd" id="4_hdymt"]
+[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/transitions/Transition.gd" id="5_xv2kx"]
 
 [sub_resource type="Resource" id="Resource_qetix"]
-script = ExtResource("4_qdu14")
+script = ExtResource("3_610ul")
 name = "Booting"
 metadata/graph_offset = Vector2(278.5, 363)
 
 [sub_resource type="Resource" id="Resource_8khch"]
-script = ExtResource("4_qdu14")
+script = ExtResource("3_610ul")
 name = "End"
 metadata/graph_offset = Vector2(880, 223)
 
 [sub_resource type="Resource" id="Resource_48lo7"]
-script = ExtResource("4_qdu14")
+script = ExtResource("3_610ul")
 name = "Entry"
 metadata/graph_offset = Vector2(280, 103)
 
 [sub_resource type="Resource" id="Resource_a6a5n"]
-script = ExtResource("4_qdu14")
+script = ExtResource("3_610ul")
 name = "InitGame"
 metadata/graph_offset = Vector2(493, 363)
 
 [sub_resource type="Resource" id="Resource_bagdw"]
-script = ExtResource("4_qdu14")
+script = ExtResource("3_610ul")
 name = "PreBoot"
 metadata/graph_offset = Vector2(276.5, 243)
 
 [sub_resource type="Resource" id="Resource_necqs"]
-script = ExtResource("4_qdu14")
+script = ExtResource("3_610ul")
 name = "InStartMenu"
 metadata/graph_offset = Vector2(661, 223)
 
 [sub_resource type="Resource" id="Resource_ylm6c"]
-script = ExtResource("4_qdu14")
+script = ExtResource("3_610ul")
 name = "InGame"
 metadata/graph_offset = Vector2(695, 403)
 
 [sub_resource type="Resource" id="Resource_fw7t7"]
-script = ExtResource("5_nsxms")
+script = ExtResource("4_hdymt")
 name = "ToInitGame"
 
 [sub_resource type="Resource" id="Resource_uvl1m"]
-script = ExtResource("5_u1slw")
+script = ExtResource("5_xv2kx")
 from = "Booting"
 to = "InitGame"
 conditions = {
@@ -56,11 +56,11 @@ conditions = {
 priority = 0
 
 [sub_resource type="Resource" id="Resource_vul0p"]
-script = ExtResource("5_nsxms")
+script = ExtResource("4_hdymt")
 name = "ToPreBoot"
 
 [sub_resource type="Resource" id="Resource_juy77"]
-script = ExtResource("5_u1slw")
+script = ExtResource("5_xv2kx")
 from = "Entry"
 to = "PreBoot"
 conditions = {
@@ -69,11 +69,11 @@ conditions = {
 priority = 0
 
 [sub_resource type="Resource" id="Resource_63v22"]
-script = ExtResource("5_nsxms")
+script = ExtResource("4_hdymt")
 name = "ToStartMenu"
 
 [sub_resource type="Resource" id="Resource_lctrq"]
-script = ExtResource("5_u1slw")
+script = ExtResource("5_xv2kx")
 from = "InitGame"
 to = "InStartMenu"
 conditions = {
@@ -82,11 +82,11 @@ conditions = {
 priority = 0
 
 [sub_resource type="Resource" id="Resource_hjd1y"]
-script = ExtResource("5_nsxms")
+script = ExtResource("4_hdymt")
 name = "ToBooting"
 
 [sub_resource type="Resource" id="Resource_gg5q1"]
-script = ExtResource("5_u1slw")
+script = ExtResource("5_xv2kx")
 from = "PreBoot"
 to = "Booting"
 conditions = {
@@ -95,11 +95,11 @@ conditions = {
 priority = 0
 
 [sub_resource type="Resource" id="Resource_grabc"]
-script = ExtResource("5_nsxms")
+script = ExtResource("4_hdymt")
 name = "ToEnd"
 
 [sub_resource type="Resource" id="Resource_iy6q5"]
-script = ExtResource("5_u1slw")
+script = ExtResource("5_xv2kx")
 from = "InStartMenu"
 to = "End"
 conditions = {
@@ -108,11 +108,11 @@ conditions = {
 priority = 0
 
 [sub_resource type="Resource" id="Resource_d38yk"]
-script = ExtResource("5_nsxms")
+script = ExtResource("4_hdymt")
 name = "ToInGame"
 
 [sub_resource type="Resource" id="Resource_672qq"]
-script = ExtResource("5_u1slw")
+script = ExtResource("5_xv2kx")
 from = "InStartMenu"
 to = "InGame"
 conditions = {
@@ -121,11 +121,11 @@ conditions = {
 priority = 0
 
 [sub_resource type="Resource" id="Resource_dq851"]
-script = ExtResource("5_nsxms")
+script = ExtResource("4_hdymt")
 name = "ToEnd"
 
 [sub_resource type="Resource" id="Resource_xqvx8"]
-script = ExtResource("5_u1slw")
+script = ExtResource("5_xv2kx")
 from = "InGame"
 to = "End"
 conditions = {
@@ -134,11 +134,11 @@ conditions = {
 priority = 0
 
 [sub_resource type="Resource" id="Resource_mjfeb"]
-script = ExtResource("5_nsxms")
+script = ExtResource("4_hdymt")
 name = "ToStartMenu"
 
 [sub_resource type="Resource" id="Resource_hdn1y"]
-script = ExtResource("5_u1slw")
+script = ExtResource("5_xv2kx")
 from = "InGame"
 to = "InStartMenu"
 conditions = {
@@ -147,7 +147,7 @@ conditions = {
 priority = 0
 
 [sub_resource type="Resource" id="Resource_cq4l3"]
-script = ExtResource("3_c77lf")
+script = ExtResource("2_vudpd")
 states = {
 "Booting": SubResource("Resource_qetix"),
 "End": SubResource("Resource_8khch"),
@@ -181,9 +181,9 @@ transitions = {
 }
 name = ""
 
-[node name="World" type="Node2D"]
-script = ExtResource("1_mqg8e")
+[node name="Application" type="Node2D"]
+script = ExtResource("1_hj4i6")
 
 [node name="StateMachinePlayer" type="Node" parent="."]
-script = ExtResource("2_3sjw4")
+script = ExtResource("1_26g2b")
 state_machine = SubResource("Resource_cq4l3")

@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="MyNewGame"
-run/main_scene="res://Scenes/World.tscn"
+run/main_scene="res://Scenes/Application.tscn"
 config/features=PackedStringArray("4.3", "C#")
 config/icon="res://icon.svg"
 
