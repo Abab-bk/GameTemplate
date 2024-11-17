@@ -9,6 +9,8 @@ public partial class SettingsPanel : Settings
 {
     private UserPreferences _userPreferences;
 
+    private string Vector2ToString(Vector2 vector2) => $"{vector2.X} * {vector2.Y}";
+    
     public override void _Ready()
     {
         var languagePopupMenu = S_LanguageMenu.Instance.GetPopup();
@@ -24,7 +26,7 @@ public partial class SettingsPanel : Settings
         foreach (var resolution in Data.Constants.Resolutions)
         {
             resolutionPopupMenu.AddItem(
-                resolution.ToString(),
+                Vector2ToString(resolution),
                 Array.IndexOf(Data.Constants.Resolutions, resolution)
                 );
         }

@@ -1,7 +1,6 @@
 using System.Linq;
 using DsUi;
 using Game.Scripts.Classes;
-using Game.Scripts.Enums;
 using Game.Scripts.Models;
 using Godot;
 using Environment = System.Environment;
@@ -84,9 +83,9 @@ public partial class Application : Node2D
     
     public void ApplyUserPreferences(UserPreferences userPreferences)
     {
-        AudioServer.SetBusVolumeDb(0, userPreferences.MasterVolume);
-        AudioServer.SetBusVolumeDb(1, userPreferences.SoundVolume);
-        AudioServer.SetBusVolumeDb(2, userPreferences.MusicVolume);
+        AudioServer.SetBusVolumeDb(0, Mathf.LinearToDb(userPreferences.MasterVolume / 100f));
+        AudioServer.SetBusVolumeDb(1, Mathf.LinearToDb(userPreferences.SoundVolume / 100f));
+        AudioServer.SetBusVolumeDb(2, Mathf.LinearToDb(userPreferences.MusicVolume / 100f));
         
         if (DisplayServer.WindowGetMode() != userPreferences.GetWindowMode())
             DisplayServer.WindowSetMode(userPreferences.GetWindowMode());

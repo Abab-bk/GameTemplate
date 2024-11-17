@@ -96,5 +96,6 @@ public class AppSaver
         {
             Global.Application.ApplyUserPreferences(UserPreferences);
         };
+        Global.Application.ApplyUserPreferences(UserPreferences);
     }
 }

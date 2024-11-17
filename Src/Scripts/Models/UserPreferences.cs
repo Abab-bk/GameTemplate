@@ -15,7 +15,7 @@ public partial class UserPreferences : ISavableModel
         "en" => Language.English,
         "zh" => Language.Chinese,
         "ja" => Language.Japanese,
-        _ => Language.Chinese
+        _ => Language.English
     };
 
     public float MasterVolume { get; set; } = 0.8f;
