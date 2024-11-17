@@ -3,6 +3,6 @@
 namespace Game.Scripts.Models;
 
 [MemoryPackable]
-public class GameSave : ISaveModel
+public partial class GameSave : ISavableModel
 {
 }

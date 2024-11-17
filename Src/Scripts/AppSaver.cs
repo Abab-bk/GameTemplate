@@ -25,7 +25,7 @@ public class AppSaver
         LoadGameSave();
     }
     
-    private void SaveItem(ISaveModel saveModel, string savePath, string logName)
+    private void SaveItem(ISavableModel saveModel, string savePath, string logName)
     {
         try
         {
@@ -40,7 +40,7 @@ public class AppSaver
             throw;
         }
     }
-    private void LoadItem<T>(string savePath, string logName) where T : ISaveModel, new()
+    private void LoadItem<T>(string savePath, string logName) where T : ISavableModel, new()
     {
         try
         {
