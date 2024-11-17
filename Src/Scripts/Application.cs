@@ -1,6 +1,8 @@
+using System.Linq;
 using DsUi;
 using Game.Scripts.Classes;
 using Godot;
+using Environment = System.Environment;
 
 namespace Game.Scripts;
 
@@ -44,6 +46,13 @@ public partial class Application : Node2D
 #if IMGUI
                 AddChild(new Debugger());
 #endif
+                if (Environment.GetCommandLineArgs().Contains("--SkipStartMenu"))
+                {
+                    Logger.Log("[Application] Has --SkipStartMenu");
+                    _stateMachine.SetTrigger("ToInGame");
+                    return;
+                }
+
                 _stateMachine.SetTrigger("ToStartMenu");
                 break;
             case "InStartMenu":
