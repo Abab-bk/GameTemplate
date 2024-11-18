@@ -8,6 +8,8 @@ public partial class StartMenuPanel : StartMenu
     {
         S_GameTitle.Instance.Text = Data.Constants.GameName;
 
+        S_StartBtn.Instance.Text = Translator.GetMessage("start");
+        
         S_StartBtn.Instance.Pressed += () => EventBus.RequestStartGame?.Invoke();
         S_ExitBtn.Instance.Pressed += () => EventBus.RequestQuitGame?.Invoke();
         S_CreditsBtn.Instance.Pressed += () => UiManager.Open_Credits();

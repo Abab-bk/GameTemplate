@@ -1,0 +1,16 @@
+﻿start = 开始
+settings = 设置
+credits = 关于
+exit = 退出
+language = 语言
+resolution = 分辨率
+fullscreen = 全屏
+vsync = 垂直同步
+master-volume = 主音量
+music-volume = 音乐音量
+sound-volume = 音效音量
+confirm = 确认
+cancel = 取消
+back = 返回
+resume = 继续
+back-to-start-menu = 返回开始菜单

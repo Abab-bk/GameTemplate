@@ -1,0 +1,16 @@
+﻿start = Start
+settings = Settings
+credits = Credits
+exit = Exit
+language = Language
+resolution = Resolution
+fullscreen = Fullscreen
+vsync = Vsync
+master-volume = Master Volume
+music-volume = Music Volume
+sound-volume = Sound Volume
+confirm = Confirm
+cancel = Cancel
+back = Back
+resume = Resume
+back-to-start-menu = Back to Start Menu

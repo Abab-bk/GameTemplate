@@ -50,6 +50,9 @@ public partial class Application : Node2D
                 _stateMachine.SetTrigger("ToBooting");
                 break;
             case "Booting":
+                // load language resources
+                Translator.Setup();
+                
                 _stateMachine.SetTrigger("ToInitGame");
                 break;
             case "InitGame":
@@ -112,8 +115,11 @@ public partial class Application : Node2D
         
         if (DisplayServer.WindowGetSize() != userPreferences.Resolution)
             DisplayServer.WindowSetSize(userPreferences.Resolution);
-        
+
         if (TranslationServer.GetLocale() != Utils.GetLanguageLocaleCode(userPreferences.Language))
+        {
             TranslationServer.SetLocale(Utils.GetLanguageLocaleCode(userPreferences.Language));
+            Translator.ChangeLanguage(userPreferences.Language);
+        }
     }
 }
