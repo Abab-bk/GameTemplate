@@ -6,10 +6,59 @@ public static partial class UiManager
 
     public static class UiName
     {
+        public const string Credits = "Credits";
         public const string Hud = "Hud";
         public const string PauseMenu = "PauseMenu";
         public const string Settings = "Settings";
         public const string StartMenu = "StartMenu";
+    }
+
+    /// <summary>
+    /// 创建 Credits, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static Game.Scripts.Ui.Credits.CreditsPanel Create_Credits()
+    {
+        return CreateUi<Game.Scripts.Ui.Credits.CreditsPanel>(UiName.Credits);
+    }
+
+    /// <summary>
+    /// 打开 Credits, 并返回UI实例
+    /// </summary>
+    public static Game.Scripts.Ui.Credits.CreditsPanel Open_Credits()
+    {
+        return OpenUi<Game.Scripts.Ui.Credits.CreditsPanel>(UiName.Credits);
+    }
+
+    /// <summary>
+    /// 隐藏 Credits 的所有实例
+    /// </summary>
+    public static void Hide_Credits()
+    {
+        var uiInstance = Get_Credits_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 Credits 的所有实例
+    /// </summary>
+    public static void Destroy_Credits()
+    {
+        var uiInstance = Get_Credits_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 Credits 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static Game.Scripts.Ui.Credits.CreditsPanel[] Get_Credits_Instance()
+    {
+        return GetUiInstance<Game.Scripts.Ui.Credits.CreditsPanel>(nameof(Game.Scripts.Ui.Credits.Credits));
     }
 
     /// <summary>

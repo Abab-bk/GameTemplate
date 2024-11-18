@@ -1,0 +1,31 @@
+[gd_scene load_steps=2 format=3 uid="uid://idg2uhjulyg3"]
+
+[ext_resource type="Script" path="res://Scripts/Prefabs/CreditItem.cs" id="1_g787o"]
+
+[node name="CreditItem" type="VBoxContainer"]
+offset_right = 396.0
+offset_bottom = 490.0
+size_flags_horizontal = 3
+script = ExtResource("1_g787o")
+
+[node name="Title" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
+theme_override_font_sizes/font_size = 60
+text = "Programming"
+horizontal_alignment = 1
+
+[node name="Text" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
+theme_override_font_sizes/font_size = 40
+text = "BTOTHER
+FLOWER
+BTOTHER
+FLOWERBTOTHER
+FLOWERBTOTHER
+FLOWERBTOTHER
+FLOWER"
+horizontal_alignment = 1

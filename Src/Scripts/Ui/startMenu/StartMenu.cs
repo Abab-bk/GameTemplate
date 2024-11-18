@@ -58,6 +58,15 @@ public abstract partial class StartMenu : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.Button"/>, 路径: StartMenu.MarginContainer.VBoxContainer.VBoxContainer.CreditsBtn
+    /// </summary>
+    public class CreditsBtn : UiNode<StartMenuPanel, Godot.Button, CreditsBtn>
+    {
+        public CreditsBtn(StartMenuPanel uiPanel, Godot.Button node) : base(uiPanel, node) {  }
+        public override CreditsBtn Clone() => new (UiPanel, (Godot.Button)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.Button"/>, 路径: StartMenu.MarginContainer.VBoxContainer.VBoxContainer.ExitBtn
     /// </summary>
     public class ExitBtn : UiNode<StartMenuPanel, Godot.Button, ExitBtn>
@@ -96,6 +105,19 @@ public abstract partial class StartMenu : UiBase
             }
         }
         private SettingsBtn _L_SettingsBtn;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: StartMenu.MarginContainer.VBoxContainer.CreditsBtn
+        /// </summary>
+        public CreditsBtn L_CreditsBtn
+        {
+            get
+            {
+                if (_L_CreditsBtn == null) _L_CreditsBtn = new CreditsBtn(UiPanel, Instance.GetNode<Godot.Button>("CreditsBtn"));
+                return _L_CreditsBtn;
+            }
+        }
+        private CreditsBtn _L_CreditsBtn;
 
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: StartMenu.MarginContainer.VBoxContainer.ExitBtn
@@ -186,6 +208,11 @@ public abstract partial class StartMenu : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: StartMenu.MarginContainer.VBoxContainer.VBoxContainer.SettingsBtn
     /// </summary>
     public SettingsBtn S_SettingsBtn => L_MarginContainer.L_VBoxContainer.L_VBoxContainer.L_SettingsBtn;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: StartMenu.MarginContainer.VBoxContainer.VBoxContainer.CreditsBtn
+    /// </summary>
+    public CreditsBtn S_CreditsBtn => L_MarginContainer.L_VBoxContainer.L_VBoxContainer.L_CreditsBtn;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: StartMenu.MarginContainer.VBoxContainer.VBoxContainer.ExitBtn

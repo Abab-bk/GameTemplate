@@ -10,6 +10,7 @@ public partial class StartMenuPanel : StartMenu
 
         S_StartBtn.Instance.Pressed += () => EventBus.RequestStartGame?.Invoke();
         S_ExitBtn.Instance.Pressed += () => EventBus.RequestQuitGame?.Invoke();
+        S_CreditsBtn.Instance.Pressed += () => UiManager.Open_Credits();
         S_SettingsBtn.Instance.Pressed += () =>
         {
             var panel = UiManager.Open_Settings();
