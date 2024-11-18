@@ -56,7 +56,24 @@ public partial class Application : Node2D
 #if IMGUI
                 AddChild(new Debugger());
 #endif
-                _stateMachine.SetTrigger("ToStartMenu");
+                _stateMachine.SetTrigger("ToBootSplash");
+                break;
+            case "InBootSplash":
+                if (
+                    Environment.GetCommandLineArgs().Contains("--SkipBootSplash")
+                )
+                {
+                    Logger.Log("[Application] Has --SkipBootSplash");
+                    Global.Flags.Add("SkippedBootSplash");
+                    _stateMachine.SetTrigger("ToStartMenu");
+                    return;
+                }
+
+                UiManager.Open_BootSplash().OnDestroyUiEvent += () =>
+                {
+                    _stateMachine.SetTrigger("ToStartMenu");
+                };
+                
                 break;
             case "InStartMenu":
                 if (

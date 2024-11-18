@@ -6,11 +6,60 @@ public static partial class UiManager
 
     public static class UiName
     {
+        public const string BootSplash = "BootSplash";
         public const string Credits = "Credits";
         public const string Hud = "Hud";
         public const string PauseMenu = "PauseMenu";
         public const string Settings = "Settings";
         public const string StartMenu = "StartMenu";
+    }
+
+    /// <summary>
+    /// 创建 BootSplash, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static Game.Scripts.Ui.BootSplash.BootSplashPanel Create_BootSplash()
+    {
+        return CreateUi<Game.Scripts.Ui.BootSplash.BootSplashPanel>(UiName.BootSplash);
+    }
+
+    /// <summary>
+    /// 打开 BootSplash, 并返回UI实例
+    /// </summary>
+    public static Game.Scripts.Ui.BootSplash.BootSplashPanel Open_BootSplash()
+    {
+        return OpenUi<Game.Scripts.Ui.BootSplash.BootSplashPanel>(UiName.BootSplash);
+    }
+
+    /// <summary>
+    /// 隐藏 BootSplash 的所有实例
+    /// </summary>
+    public static void Hide_BootSplash()
+    {
+        var uiInstance = Get_BootSplash_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 BootSplash 的所有实例
+    /// </summary>
+    public static void Destroy_BootSplash()
+    {
+        var uiInstance = Get_BootSplash_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 BootSplash 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static Game.Scripts.Ui.BootSplash.BootSplashPanel[] Get_BootSplash_Instance()
+    {
+        return GetUiInstance<Game.Scripts.Ui.BootSplash.BootSplashPanel>(nameof(Game.Scripts.Ui.BootSplash.BootSplash));
     }
 
     /// <summary>

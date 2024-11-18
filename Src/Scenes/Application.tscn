@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://d2l6e12gjcdd2"]
+[gd_scene load_steps=34 format=3 uid="uid://d2l6e12gjcdd2"]
 
 [ext_resource type="Script" path="res://addons/imjp94.yafsm/src/StateMachinePlayer.gd" id="1_26g2b"]
 [ext_resource type="Script" path="res://Scripts/Application.cs" id="1_hj4i6"]
@@ -30,17 +30,22 @@ metadata/graph_offset = Vector2(695, 403)
 [sub_resource type="Resource" id="Resource_necqs"]
 script = ExtResource("3_610ul")
 name = "InStartMenu"
-metadata/graph_offset = Vector2(661, 223)
+metadata/graph_offset = Vector2(681, 223)
 
 [sub_resource type="Resource" id="Resource_a6a5n"]
 script = ExtResource("3_610ul")
 name = "InitGame"
-metadata/graph_offset = Vector2(493, 363)
+metadata/graph_offset = Vector2(433, 283)
 
 [sub_resource type="Resource" id="Resource_bagdw"]
 script = ExtResource("3_610ul")
 name = "PreBoot"
 metadata/graph_offset = Vector2(276.5, 243)
+
+[sub_resource type="Resource" id="Resource_eynxo"]
+script = ExtResource("3_610ul")
+name = "InBootSplash"
+metadata/graph_offset = Vector2(416.5, 423)
 
 [sub_resource type="Resource" id="Resource_fw7t7"]
 script = ExtResource("4_hdymt")
@@ -120,19 +125,6 @@ conditions = {
 }
 priority = 0
 
-[sub_resource type="Resource" id="Resource_63v22"]
-script = ExtResource("4_hdymt")
-name = "ToStartMenu"
-
-[sub_resource type="Resource" id="Resource_lctrq"]
-script = ExtResource("5_xv2kx")
-from = "InitGame"
-to = "InStartMenu"
-conditions = {
-"ToStartMenu": SubResource("Resource_63v22")
-}
-priority = 0
-
 [sub_resource type="Resource" id="Resource_hjd1y"]
 script = ExtResource("4_hdymt")
 name = "ToBooting"
@@ -146,12 +138,39 @@ conditions = {
 }
 priority = 0
 
+[sub_resource type="Resource" id="Resource_qsiyd"]
+script = ExtResource("4_hdymt")
+name = "ToStartMenu"
+
+[sub_resource type="Resource" id="Resource_v1ste"]
+script = ExtResource("5_xv2kx")
+from = "InBootSplash"
+to = "InStartMenu"
+conditions = {
+"ToStartMenu": SubResource("Resource_qsiyd")
+}
+priority = 0
+
+[sub_resource type="Resource" id="Resource_frbtf"]
+script = ExtResource("4_hdymt")
+name = "ToBootSplash"
+
+[sub_resource type="Resource" id="Resource_1ktpx"]
+script = ExtResource("5_xv2kx")
+from = "InitGame"
+to = "InBootSplash"
+conditions = {
+"ToBootSplash": SubResource("Resource_frbtf")
+}
+priority = 0
+
 [sub_resource type="Resource" id="Resource_cq4l3"]
 script = ExtResource("2_vudpd")
 states = {
 "Booting": SubResource("Resource_qetix"),
 "End": SubResource("Resource_8khch"),
 "Entry": SubResource("Resource_48lo7"),
+"InBootSplash": SubResource("Resource_eynxo"),
 "InGame": SubResource("Resource_ylm6c"),
 "InStartMenu": SubResource("Resource_necqs"),
 "InitGame": SubResource("Resource_a6a5n"),
@@ -164,6 +183,9 @@ transitions = {
 "Entry": {
 "PreBoot": SubResource("Resource_juy77")
 },
+"InBootSplash": {
+"InStartMenu": SubResource("Resource_v1ste")
+},
 "InGame": {
 "End": SubResource("Resource_xqvx8"),
 "InStartMenu": SubResource("Resource_hdn1y")
@@ -173,7 +195,7 @@ transitions = {
 "InGame": SubResource("Resource_672qq")
 },
 "InitGame": {
-"InStartMenu": SubResource("Resource_lctrq")
+"InBootSplash": SubResource("Resource_1ktpx")
 },
 "PreBoot": {
 "Booting": SubResource("Resource_gg5q1")
