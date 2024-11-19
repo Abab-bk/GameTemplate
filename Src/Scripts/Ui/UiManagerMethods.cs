@@ -9,6 +9,7 @@ public static partial class UiManager
         public const string BootSplash = "BootSplash";
         public const string Credits = "Credits";
         public const string Hud = "Hud";
+        public const string LoadingScreen = "LoadingScreen";
         public const string Modal = "Modal";
         public const string PauseMenu = "PauseMenu";
         public const string Settings = "Settings";
@@ -157,6 +158,54 @@ public static partial class UiManager
     public static Game.Scripts.Ui.Hud.HudPanel[] Get_Hud_Instance()
     {
         return GetUiInstance<Game.Scripts.Ui.Hud.HudPanel>(nameof(Game.Scripts.Ui.Hud.Hud));
+    }
+
+    /// <summary>
+    /// 创建 LoadingScreen, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static Game.Scripts.Ui.LoadingScreen.LoadingScreenPanel Create_LoadingScreen()
+    {
+        return CreateUi<Game.Scripts.Ui.LoadingScreen.LoadingScreenPanel>(UiName.LoadingScreen);
+    }
+
+    /// <summary>
+    /// 打开 LoadingScreen, 并返回UI实例
+    /// </summary>
+    public static Game.Scripts.Ui.LoadingScreen.LoadingScreenPanel Open_LoadingScreen()
+    {
+        return OpenUi<Game.Scripts.Ui.LoadingScreen.LoadingScreenPanel>(UiName.LoadingScreen);
+    }
+
+    /// <summary>
+    /// 隐藏 LoadingScreen 的所有实例
+    /// </summary>
+    public static void Hide_LoadingScreen()
+    {
+        var uiInstance = Get_LoadingScreen_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 LoadingScreen 的所有实例
+    /// </summary>
+    public static void Destroy_LoadingScreen()
+    {
+        var uiInstance = Get_LoadingScreen_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 LoadingScreen 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static Game.Scripts.Ui.LoadingScreen.LoadingScreenPanel[] Get_LoadingScreen_Instance()
+    {
+        return GetUiInstance<Game.Scripts.Ui.LoadingScreen.LoadingScreenPanel>(nameof(Game.Scripts.Ui.LoadingScreen.LoadingScreen));
     }
 
     /// <summary>
