@@ -9,6 +9,7 @@ public static partial class UiManager
         public const string BootSplash = "BootSplash";
         public const string Credits = "Credits";
         public const string Hud = "Hud";
+        public const string Modal = "Modal";
         public const string PauseMenu = "PauseMenu";
         public const string Settings = "Settings";
         public const string StartMenu = "StartMenu";
@@ -156,6 +157,54 @@ public static partial class UiManager
     public static Game.Scripts.Ui.Hud.HudPanel[] Get_Hud_Instance()
     {
         return GetUiInstance<Game.Scripts.Ui.Hud.HudPanel>(nameof(Game.Scripts.Ui.Hud.Hud));
+    }
+
+    /// <summary>
+    /// 创建 Modal, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static Game.Scripts.Ui.Modal.ModalPanel Create_Modal()
+    {
+        return CreateUi<Game.Scripts.Ui.Modal.ModalPanel>(UiName.Modal);
+    }
+
+    /// <summary>
+    /// 打开 Modal, 并返回UI实例
+    /// </summary>
+    public static Game.Scripts.Ui.Modal.ModalPanel Open_Modal()
+    {
+        return OpenUi<Game.Scripts.Ui.Modal.ModalPanel>(UiName.Modal);
+    }
+
+    /// <summary>
+    /// 隐藏 Modal 的所有实例
+    /// </summary>
+    public static void Hide_Modal()
+    {
+        var uiInstance = Get_Modal_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 Modal 的所有实例
+    /// </summary>
+    public static void Destroy_Modal()
+    {
+        var uiInstance = Get_Modal_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 Modal 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static Game.Scripts.Ui.Modal.ModalPanel[] Get_Modal_Instance()
+    {
+        return GetUiInstance<Game.Scripts.Ui.Modal.ModalPanel>(nameof(Game.Scripts.Ui.Modal.Modal));
     }
 
     /// <summary>

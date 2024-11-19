@@ -1,8 +1,10 @@
 using System.Linq;
 using DsUi;
 using Game.Scripts.Classes;
+using Game.Scripts.Configs;
 using Game.Scripts.Models;
 using Godot;
+using Linguini.Shared.Types.Bundle;
 using Environment = System.Environment;
 
 namespace Game.Scripts;
@@ -52,6 +54,22 @@ public partial class Application : Node2D
             case "Booting":
                 // load language resources
                 Translator.Setup();
+                Translator.LanguageChanged += language =>
+                {
+                    UiManager
+                        .Open_Modal()
+                        .Config(new ModalConfig(
+                            Translator.GetMessage("language_changed"),
+                            Translator.GetAttrMessage(
+                                "language_changed_text",
+                                ("language", (FluentString)language.ToString())
+                                ),
+                            () =>
+                            {
+                                EventBus.RequestQuitGame?.Invoke();
+                            }
+                        ));
+                };
                 
                 _stateMachine.SetTrigger("ToInitGame");
                 break;

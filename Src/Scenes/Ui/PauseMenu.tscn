@@ -30,25 +30,25 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 100)
 layout_mode = 2
 size_flags_horizontal = 4
-text = "Resume"
+text = "resume"
 
 [node name="SettingsBtn" type="Button" parent="PanelContainer/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 100)
 layout_mode = 2
 size_flags_horizontal = 4
-text = "Settings"
+text = "settings"
 
 [node name="BackToStartMenuBtn" type="Button" parent="PanelContainer/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 100)
 layout_mode = 2
 size_flags_horizontal = 4
-text = "Back To StarMenu"
+text = "back_to_start_menu"
 
 [node name="ExitBtn" type="Button" parent="PanelContainer/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 100)
 layout_mode = 2
 size_flags_horizontal = 4
-text = "Exit"
+text = "exit"

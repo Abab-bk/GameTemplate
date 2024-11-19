@@ -22,6 +22,11 @@ script = ExtResource("3_610ul")
 name = "Entry"
 metadata/graph_offset = Vector2(280, 103)
 
+[sub_resource type="Resource" id="Resource_eynxo"]
+script = ExtResource("3_610ul")
+name = "InBootSplash"
+metadata/graph_offset = Vector2(416.5, 423)
+
 [sub_resource type="Resource" id="Resource_ylm6c"]
 script = ExtResource("3_610ul")
 name = "InGame"
@@ -41,11 +46,6 @@ metadata/graph_offset = Vector2(433, 283)
 script = ExtResource("3_610ul")
 name = "PreBoot"
 metadata/graph_offset = Vector2(276.5, 243)
-
-[sub_resource type="Resource" id="Resource_eynxo"]
-script = ExtResource("3_610ul")
-name = "InBootSplash"
-metadata/graph_offset = Vector2(416.5, 423)
 
 [sub_resource type="Resource" id="Resource_fw7t7"]
 script = ExtResource("4_hdymt")
@@ -70,6 +70,19 @@ from = "Entry"
 to = "PreBoot"
 conditions = {
 "ToPreBoot": SubResource("Resource_vul0p")
+}
+priority = 0
+
+[sub_resource type="Resource" id="Resource_qsiyd"]
+script = ExtResource("4_hdymt")
+name = "ToStartMenu"
+
+[sub_resource type="Resource" id="Resource_v1ste"]
+script = ExtResource("5_xv2kx")
+from = "InBootSplash"
+to = "InStartMenu"
+conditions = {
+"ToStartMenu": SubResource("Resource_qsiyd")
 }
 priority = 0
 
@@ -125,32 +138,6 @@ conditions = {
 }
 priority = 0
 
-[sub_resource type="Resource" id="Resource_hjd1y"]
-script = ExtResource("4_hdymt")
-name = "ToBooting"
-
-[sub_resource type="Resource" id="Resource_gg5q1"]
-script = ExtResource("5_xv2kx")
-from = "PreBoot"
-to = "Booting"
-conditions = {
-"ToBooting": SubResource("Resource_hjd1y")
-}
-priority = 0
-
-[sub_resource type="Resource" id="Resource_qsiyd"]
-script = ExtResource("4_hdymt")
-name = "ToStartMenu"
-
-[sub_resource type="Resource" id="Resource_v1ste"]
-script = ExtResource("5_xv2kx")
-from = "InBootSplash"
-to = "InStartMenu"
-conditions = {
-"ToStartMenu": SubResource("Resource_qsiyd")
-}
-priority = 0
-
 [sub_resource type="Resource" id="Resource_frbtf"]
 script = ExtResource("4_hdymt")
 name = "ToBootSplash"
@@ -161,6 +148,19 @@ from = "InitGame"
 to = "InBootSplash"
 conditions = {
 "ToBootSplash": SubResource("Resource_frbtf")
+}
+priority = 0
+
+[sub_resource type="Resource" id="Resource_hjd1y"]
+script = ExtResource("4_hdymt")
+name = "ToBooting"
+
+[sub_resource type="Resource" id="Resource_gg5q1"]
+script = ExtResource("5_xv2kx")
+from = "PreBoot"
+to = "Booting"
+conditions = {
+"ToBooting": SubResource("Resource_hjd1y")
 }
 priority = 0
 

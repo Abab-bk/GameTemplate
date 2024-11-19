@@ -10,8 +10,8 @@ public partial class SettingsPanel : Settings
     private UserPreferences _userPreferences;
 
     private string Vector2ToString(Vector2 vector2) => $"{vector2.X} * {vector2.Y}";
-    
-    public override void _Ready()
+
+    public override void OnCreateUi()
     {
         var languagePopupMenu = S_LanguageMenu.Instance.GetPopup();
         foreach (var name in Enum.GetNames<Language>())
@@ -19,7 +19,7 @@ public partial class SettingsPanel : Settings
             languagePopupMenu.AddItem(
                 name,
                 (int)Enum.Parse(typeof(Language), name)
-                );
+            );
         }
 
         var resolutionPopupMenu = S_ResolutionMenu.Instance.GetPopup();
@@ -28,7 +28,7 @@ public partial class SettingsPanel : Settings
             resolutionPopupMenu.AddItem(
                 Vector2ToString(resolution),
                 Array.IndexOf(Data.Constants.Resolutions, resolution)
-                );
+            );
         }
 
         S_ConfirmBtn.Instance.Pressed += () =>
@@ -37,8 +37,8 @@ public partial class SettingsPanel : Settings
                 typeof(Language),
                 S_LanguageMenu.Instance.GetPopup().GetItemText(
                     S_LanguageMenu.Instance.Selected
-                    )
-                );
+                )
+            );
             _userPreferences.Fullscreen = S_FullscreenCheckbox.Instance.ButtonPressed;
             _userPreferences.VSync = S_VSyncCheckbox.Instance.ButtonPressed;
             
@@ -56,6 +56,7 @@ public partial class SettingsPanel : Settings
 
         S_CancelBtn.Instance.Pressed += Destroy;
     }
+    
 
     public void Load(UserPreferences userPreferences)
     {

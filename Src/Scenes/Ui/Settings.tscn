@@ -61,7 +61,7 @@ alignment = 1
 [node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/Labels/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Language"
+text = "language"
 label_settings = ExtResource("3_85q3g")
 horizontal_alignment = 2
 
@@ -79,7 +79,7 @@ alignment = 1
 [node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/Labels/HBoxContainer4"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Resolution"
+text = "resolution"
 label_settings = ExtResource("3_85q3g")
 horizontal_alignment = 2
 
@@ -97,7 +97,7 @@ alignment = 1
 [node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/Labels/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Fullscreen"
+text = "fullscreen"
 label_settings = ExtResource("3_85q3g")
 horizontal_alignment = 2
 
@@ -114,7 +114,7 @@ alignment = 1
 [node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/Labels/HBoxContainer3"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "VSync"
+text = "vsync"
 label_settings = ExtResource("3_85q3g")
 horizontal_alignment = 2
 
@@ -131,7 +131,7 @@ alignment = 1
 [node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/Labels/HBoxContainer5"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "MasterVolume"
+text = "master_volume"
 label_settings = ExtResource("3_85q3g")
 horizontal_alignment = 2
 
@@ -150,7 +150,7 @@ alignment = 1
 [node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/Labels/HBoxContainer6"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "MusicVolume"
+text = "music_volume"
 label_settings = ExtResource("3_85q3g")
 horizontal_alignment = 2
 
@@ -169,7 +169,7 @@ alignment = 1
 [node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/Labels/HBoxContainer7"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "SoundVolume"
+text = "sound_volume"
 label_settings = ExtResource("3_85q3g")
 horizontal_alignment = 2
 
@@ -189,10 +189,10 @@ alignment = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
-text = "Confirm"
+text = "confirm"
 
 [node name="CancelBtn" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
-text = "Cancel"
+text = "cancel"

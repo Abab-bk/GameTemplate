@@ -7,8 +7,6 @@ public partial class StartMenuPanel : StartMenu
     public override void OnCreateUi()
     {
         S_GameTitle.Instance.Text = Data.Constants.GameName;
-
-        S_StartBtn.Instance.Text = Translator.GetMessage("start");
         
         S_StartBtn.Instance.Pressed += () => EventBus.RequestStartGame?.Invoke();
         S_ExitBtn.Instance.Pressed += () => EventBus.RequestQuitGame?.Invoke();

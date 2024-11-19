@@ -33,8 +33,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Content Include="Assets\Locale\**\*"
-             Link="%(RecursiveDir)%(Filename)%(Extension)"
+    <Content Include="Assets\Locale\**\*.ftl"
              CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   
