@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luban", "..\Libs\Luban\Luba
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBase", "..\Libs\DataBase\DataBase.csproj", "{76D72D03-3E92-42EE-AA9B-E40886CF641A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "..\Libs\TestProject\TestProject.csproj", "{9671F5CC-F0B3-426C-87EF-261A795E22CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 	Debug|Any CPU = Debug|Any CPU
@@ -39,5 +41,11 @@ Global
 		{76D72D03-3E92-42EE-AA9B-E40886CF641A}.ExportDebug|Any CPU.Build.0 = Debug|Any CPU
 		{76D72D03-3E92-42EE-AA9B-E40886CF641A}.ExportRelease|Any CPU.ActiveCfg = Debug|Any CPU
 		{76D72D03-3E92-42EE-AA9B-E40886CF641A}.ExportRelease|Any CPU.Build.0 = Debug|Any CPU
+		{9671F5CC-F0B3-426C-87EF-261A795E22CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9671F5CC-F0B3-426C-87EF-261A795E22CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9671F5CC-F0B3-426C-87EF-261A795E22CB}.ExportDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9671F5CC-F0B3-426C-87EF-261A795E22CB}.ExportDebug|Any CPU.Build.0 = Debug|Any CPU
+		{9671F5CC-F0B3-426C-87EF-261A795E22CB}.ExportRelease|Any CPU.ActiveCfg = Debug|Any CPU
+		{9671F5CC-F0B3-426C-87EF-261A795E22CB}.ExportRelease|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 EndGlobal
