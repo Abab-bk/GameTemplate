@@ -1,5 +1,11 @@
 ## MyGameTemplate
 
+## Skip StarMenu or BootSplash
+
+If u want to skip start menu on run game, add argument: --SkipStartMenu.
+
+If u want to skip boot splash on run game, add argument: --SkipBootSplash.
+
 ## Theory
 
 In my game template, you should keep "one scene", so, no "Scene Manager" or something like it.
@@ -56,10 +62,6 @@ Check static class ```Data``` after your read luban's doc.
 
 ## Unit Test
 
-[GdUnit4](https://github.com/MikeSchulze/gdUnit4)
+Has a test project, used [NUnit](https://github.com/nunit/nunit) .
 
-Check ```Src\Scripts\Tests``` folder.
 
-## Skip StarMenu
-
-If u want to skip start menu on run game, add argument: --SkipStartMenu.
