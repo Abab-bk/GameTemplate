@@ -1,3 +1,4 @@
+using DataBase;
 using DsUi;
 
 namespace Game.Scripts.Ui.StartMenu;

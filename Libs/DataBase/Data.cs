@@ -1,8 +1,7 @@
 ﻿using System.Text.Json;
-using AcidWallStudio;
 using cfg;
 
-namespace Game.Scripts;
+namespace DataBase;
 
 public static class Data
 {
@@ -12,7 +11,7 @@ public static class Data
     static Data()
     {
         Tables = new Tables(file => JsonSerializer.Deserialize<JsonElement>(
-            Wizard.ReadAllText($"res://Assets/Data/{file}.json")));
+            File.ReadAllText($"res://Assets/Data/{file}.json")));
         Constants = Tables.TbConstants;
     }
 }

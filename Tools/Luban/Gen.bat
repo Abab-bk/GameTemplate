@@ -7,7 +7,7 @@ dotnet %LUBAN_DLL% ^
     -d json ^
     -c cs-dotnet-json ^
     --conf %CONF_ROOT%\Luban.conf ^
-    -x outputDataDir=..\..\Src\Assets\Data ^
-    -x outputCodeDir=..\..\Src\Scripts\Data
+    -x outputDataDir=..\..\Libs\DataBase\Assets ^
+    -x outputCodeDir=..\..\Libs\DataBase\Scripts
 
 pause

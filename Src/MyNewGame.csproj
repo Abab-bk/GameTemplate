@@ -29,6 +29,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\Libs\AcidUtilities\AcidUtilities.csproj" />
+    <ProjectReference Include="..\Libs\DataBase\DataBase.csproj" />
     <ProjectReference Include="..\Libs\Luban\Luban.csproj" />
   </ItemGroup>
   
