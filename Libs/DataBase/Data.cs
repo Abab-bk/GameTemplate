@@ -11,7 +11,7 @@ public static class Data
     static Data()
     {
         Tables = new Tables(file => JsonSerializer.Deserialize<JsonElement>(
-            File.ReadAllText($"res://Assets/Data/{file}.json")));
+            File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"Assets/{file}.json"))));
         Constants = Tables.TbConstants;
     }
 }
