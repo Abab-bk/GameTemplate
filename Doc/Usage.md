@@ -64,4 +64,7 @@ Check static class ```Data``` after your read luban's doc.
 
 Has a test project, used [NUnit](https://github.com/nunit/nunit) .
 
+## Translator
 
+```Translator``` class is a wrapper for [Linguini](https://github.com/Ygg01/Linguini)
+By default ```.ftl```  files are located in ```Assets\Locale```
