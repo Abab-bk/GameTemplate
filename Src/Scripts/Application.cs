@@ -111,7 +111,10 @@ public partial class Application : Node2D
                 break;
             case "InGame":
                 UiManager.Destroy_StartMenu();
-                AddChild(new World());
+                AddChild(GD
+                        .Load<PackedScene>("res://Scenes/World.tscn")
+                        .Instantiate()
+                );
                 break;
             case "End":
                 GetTree().Quit();
