@@ -18,7 +18,6 @@ public partial class Application : Node2D
         _stateMachine = new StateMachine(GetNode("StateMachinePlayer"), "ApplicationState");
 
         _stateMachine.OnTransition += OnStateMachineTransition;
-        _stateMachine.OnUpdate += OnStateMachineUpdate;
         
         _stateMachine.SetTrigger("ToPreBoot");
         
@@ -35,10 +34,6 @@ public partial class Application : Node2D
         };
     }
     
-    private void OnStateMachineUpdate(string state, float delta)
-    {
-    }
-
     private void OnStateMachineTransition(string from, string to)
     {
         switch (to)

@@ -6,7 +6,7 @@ namespace Game.Scripts.Classes;
 public class StateMachine
 {
     public event Action<string, string> OnTransition;
-    public event Action<string, float> OnUpdate;
+    // public event Action<string, float> OnUpdate;
 
     public string CurrentState => (string)_node.Get("current");
     
@@ -22,12 +22,12 @@ public class StateMachine
                 Logger.Log($"[{stateMachineName}] state transitioned from {from} to {to}");
                 OnTransition?.Invoke(from, to);
             }));
-        _node.Connect("updated", Callable.From(
-            (string state, double delta) =>
-            {
-                OnUpdate?.Invoke(state, (float)delta);
-            }
-        ));
+        // _node.Connect("updated", Callable.From(
+        //     (string state, double delta) =>
+        //     {
+        //         OnUpdate?.Invoke(state, (float)delta);
+        //     })
+        // );
     }
     
     public void Start() => _node.Call("start");

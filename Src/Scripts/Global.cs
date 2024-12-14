@@ -4,7 +4,7 @@ namespace Game.Scripts;
 
 public static class Global
 {
-    public static List<string> Flags = new();
+    public static readonly List<string> Flags = new();
     public static World World { get; set; }
     public static Application Application { get; set; }
 
