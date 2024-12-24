@@ -1,5 +1,7 @@
 using Godot;
 using ImGuiGodot.Internal;
+using State = ImGuiGodot.Internal.State;
+
 #if GODOT_PC
 #nullable enable
 

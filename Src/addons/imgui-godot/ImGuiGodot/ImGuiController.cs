@@ -3,6 +3,7 @@
 using Godot;
 using ImGuiGodot.Internal;
 using ImGuiNET;
+using State = ImGuiGodot.Internal.State;
 
 namespace ImGuiGodot;
 

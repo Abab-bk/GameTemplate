@@ -4,6 +4,7 @@ using Game.Scripts.Classes;
 using Game.Scripts.Configs;
 using Game.Scripts.Models;
 using Godot;
+using GodotTask;
 using Linguini.Shared.Types.Bundle;
 using Environment = System.Environment;
 
@@ -11,18 +12,20 @@ namespace Game.Scripts;
 
 public partial class Application : Node2D
 {
-    private StateMachine _stateMachine;
+    private HFSM _stateMachine;
     
     public override void _Ready()
     {
-        _stateMachine = new StateMachine(GetNode("StateMachinePlayer"), "ApplicationState");
+        _stateMachine = HFSMUtils.TryConvert<HFSM>(GetNode<Node>("HFSM"));
 
-        _stateMachine.OnTransition += OnStateMachineTransition;
-        
-        _stateMachine.SetTrigger("ToPreBoot");
+        if (_stateMachine == null)
+            throw new System.Exception("Initialize Application state machine failed.");
+
+        _stateMachine.Transited += OnStateMachineTransition;
+        _stateMachine.SetTrigger("Next");
         
         EventBus.RequestQuitGame += () => _stateMachine.SetTrigger("ToEnd");
-        EventBus.RequestStartGame += () => _stateMachine.SetTrigger("ToInGame");
+        EventBus.RequestStartGame += () => _stateMachine.SetTrigger("ToGame");
         EventBus.RequestBackToStartMenu += () =>
         {
             if (Global.World != null)
@@ -34,9 +37,10 @@ public partial class Application : Node2D
         };
     }
     
-    private void OnStateMachineTransition(string from, string to)
+    private async void OnStateMachineTransition(State from, State to)
     {
-        switch (to)
+        Logger.Log($"[Application]: {from.GetName()} -> {to.GetName()}");
+        switch (to.GetName())
         {
             case "PreBoot":
                 Global.Application = this;
@@ -44,7 +48,9 @@ public partial class Application : Node2D
                 Global.AppSaver = new AppSaver();
                 Global.AppSaver.Load();
                 
-                _stateMachine.SetTrigger("ToBooting");
+                await GDTask.NextFrame();
+                _stateMachine.SetTrigger("Next");
+                
                 break;
             case "Booting":
                 // load language resources
@@ -66,13 +72,15 @@ public partial class Application : Node2D
                         ));
                 };
                 
-                _stateMachine.SetTrigger("ToInitGame");
+                await GDTask.NextFrame();
+                _stateMachine.SetTrigger("Next");
                 break;
             case "InitGame":
 #if IMGUI
                 AddChild(new Debugger());
 #endif
-                _stateMachine.SetTrigger("ToBootSplash");
+                await GDTask.NextFrame();
+                _stateMachine.SetTrigger("Next");
                 break;
             case "InBootSplash":
                 if (
@@ -81,6 +89,7 @@ public partial class Application : Node2D
                 {
                     Logger.Log("[Application] Has --SkipBootSplash");
                     Global.Flags.Add("SkippedBootSplash");
+                    await GDTask.NextFrame();
                     _stateMachine.SetTrigger("ToStartMenu");
                     return;
                 }
@@ -99,7 +108,8 @@ public partial class Application : Node2D
                 {
                     Logger.Log("[Application] Has --SkipStartMenu");
                     Global.Flags.Add("SkippedStartMenu");
-                    _stateMachine.SetTrigger("ToInGame");
+                    await GDTask.NextFrame();
+                    _stateMachine.SetTrigger("ToGame");
                     return;
                 }
                 UiManager.Open_StartMenu();
