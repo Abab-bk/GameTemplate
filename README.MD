@@ -23,15 +23,26 @@ Whenever I'm developing a game, always clone this repo.
 
 ## Credits
 
+- [HFSM2](https://github.com/Daylily-Zeleen/HFSM2)
+
 - [ImGui Godot](https://github.com/pkdawson/imgui-godot)
+
 - [Luban](https://github.com/focus-creative-games/luban)
+
 - [DsUi](https://github.com/xlljc/Ds_Ui)
+
 - [MemoryPack](https://github.com/Cysharp/MemoryPack).
+
 - [GTweensGodot](https://github.com/Guillemsc/GTweensGodot)
+
 - [OnReady](https://github.com/The0ld/cs_onready_plugin)
+
 - [GDTask](https://github.com/Delsin-Yu/GDTask.Nuget)
+
 - [NUnit](https://github.com/nunit/nunit)
+
 - [Linguini](https://github.com/Ygg01/Linguini)
+
 - A util lib by myself.
 
 Please check these links to learn how to use.
