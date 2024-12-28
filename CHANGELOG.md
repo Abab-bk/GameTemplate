@@ -1,3 +1,9 @@
+## 3.1.0 (2024-12-28)
+
+### Feat
+
+- Add InitProject.py
+
 ## 3.0.0 (2024-12-24)
 
 ### Refactor
