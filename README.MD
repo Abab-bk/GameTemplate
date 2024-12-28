@@ -13,7 +13,7 @@ Whenever I'm developing a game, always clone this repo.
 
 - Clone this repo or click "Use this template" button on top right (in Github).
 
-- Run "RenameProject.py" to rename your project name.
+- Run "InitProject.py" to init your project.
 
 - Start coding.
 
