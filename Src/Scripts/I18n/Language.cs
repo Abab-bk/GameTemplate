@@ -1,4 +1,4 @@
-﻿namespace Game.Scripts.Enums;
+﻿namespace Game.Scripts.I18n;
 
 public enum Language
 {

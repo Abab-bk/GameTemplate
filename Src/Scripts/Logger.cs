@@ -1,74 +1,16 @@
-﻿using Godot;
+﻿using Microsoft.Extensions.Logging;
 
 namespace Game.Scripts;
 
-/// <summary>
-/// 调试日志输出
-/// </summary>
 public static class Logger
 {
-    /// <summary>
-    /// 所有日志信息,包括log和error
-    /// </summary>
-    public static string AllLogMessage { get; private set; } = "";
-    
-    /// <summary>
-    /// 输出日志
-    /// </summary>
-    public static void Log(params object[] message)
+    public static void Log(string message)
     {
-        var str = "[Log]";
-        foreach (var m in message)
-        {
-            if (m is null)
-            {
-                str += "null";
-            }
-            else
-            {
-                str += m;
-            }
-        }
-
-        GD.Print(str);
-        AllLogMessage = str + "\n" + AllLogMessage;
-        if (AllLogMessage.Length > 10000)
-        {
-            AllLogMessage = AllLogMessage.Substring(0, 9500);
-        }
+        Global.Logger.Log(LogLevel.Information, message);
     }
     
-    /// <summary>
-    /// 输出错误日志
-    /// </summary>
-    public static void LogError(params object[] message)
+    public static void LogError(string message)
     {
-        var str = "[Error]";
-        foreach (var m in message)
-        {
-            if (m is null)
-            {
-                str += "null";
-            }
-            else
-            {
-                str += m;
-            }
-        }
-
-        GD.PrintErr(str);
-        AllLogMessage = str + "\n" + AllLogMessage;
-        if (AllLogMessage.Length > 10000)
-        {
-            AllLogMessage = AllLogMessage.Substring(0, 9500);
-        }
-    }
-
-    /// <summary>
-    /// 清除log
-    /// </summary>
-    public static void Clear()
-    {
-        AllLogMessage = "";
+        Global.Logger.Log(LogLevel.Error, message);
     }
 }

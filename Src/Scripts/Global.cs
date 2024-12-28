@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
 namespace Game.Scripts;
 
@@ -7,6 +8,8 @@ public static class Global
     public static readonly List<string> Flags = new();
     public static World World { get; set; }
     public static Application Application { get; set; }
+    
+    public static ILogger Logger { get; set; }
 
     private static AppSaver _appSaver;
     

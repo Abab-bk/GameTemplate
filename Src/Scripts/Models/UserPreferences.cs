@@ -1,5 +1,5 @@
 ﻿using System;
-using Game.Scripts.Enums;
+using Game.Scripts.I18n;
 using Godot;
 using MemoryPack;
 

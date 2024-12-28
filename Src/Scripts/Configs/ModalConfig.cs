@@ -1,4 +1,5 @@
 ﻿using System;
+using Game.Scripts.I18n;
 
 namespace Game.Scripts.Configs;
 

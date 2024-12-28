@@ -1,4 +1,4 @@
-﻿using Game.Scripts.Enums;
+﻿using Game.Scripts.I18n;
 
 namespace Game.Scripts.Classes;
 

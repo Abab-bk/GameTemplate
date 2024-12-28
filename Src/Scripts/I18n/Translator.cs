@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using Game.Scripts.Classes;
-using Game.Scripts.Enums;
 using Godot;
 using Linguini.Bundle;
 using Linguini.Bundle.Builder;
 using Linguini.Shared.Types.Bundle;
 
-namespace Game.Scripts;
+namespace Game.Scripts.I18n;
 
 public static class Translator
 {
@@ -86,7 +85,7 @@ public static class Translator
             }
             catch (Exception e)
             {
-                Logger.LogError($"[Translator Error]: {e}");
+                Logger.LogError($"[Translator]: {e}");
                 throw;
             }
         }

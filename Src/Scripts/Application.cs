@@ -1,11 +1,17 @@
+using System;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using DsUi;
 using Game.Scripts.Classes;
 using Game.Scripts.Configs;
+using Game.Scripts.I18n;
 using Game.Scripts.Models;
 using Godot;
 using GodotTask;
 using Linguini.Shared.Types.Bundle;
+using Microsoft.Extensions.Logging;
+using ZLogger;
 using Environment = System.Environment;
 
 namespace Game.Scripts;
@@ -14,12 +20,47 @@ public partial class Application : Node2D
 {
     private HFSM _stateMachine;
     
+    private class GodotLoggerProcessor : IAsyncLogProcessor
+    {
+        public ValueTask DisposeAsync() => default;
+
+        public void Post(IZLoggerEntry log)
+        {
+            GD.Print($"[{log.LogInfo.LogLevel}] {log.ToString()}");
+            log.Return();
+        }
+    }
+    
     public override void _Ready()
     {
+        Global.Logger = LoggerFactory
+            .Create(logging =>
+            {
+                logging.AddZLoggerLogProcessor(new GodotLoggerProcessor());
+
+                if (OS.HasFeature("template"))
+                {
+                    if (!Environment.GetCommandLineArgs().Contains("--LogToFile")) return;
+                    logging.AddZLoggerFile(Path.Combine(
+                        AppDomain.CurrentDomain.BaseDirectory,
+                        ".Logs/GameLog.log"
+                    ));
+                }
+                else
+                {
+                    if (!Environment.GetCommandLineArgs().Contains("--LogToFile")) return;
+                    logging.AddZLoggerFile(Path.Combine(
+                        OS.GetUserDataDir(),
+                        ".Logs/GameLog.log"
+                    ));
+                }
+            })
+            .CreateLogger("Application");
+
         _stateMachine = HFSMUtils.TryConvert<HFSM>(GetNode<Node>("HFSM"));
 
         if (_stateMachine == null)
-            throw new System.Exception("Initialize Application state machine failed.");
+            throw new Exception("Initialize Application state machine failed.");
 
         _stateMachine.Transited += OnStateMachineTransition;
         _stateMachine.SetTrigger("Next");

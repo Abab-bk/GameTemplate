@@ -1,8 +1,7 @@
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Game.Scripts;
+using Game.Scripts.I18n;
 using Godot;
 
 namespace DsUi
