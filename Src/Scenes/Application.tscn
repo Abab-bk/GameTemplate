@@ -1,6 +1,6 @@
 [gd_scene load_steps=33 format=3 uid="uid://d2l6e12gjcdd2"]
 
-[ext_resource type="Script" path="res://Scripts/Application.cs" id="1_hj4i6"]
+[ext_resource type="Script" uid="uid://dgpb8d4q1dqpk" path="res://Scripts/Application.cs" id="1_hj4i6"]
 
 [sub_resource type="StateConfig" id="StateConfig_4anly"]
 state_name = &"PreBoot"

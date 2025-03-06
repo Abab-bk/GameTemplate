@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://rd5jt3ofu7uh"]
 
-[ext_resource type="Script" path="res://Scripts/Ui/modal/ModalPanel.cs" id="1_b2dhf"]
+[ext_resource type="Script" uid="uid://bvpjo44mkx10r" path="res://Scripts/Ui/modal/ModalPanel.cs" id="1_b2dhf"]
 [ext_resource type="LabelSettings" uid="uid://br6vse4mdr2iu" path="res://Assets/LabelSettings/Title.tres" id="2_nrk5g"]
 [ext_resource type="LabelSettings" uid="uid://dl41kstbvm6v4" path="res://Assets/LabelSettings/Text.tres" id="3_6bexc"]
 

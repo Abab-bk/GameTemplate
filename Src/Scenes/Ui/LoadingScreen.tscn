@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://xu5m1j12c5rq"]
 
 [ext_resource type="Theme" uid="uid://dcu258d8wjk74" path="res://Assets/Themes/Default.tres" id="1_bphis"]
-[ext_resource type="Script" path="res://Scripts/Ui/loadingScreen/LoadingScreenPanel.cs" id="1_klmli"]
+[ext_resource type="Script" uid="uid://gp0sbapucvea" path="res://Scripts/Ui/loadingScreen/LoadingScreenPanel.cs" id="1_klmli"]
 [ext_resource type="LabelSettings" uid="uid://dl41kstbvm6v4" path="res://Assets/LabelSettings/Text.tres" id="3_1pj3t"]
 
 [sub_resource type="Animation" id="Animation_gm4n5"]
@@ -37,8 +37,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_njgc1"]
 _data = {
-"FadeIn": SubResource("Animation_gm4n5"),
-"RESET": SubResource("Animation_bovvp")
+&"FadeIn": SubResource("Animation_gm4n5"),
+&"RESET": SubResource("Animation_bovvp")
 }
 
 [node name="LoadingScreen" type="Control"]

@@ -1,17 +1,13 @@
-<Project Sdk="Godot.NET.Sdk/4.3.0">
+<Project Sdk="Godot.NET.Sdk/4.4.0">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net8.0</TargetFramework>
-    <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'ios' ">net8.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <RootNamespace>Game</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup>
-    <DefineConstants
-            Condition="'$(Configuration)'!='ExportRelease' And
-        $(DefineConstants.Contains('GODOT_PC'))">$(DefineConstants);IMGUI</DefineConstants>
+    <DefineConstants Condition="'$(Configuration)'!='ExportRelease' And&#xA;        $(DefineConstants.Contains('GODOT_PC'))">$(DefineConstants);IMGUI</DefineConstants>
   </PropertyGroup>
 
   <Choose>
@@ -34,8 +30,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Content Include="Assets\Locale\**\*.ftl"
-             CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Assets\Locale\**\*.ftl" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   
   <ItemGroup>
