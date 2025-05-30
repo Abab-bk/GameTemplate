@@ -1,5 +1,4 @@
 ﻿using System;
-using Game.Scripts.I18n;
 
 namespace Game.Scripts.Configs;
 
@@ -14,8 +13,8 @@ public class ModalConfig(
 {
     public string Title { get; set; } = title;
     public string Text { get; set; } = text;
-    public string ConfirmText { get; set; } = confirmText ?? Translator.GetMessage("confirm");
-    public string CancelText { get; set; } = cancelText ?? Translator.GetMessage("cancel");
+    public string ConfirmText { get; set; } = confirmText;
+    public string CancelText { get; set; } = cancelText;
     public Action OnConfirm { get; set; } = onConfirm;
     public Action OnCancel { get; set; } = onCancel;
 }

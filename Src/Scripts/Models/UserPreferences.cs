@@ -10,13 +10,7 @@ public partial class UserPreferences : ISavableModel
 {
     public event Action TryApplyChanged;
 
-    public Language Language { get; set; } = OS.GetLocaleLanguage() switch
-    {
-        "en" => Language.English,
-        "zh" => Language.Chinese,
-        "ja" => Language.Japanese,
-        _ => Language.English
-    };
+    public Language Language { get; set; } = Language.English;
 
     public float MasterVolume { get; set; } = 0.8f;
     public float MusicVolume { get; set; } = 0.8f;

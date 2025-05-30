@@ -4,12 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using DsUi;
 using Game.Scripts.Classes;
-using Game.Scripts.Configs;
-using Game.Scripts.I18n;
 using Game.Scripts.Models;
 using Godot;
 using GodotTask;
-using Linguini.Shared.Types.Bundle;
 using Microsoft.Extensions.Logging;
 using ZLogger;
 using Environment = System.Environment;
@@ -96,25 +93,6 @@ public partial class Application : Node2D
                 
                 break;
             case "Booting":
-                // load language resources
-                Translator.Setup();
-                Translator.LanguageChanged += language =>
-                {
-                    UiManager
-                        .Open_Modal()
-                        .Config(new ModalConfig(
-                            Translator.GetMessage("language_changed"),
-                            Translator.GetAttrMessage(
-                                "language_changed_text",
-                                ("language", (FluentString)language.ToString())
-                                ),
-                            () =>
-                            {
-                                EventBus.RequestQuitGame?.Invoke();
-                            }
-                        ));
-                };
-                
                 await GDTask.NextFrame();
                 _stateMachine.SetTrigger("Next");
                 break;
@@ -188,7 +166,6 @@ public partial class Application : Node2D
         if (TranslationServer.GetLocale() != Utils.GetLanguageLocaleCode(userPreferences.Language))
         {
             TranslationServer.SetLocale(Utils.GetLanguageLocaleCode(userPreferences.Language));
-            Translator.ChangeLanguage(userPreferences.Language);
         }
     }
 }

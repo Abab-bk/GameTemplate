@@ -1,0 +1,15 @@
+﻿keys,en,zh
+start_btn,Start,开始
+exit_btn,Exit,退出
+settings_btn,Settings,设置
+credits_btn,Credits,关于
+confirm_btn,Confirm,确认
+cancel_btn,Cancel,取消
+language,Language,语言
+resolution,Resolution,分辨率
+fullscreen,Fullscreen,全屏
+master_volume,Master Volume,主音量
+music_volume,Music Volume,音乐音量
+sfx_volume,SFX Volume,音效音量
+resume_btn,Resume,继续
+back_to_main_menu,Back to Main Menu,返回主菜单

@@ -39,7 +39,7 @@ public class AppSaver
             var writer = new ArrayBufferWriter<byte>();
             MemoryPackSerializer.Serialize(in writer, in saveModel);
             File.WriteAllBytes(savePath, writer.WrittenMemory.ToArray());
-            _logger.ZLogInformation($"Save {logName} ok. {saveModel}");
+            _logger.ZLogInformation($"Save {logName} ok. Model: {saveModel}");
         }
         catch (Exception e)
         {

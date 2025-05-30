@@ -169,7 +169,7 @@ alignment = 1
 [node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/Labels/HBoxContainer7"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "sound_volume"
+text = "sfx_volume"
 label_settings = ExtResource("3_85q3g")
 horizontal_alignment = 2
 
@@ -189,10 +189,10 @@ alignment = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
-text = "confirm"
+text = "confirm_btn"
 
 [node name="CancelBtn" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
-text = "cancel"
+text = "cancel_btn"

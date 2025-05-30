@@ -42,25 +42,25 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 80)
 layout_mode = 2
 size_flags_horizontal = 4
-text = "start"
+text = "start_btn"
 
 [node name="SettingsBtn" type="Button" parent="MarginContainer/VBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 80)
 layout_mode = 2
 size_flags_horizontal = 4
-text = "settings"
+text = "settings_btn"
 
 [node name="CreditsBtn" type="Button" parent="MarginContainer/VBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 80)
 layout_mode = 2
 size_flags_horizontal = 4
-text = "credits"
+text = "credits_btn"
 
 [node name="ExitBtn" type="Button" parent="MarginContainer/VBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 80)
 layout_mode = 2
 size_flags_horizontal = 4
-text = "exit"
+text = "exit_btn"

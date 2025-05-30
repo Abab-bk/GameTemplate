@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Game.Scripts.I18n;
 using Godot;
 
 namespace DsUi
@@ -87,15 +86,7 @@ namespace DsUi
             //记录ui打开
             UiManager.RecordUi(this, UiManager.RecordType.Open);
         }
-
-        public override void _Ready()
-        {
-            if (AutoTranslateMode != AutoTranslateModeEnum.Disabled)
-            {
-                Translator.TranslateTree(this);
-            }
-        }
-
+        
         /// <summary>
         /// 创建当前ui时调用
         /// </summary>

@@ -10,7 +10,6 @@ public static class Utils
         {
             Language.English => "en",
             Language.Chinese => "zh",
-            Language.Japanese => "ja",
             _ => "en"
         };
     }

@@ -30,12 +30,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Content Include="Assets\Locale\**\*.ftl" CopyToOutputDirectory="PreserveNewest" />
-  </ItemGroup>
-  
-  <ItemGroup>
     <PackageReference Include="GDTask" Version="1.2.2" />
-    <PackageReference Include="Linguini.Bundle" Version="0.8.1" />
     <PackageReference Include="MemoryPack" Version="1.21.3" />
 
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
