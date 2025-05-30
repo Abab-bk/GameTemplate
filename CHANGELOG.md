@@ -1,3 +1,15 @@
+## 4.0.0 (2025-05-30)
+
+### Feat
+
+- something
+
+### Refactor
+
+- EPIC
+- Using Godot translateServer now
+- Correctly using the logger now
+
 ## 3.3.0 (2025-03-06)
 
 ### Feat
