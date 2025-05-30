@@ -56,7 +56,7 @@ public class AppSaver
                 _logger.ZLogInformation($"Loading {logName}...");
                 var data = File.ReadAllBytes(savePath);
                 var saveModel = MemoryPackSerializer.Deserialize<T>(data);
-                _logger.ZLogInformation($"Load {logName} ok. {saveModel}");
+                _logger.ZLogInformation($"Load {logName} ok. Model: {saveModel}");
                 return saveModel;
             }
             _logger.ZLogInformation($"{logName} not exists. Create new one.");
