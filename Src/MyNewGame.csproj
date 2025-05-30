@@ -39,4 +39,8 @@
 
     <PackageReference Include="ZLogger" Version="2.5.9" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Content Include="Scripts\Libs\.gitkeep" />
+  </ItemGroup>
 </Project>

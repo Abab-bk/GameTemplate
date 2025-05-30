@@ -1,6 +1,6 @@
 ﻿using Game.Scripts.I18n;
 
-namespace Game.Scripts.Classes;
+namespace Game.Scripts.Common;
 
 public static class Utils
 {

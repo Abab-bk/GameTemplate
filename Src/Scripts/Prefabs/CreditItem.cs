@@ -1,18 +1,12 @@
 using Godot;
-using OnReadyCs;
 
 namespace Game.Scripts.Prefabs;
 
 public partial class CreditItem : VBoxContainer
 {
-    [OnReady("Title")] private Label _title;
-    [OnReady("Text")] private Label _text;
-
-    public override void _Ready()
-    {
-        this.InitializeOnReadyFields();
-    }
-
+    [Export] private Label _title;
+    [Export] private Label _text;
+    
     public CreditItem Config(string key, string[] data)
     {
         _title.Text = key;
