@@ -19,6 +19,7 @@ namespace Game.Scripts;
 public partial class Application : Node2D
 {
     private HFSM _stateMachine;
+    private ILogger<Application> _logger;
     
     private class GodotLoggerProcessor : IAsyncLogProcessor
     {
@@ -26,14 +27,14 @@ public partial class Application : Node2D
 
         public void Post(IZLoggerEntry log)
         {
-            GD.Print($"[{log.LogInfo.LogLevel}] {log.ToString()}");
+            GD.Print($"[{log.LogInfo.LogLevel}] [{log.LogInfo.Category}] {log.ToString()}");
             log.Return();
         }
     }
     
     public override void _Ready()
     {
-        Global.Logger = LoggerFactory
+        LogManager.SetLoggerFactory(LoggerFactory
             .Create(logging =>
             {
                 logging.AddZLoggerLogProcessor(new GodotLoggerProcessor());
@@ -54,8 +55,9 @@ public partial class Application : Node2D
                         ".Logs/GameLog.log"
                     ));
                 }
-            })
-            .CreateLogger("Application");
+            }));
+
+        _logger = LogManager.GetLogger<Application>();
 
         _stateMachine = HFSMUtils.TryConvert<HFSM>(GetNode<Node>("HFSM"));
 
@@ -80,7 +82,7 @@ public partial class Application : Node2D
     
     private async void OnStateMachineTransition(State from, State to)
     {
-        Logger.Log($"[Application]: {from.GetName()} -> {to.GetName()}");
+        _logger.ZLogInformation($"[Application]: {from.GetName()} -> {to.GetName()}");
         switch (to.GetName())
         {
             case "PreBoot":
@@ -128,7 +130,7 @@ public partial class Application : Node2D
                     Environment.GetCommandLineArgs().Contains("--SkipBootSplash")
                 )
                 {
-                    Logger.Log("[Application] Has --SkipBootSplash");
+                    _logger.ZLogInformation($"Has --SkipBootSplash");
                     Global.Flags.Add("SkippedBootSplash");
                     await GDTask.NextFrame();
                     _stateMachine.SetTrigger("ToStartMenu");
@@ -147,7 +149,7 @@ public partial class Application : Node2D
                     !Global.Flags.Contains("SkippedStartMenu")
                     )
                 {
-                    Logger.Log("[Application] Has --SkipStartMenu");
+                    _logger.ZLogInformation($"Has --SkipStartMenu");
                     Global.Flags.Add("SkippedStartMenu");
                     await GDTask.NextFrame();
                     _stateMachine.SetTrigger("ToGame");

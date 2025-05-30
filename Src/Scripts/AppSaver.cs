@@ -3,6 +3,8 @@ using System.Buffers;
 using System.IO;
 using Game.Scripts.Models;
 using MemoryPack;
+using Microsoft.Extensions.Logging;
+using ZLogger;
 
 namespace Game.Scripts;
 
@@ -14,6 +16,8 @@ public class AppSaver
     public UserPreferences UserPreferences { get; private set; }
     public GameSave GameSave { get; private set; }
 
+    private ILogger<AppSaver> _logger = LogManager.GetLogger<AppSaver>();
+    
     public void Save()
     {
         SaveUserPreferences();
@@ -30,16 +34,16 @@ public class AppSaver
     {
         try
         {
-            Logger.Log($"[AppSaver]: Saving {logName}...");
+            _logger.ZLogInformation($"Saving {logName}...");
             
             var writer = new ArrayBufferWriter<byte>();
             MemoryPackSerializer.Serialize(in writer, in saveModel);
             File.WriteAllBytes(savePath, writer.WrittenMemory.ToArray());
-            Logger.Log($"[AppSaver]: Save {logName} ok. {saveModel}");
+            _logger.ZLogInformation($"Save {logName} ok. {saveModel}");
         }
         catch (Exception e)
         {
-            Logger.LogError($"[AppSaver Error]: {e} while saving {logName}");
+            _logger.ZLogError($"{e} while saving {logName}");
             throw;
         }
     }
@@ -49,18 +53,18 @@ public class AppSaver
         {
             if (File.Exists(savePath))
             {
-                Logger.Log($"[AppSaver]: Loading {logName}...");
+                _logger.ZLogInformation($"Loading {logName}...");
                 var data = File.ReadAllBytes(savePath);
                 var saveModel = MemoryPackSerializer.Deserialize<T>(data);
-                Logger.Log($"[AppSaver]: Load {logName} ok. {saveModel}");
+                _logger.ZLogInformation($"Load {logName} ok. {saveModel}");
                 return saveModel;
             }
-            Logger.Log($"[AppSaver]: {logName} not exists. Create new one.");
+            _logger.ZLogInformation($"{logName} not exists. Create new one.");
             return new T();
         }
         catch (Exception e)
         {
-            Logger.LogError($"[AppSaver Error]: {e} while loading {logName}");
+            _logger.ZLogError($"{e} while loading {logName}");
             throw;
         }
     }

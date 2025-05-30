@@ -85,7 +85,6 @@ public static class Translator
             }
             catch (Exception e)
             {
-                Logger.LogError($"[Translator]: {e}");
                 throw;
             }
         }
