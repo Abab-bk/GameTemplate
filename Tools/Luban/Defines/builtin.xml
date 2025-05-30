@@ -6,5 +6,5 @@
             <option name="type" value="Godot.Vector2"/>
             <option name="constructor" value="ExternalTypeUtil.NewVector2"/>
         </mapper>
-    </bean>    
+    </bean>
 </module>

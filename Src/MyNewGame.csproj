@@ -50,4 +50,8 @@
   <ItemGroup>
     <Content Include="Scripts\Libs\.gitkeep" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Combat\" />
+  </ItemGroup>
 </Project>

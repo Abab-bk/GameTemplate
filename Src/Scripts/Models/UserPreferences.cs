@@ -8,7 +8,7 @@ namespace Game.Scripts.Models;
 [MemoryPackable]
 public partial class UserPreferences : ISavableModel
 {
-    public event Action TryApplyChanged;
+    public event Action TryApplyChanged = delegate { };
 
     public Language Language { get; set; } = Language.English;
 
