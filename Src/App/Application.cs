@@ -64,12 +64,6 @@ public partial class Application : Node2D
 
         _stateMachine = HFSMUtils.TryConvert<HFSM>(GetNode<Node>("HFSM")) ?? 
                         throw new InvalidOperationException();
-
-        if (_stateMachine == null)
-            throw new Exception("Initialize Application state machine failed.");
-
-        _stateMachine.Transited += OnStateMachineTransition;
-        _stateMachine.SetTrigger("Next");
         
         EventBus.RequestQuitGame += () => _stateMachine.SetTrigger("ToEnd");
         EventBus.RequestStartGame += () => _stateMachine.SetTrigger("ToGame");
@@ -79,9 +73,11 @@ public partial class Application : Node2D
             {
                 Global.World.Destroy();
             }
-
             _stateMachine.SetTrigger("ToStartMenu");
         };
+        
+        _stateMachine.Transited += OnStateMachineTransition;
+        _stateMachine.SetTrigger("Next");
     }
     
     private async void OnStateMachineTransition(State from, State to)
