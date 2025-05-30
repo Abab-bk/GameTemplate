@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using KaimiraGames;
 
 namespace AcidWallStudio;
 
@@ -70,20 +69,7 @@ public static class Wizard
 
         return path + list.PickRandom();
     }
-
-    /// <summary>
-    /// 根据 chance 返回 bool，做随机概率使用
-    /// </summary>
-    /// <param name="chance"> 概率, 0 - 100 </param>
-    /// <returns></returns>
-    public static bool ChanceOverThreshold(int chance)
-    {
-        WeightedList<bool> list = new WeightedList<bool>();
-        list.Add(true, chance);
-        list.Add(false, 100 - chance);
-        return list.Next();
-    }
-
+    
     public static Timer CreateTimer(float time)
     {
         Timer timer = new Timer();
@@ -93,8 +79,8 @@ public static class Wizard
 
     public static float GetTriangularSample(float max, float min, float mode)
     {
-        float u = (float)Random.Shared.NextDouble();
-        float f = (mode - min) / (max - min);
+        var u = (float)Random.Shared.NextDouble();
+        var f = (mode - min) / (max - min);
 
         if (u <= f)
             return min + (float)Math.Sqrt(u * (max - min) * (mode - min));
@@ -165,7 +151,7 @@ public static class Wizard
         Node2D target = null;
         var minDistance = float.MaxValue;
         
-        foreach (Node child in node.GetTree().GetNodesInGroup(groupName))
+        foreach (var child in node.GetTree().GetNodesInGroup(groupName))
         {
             if (child is not Node2D node2D) continue;
             var distance = node.GlobalPosition.DistanceSquaredTo(node2D.GlobalPosition);
@@ -175,5 +161,10 @@ public static class Wizard
         }
         
         return target;
+    }
+    
+    public static T Instantiate<T>(string path) where T : Node
+    {
+        return GD.Load<PackedScene>(path).Instantiate<T>();
     }
 }
