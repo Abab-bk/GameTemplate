@@ -5,16 +5,16 @@ namespace Game.Scripts.Configs;
 public class ModalConfig(
     string title,
     string text,
-    Action onConfirm = null,
-    Action onCancel = null,
-    string confirmText = null,
-    string cancelText = null
+    Action? onConfirm = null,
+    Action? onCancel = null,
+    string confirmText = "confirm",
+    string cancelText = "cancel"
     )
 {
     public string Title { get; set; } = title;
     public string Text { get; set; } = text;
     public string ConfirmText { get; set; } = confirmText;
     public string CancelText { get; set; } = cancelText;
-    public Action OnConfirm { get; set; } = onConfirm;
-    public Action OnCancel { get; set; } = onCancel;
+    public Action? OnConfirm { get; set; } = onConfirm;
+    public Action? OnCancel { get; set; } = onCancel;
 }

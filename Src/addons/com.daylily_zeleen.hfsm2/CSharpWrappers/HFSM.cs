@@ -67,7 +67,7 @@ public partial class HFSM : Node, IHFSMClass<HFSM>
 	/// Signal transited(from_state: State, to_state: State)
 	/// </summary>
 	[Signal]
-	public delegate void TransitedEventHandler(State? fromState, State? toState);
+	public delegate void TransitedEventHandler(State fromState, State toState);
 	/// <summary>
 	/// Native Signal transited(from_state: State, to_state: State)
 	/// </summary>

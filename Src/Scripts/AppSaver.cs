@@ -12,11 +12,11 @@ public class AppSaver
 {
     public string UserPreferencesPath { get; set; } = "UserPreferences.bin";
     public string GameSavePath { get; set; } = "GameSave.bin";
-    
-    public UserPreferences UserPreferences { get; private set; }
-    public GameSave GameSave { get; private set; }
 
-    private ILogger<AppSaver> _logger = LogManager.GetLogger<AppSaver>();
+    public UserPreferences UserPreferences { get; private set; } = default!;
+    public GameSave GameSave { get; private set; } = default!;
+
+    private readonly ILogger<AppSaver> _logger = LogManager.GetLogger<AppSaver>();
     
     public void Save()
     {
@@ -56,6 +56,9 @@ public class AppSaver
                 _logger.ZLogInformation($"Loading {logName}...");
                 var data = File.ReadAllBytes(savePath);
                 var saveModel = MemoryPackSerializer.Deserialize<T>(data);
+                
+                if (saveModel == null) throw new Exception("Model is null");
+                
                 _logger.ZLogInformation($"Load {logName} ok. Model: {saveModel}");
                 return saveModel;
             }
@@ -71,6 +74,9 @@ public class AppSaver
     
     public void SaveGameSave()
     {
+        if (GameSave == null) 
+            throw new Exception("GameSave is null");
+        
         SaveItem(GameSave, GameSavePath, "GameSave");
     }
     
@@ -83,13 +89,10 @@ public class AppSaver
         };
     }
     
-    public void UnloadGameSave()
-    {
-        GameSave = null;
-    }
-    
     private void SaveUserPreferences()
     {
+        if (UserPreferences == null)
+            throw new Exception("UserPreferences is null");
         SaveItem(UserPreferences, UserPreferencesPath, "UserPreferences");
     }
     

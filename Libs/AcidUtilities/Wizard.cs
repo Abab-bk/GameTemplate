@@ -167,4 +167,7 @@ public static class Wizard
     {
         return GD.Load<PackedScene>(path).Instantiate<T>();
     }
+    
+    public static PackedScene LoadPackedScene(string path)
+        => GD.Load<PackedScene>(path);
 }

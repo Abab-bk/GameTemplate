@@ -1,18 +1,14 @@
 ﻿using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
 
 namespace Game.Scripts;
 
 public static class Global
 {
     public static readonly List<string> Flags = new();
-    public static World World { get; set; }
-    public static Application Application { get; set; }
+    public static App.World? World { get; set; } = default!;
+    public static App.Application Application { get; set; } = default!;
     
-    public static ILogger Logger { get; set; }
-
-    private static AppSaver _appSaver;
-    
+    private static AppSaver _appSaver = default!;
     public static AppSaver AppSaver {
         get => _appSaver; 
         set
