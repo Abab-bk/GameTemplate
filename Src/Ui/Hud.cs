@@ -1,6 +1,4 @@
-using AcidWallStudio;
 using Game.Scripts;
-using GDPanelFramework;
 using GDPanelFramework.Panels;
 using Godot;
 
@@ -9,22 +7,27 @@ namespace Game.Ui;
 [SceneTree]
 public partial class Hud : UIPanel
 {
-    private PackedScene PauseMenuScene { get; set; } = Wizard
-        .LoadPackedScene(PauseMenu.TscnFilePath);
-
     protected override void _OnPanelInitialize()
     {
         base._OnPanelInitialize();
         EventBus.RequestBackToStartMenu += ClosePanel;
+        PauseMenu.Visible = false;
     }
 
-    public override void _Input(InputEvent @event)
+    public override void _UnhandledInput(InputEvent @event)
     {
+        base._UnhandledInput(@event);
         if (!@event.IsActionPressed("Pause")) return;
-        if (!Global.IsPaused) PauseMenuScene.CreatePanel<PauseMenu>().OpenPanel();
+        PauseMenu.Visible = !PauseMenu.Visible;
     }
 
     protected override void _OnPanelOpen()
     {
+    }
+
+    protected override void _OnPanelClose()
+    {
+        base._OnPanelClose();
+        QueueFree();
     }
 }

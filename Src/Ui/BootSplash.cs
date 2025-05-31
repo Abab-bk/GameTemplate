@@ -48,4 +48,10 @@ public partial class BootSplash : UIPanel
     protected override void _OnPanelOpen()
     {
     }
+
+    protected override void _OnPanelClose()
+    {
+        base._OnPanelClose();
+        QueueFree();
+    }
 }

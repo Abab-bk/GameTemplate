@@ -25,14 +25,14 @@ public static class Global
     public static void TryPause()
     {
         _pauseCount++;
-        EventBus.PauseCountChanged?.Invoke(_pauseCount);
+        EventBus.PauseCountChanged.Invoke(_pauseCount);
         Application.GetTree().Paused = _pauseCount > 0;
     }
     
     public static void TryResume()
     {
         _pauseCount--;
-        EventBus.PauseCountChanged?.Invoke(_pauseCount);
+        EventBus.PauseCountChanged.Invoke(_pauseCount);
         Application.GetTree().Paused = _pauseCount > 0;
     }
 }

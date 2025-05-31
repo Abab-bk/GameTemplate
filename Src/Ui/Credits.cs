@@ -41,4 +41,10 @@ public partial class Credits : UIPanel
             tween.Play();
         });
     }
+
+    protected override void _OnPanelClose()
+    {
+        base._OnPanelClose();
+        QueueFree();
+    }
 }
