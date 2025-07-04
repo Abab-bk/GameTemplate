@@ -1,4 +1,4 @@
-using Game.Scripts.Configs;
+using Game.Commons;
 using GDPanelFramework.Panels;
 using Godot;
 

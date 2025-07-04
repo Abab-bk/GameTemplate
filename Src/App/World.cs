@@ -19,6 +19,11 @@ public partial class World : Node2D
     {
         Global.World = this;
         HudScene.CreatePanel<Hud>().OpenPanel();
+
+#if IMGUI
+        AddChild(new Debugger());
+#endif
+        
         _logger.ZLogInformation($"Ready");
     }
     

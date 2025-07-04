@@ -1,23 +1,23 @@
 using System;
 using DataBase;
-using Game.Scripts;
+using Game.Persistent;
 using Game.Scripts.I18n;
-using Game.Scripts.Models;
 using GDPanelFramework.Panels;
 using Godot;
+using GodotTask;
+using UserPreferences = Game.Persistent.Models.UserPreferences;
 
 namespace Game.Ui;
 
 [SceneTree]
-public partial class Settings : UIPanel
+public partial class Settings : UIPanelArg<UserPreferences, bool>
 {
-    private UserPreferences UserPreferences { get; set; } = default!;
-
     private string Vector2ToString(Vector2 vector2) => $"{vector2.X} * {vector2.Y}";
+    
+    private void Close() => ClosePanel(true);
 
-    protected override void _OnPanelInitialize()
+    protected override void _OnPanelOpen(UserPreferences openArg)
     {
-        base._OnPanelInitialize();
         var languagePopupMenu = LanguageMenu.GetPopup();
         foreach (var name in Enum.GetNames<Language>())
         {
@@ -38,59 +38,50 @@ public partial class Settings : UIPanel
 
         ConfirmBtn.Pressed += () =>
         {
-            UserPreferences.Language = (Language)Enum.Parse(
+            openArg.Language = (Language)Enum.Parse(
                 typeof(Language),
                 LanguageMenu.GetPopup().GetItemText(
                     LanguageMenu.Selected
                 )
             );
-            UserPreferences.Fullscreen = FullscreenCheckbox.ButtonPressed;
-            UserPreferences.VSync = VSyncCheckbox.ButtonPressed;
+            openArg.Fullscreen = FullscreenCheckbox.ButtonPressed;
+            openArg.VSync = VSyncCheckbox.ButtonPressed;
             
-            UserPreferences.MasterVolume = (float)MasterVolumeSlider.Value / 100f;
-            UserPreferences.MusicVolume = (float)MusicVolumeSlider.Value / 100f;
-            UserPreferences.SoundVolume = (float)SoundVolumeSlider.Value / 100f;
+            openArg.MasterVolume = (float)MasterVolumeSlider.Value / 100f;
+            openArg.MusicVolume = (float)MusicVolumeSlider.Value / 100f;
+            openArg.SoundVolume = (float)SoundVolumeSlider.Value / 100f;
             
-            UserPreferences.Resolution = (Vector2I)Data.Constants.Resolutions[ResolutionMenu.Selected];
+            openArg.Resolution = (Vector2I)Data.Constants.Resolutions[ResolutionMenu.Selected];
             
-            EventBus.RequestSaveAppSaver.Invoke();
-            UserPreferences.Apply();
+            SaveManager.Instance.SaveUserPreferences().Forget();
+            openArg.Apply();
             
-            UpdateUi();
+            UpdateUi(openArg);
         };
 
-        CancelBtn.Pressed += ClosePanel;
+        CancelBtn.Pressed += Close;
+        
+        UpdateUi(openArg);
     }
 
-    public Settings Load(UserPreferences userPreferences)
+    protected override void _OnPanelClose(bool closeArg)
     {
-        UserPreferences = userPreferences;
-        UpdateUi();
-        return this;
+        base._OnPanelClose(closeArg);
+        QueueFree();
     }
 
-    private void UpdateUi()
+    private void UpdateUi(UserPreferences userPreferences)
     {
-        LanguageMenu.Select((int)UserPreferences.Language);
+        LanguageMenu.Select((int)userPreferences.Language);
         ResolutionMenu.Select(
-            Array.IndexOf(Data.Constants.Resolutions, UserPreferences.Resolution)
+            Array.IndexOf(Data.Constants.Resolutions, userPreferences.Resolution)
             );
         
-        FullscreenCheckbox.ButtonPressed = UserPreferences.Fullscreen;
-        VSyncCheckbox.ButtonPressed = UserPreferences.VSync;
+        FullscreenCheckbox.ButtonPressed = userPreferences.Fullscreen;
+        VSyncCheckbox.ButtonPressed = userPreferences.VSync;
         
-        MasterVolumeSlider.Value = UserPreferences.MasterVolume * 100f;
-        MusicVolumeSlider.Value = UserPreferences.MusicVolume * 100f;
-        SoundVolumeSlider.Value = UserPreferences.SoundVolume * 100f;
-    }
-
-    protected override void _OnPanelOpen()
-    {
-    }
-
-    protected override void _OnPanelClose()
-    {
-        base._OnPanelClose();
-        QueueFree();
+        MasterVolumeSlider.Value = userPreferences.MasterVolume * 100f;
+        MusicVolumeSlider.Value = userPreferences.MusicVolume * 100f;
+        SoundVolumeSlider.Value = userPreferences.SoundVolume * 100f;
     }
 }

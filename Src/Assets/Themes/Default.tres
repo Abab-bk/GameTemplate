@@ -1,4 +1,18 @@
-[gd_resource type="Theme" format=3 uid="uid://dcu258d8wjk74"]
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://dcu258d8wjk74"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mu514"]
 
 [resource]
 default_font_size = 20
+EmptyBtn/base_type = &"Button"
+EmptyBtn/styles/disabled = SubResource("StyleBoxEmpty_mu514")
+EmptyBtn/styles/disabled_mirrored = SubResource("StyleBoxEmpty_mu514")
+EmptyBtn/styles/focus = SubResource("StyleBoxEmpty_mu514")
+EmptyBtn/styles/hover = SubResource("StyleBoxEmpty_mu514")
+EmptyBtn/styles/hover_mirrored = SubResource("StyleBoxEmpty_mu514")
+EmptyBtn/styles/hover_pressed = SubResource("StyleBoxEmpty_mu514")
+EmptyBtn/styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_mu514")
+EmptyBtn/styles/normal = SubResource("StyleBoxEmpty_mu514")
+EmptyBtn/styles/normal_mirrored = SubResource("StyleBoxEmpty_mu514")
+EmptyBtn/styles/pressed = SubResource("StyleBoxEmpty_mu514")
+EmptyBtn/styles/pressed_mirrored = SubResource("StyleBoxEmpty_mu514")
