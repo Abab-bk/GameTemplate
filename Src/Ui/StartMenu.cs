@@ -22,9 +22,9 @@ public partial class StartMenu : UIPanel
         StartBtn.Pressed += () =>
         {
             ClosePanel();
-            EventBus.RequestStartGame.Invoke();
+            Global.Application.StartGame();
         };
-        ExitBtn.Pressed += () => EventBus.RequestQuitGame.Invoke();
+        ExitBtn.Pressed += Global.Application.Quit;
         CreditsBtn.Pressed += () => CreditsScene
             .CreatePanel<Credits>()
             .OpenPanel();

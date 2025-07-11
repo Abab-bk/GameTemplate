@@ -2,8 +2,8 @@ using System;
 using System.IO;
 using System.Linq;
 using AcidWallStudio;
+using Game.Commons;
 using Game.Persistent;
-using Game.Scripts;
 using Game.Ui;
 using GDPanelFramework;
 using GDPanelFramework.Panels.Tweener;
@@ -132,17 +132,6 @@ public partial class Application : Node2D
         await SaveManager.Instance.LoadUserPreferencesAsync();
         SaveManager.Instance.ApplyUserPreferences();
         
-        EventBus.RequestQuitGame += () => _stateMachine.Fire(Trigger.ToEnd);
-        EventBus.RequestStartGame += () => _stateMachine.Fire(Trigger.ToGame);
-        EventBus.RequestBackToStartMenu += () =>
-        {
-            if (IsInstanceValid(Global.World))
-            {
-                Global.World.Destroy();
-            }
-            _stateMachine.Fire(Trigger.ToStartMenu);
-        };
-        
         PanelManager.DefaultPanelTweener = new FadePanelTweener();
         
         BootSplashScene = Wizard.LoadPackedScene(BootSplash.TscnFilePath);
@@ -152,7 +141,17 @@ public partial class Application : Node2D
         
         await _stateMachine.FireAsync(Trigger.Next);
     }
-    
+
+    public void Quit() => _stateMachine.Fire(Trigger.ToEnd);
+    public void StartGame() => _stateMachine.Fire(Trigger.ToGame);
+
+    public void BackToStartMenu()
+    {
+        if (IsInstanceValid(Global.World)) Global.World.Destroy();
+        if (IsInstanceValid(Global.Hud)) Global.Hud.Close();
+        _stateMachine.Fire(Trigger.ToStartMenu);
+    }
+
     private void InBootSplash()
     {
         if (Environment.GetCommandLineArgs().Contains("--SkipBootSplash"))

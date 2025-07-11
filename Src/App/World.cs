@@ -1,5 +1,5 @@
 ﻿using AcidWallStudio;
-using Game.Scripts;
+using Game.Commons;
 using Game.Ui;
 using GDPanelFramework;
 using Godot;
@@ -23,13 +23,15 @@ public partial class World : Node2D
 #if IMGUI
         AddChild(new Debugger());
 #endif
+
+        Global.Game = new GameManager();
+        Global.Game.NewGame();
         
         _logger.ZLogInformation($"Ready");
     }
     
     public void Destroy()
     {
-        Global.World = null;
         _logger.ZLogInformation($"Destroy");
         QueueFree();
     }

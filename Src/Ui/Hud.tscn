@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://d30bt6saswni7"]
+[gd_scene load_steps=2 format=3 uid="uid://d30bt6saswni7"]
 
 [ext_resource type="Script" uid="uid://b31p8sidc0kvs" path="res://Ui/Hud.cs" id="1_gw3tk"]
-[ext_resource type="PackedScene" uid="uid://dhvk5v5gqnngs" path="res://Ui/PauseMenu.tscn" id="2_1ccr6"]
 
 [node name="Hud" type="Control"]
 process_mode = 3
@@ -12,7 +11,3 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_gw3tk")
-
-[node name="PauseMenu" parent="." instance=ExtResource("2_1ccr6")]
-unique_name_in_owner = true
-layout_mode = 1

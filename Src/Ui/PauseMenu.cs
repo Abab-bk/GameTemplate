@@ -2,40 +2,52 @@ using AcidWallStudio;
 using Game.App;
 using Game.Persistent;
 using GDPanelFramework;
+using GDPanelFramework.Panels;
 using Godot;
 
 namespace Game.Ui;
 
 [SceneTree]
-public partial class PauseMenu : Control
+public partial class PauseMenu : UIPanel
 {
-    public override void _Ready()
+    protected override void _OnPanelOpen()
     {
         base._Ready();
-        ResumeBtn.Pressed += Hide;
-        SettingsBtn.Pressed += () =>
-        {
-            Wizard.LoadPackedScene(Settings.TscnFilePath)
-                .CreatePanel<Settings>()
-                .OpenPanel(SaveManager.Instance.UserPreferences);
-        };
-        BackToStartMenuBtn.Pressed += () =>
-        {
-            Hide();
-            EventBus.RequestBackToStartMenu.Invoke();
-        };
-        ExitBtn.Pressed += () =>
-        {
-            EventBus.RequestQuitGame.Invoke();
-        };
-        VisibilityChanged += () =>
-        {
-            if (Visible)
-            {
-                Global.TryPause();
-                return;
-            }
-            Global.TryResume();
-        };
+        
+        ResumeBtn.Pressed += ClosePanel;
+        SettingsBtn.Pressed += OpenSettingsPanel;
+        BackToStartMenuBtn.Pressed += BackToStartMenu;
+        ExitBtn.Pressed += Global.Application.Quit;
+        
+        EnableCloseWithCancelKey();
+        
+        Global.TryPause();
+    }
+
+    protected override void _OnPanelClose()
+    {
+        base._OnPanelClose();
+        
+        ResumeBtn.Pressed -= ClosePanel;
+        SettingsBtn.Pressed -= OpenSettingsPanel;
+        BackToStartMenuBtn.Pressed -= BackToStartMenu;
+        ExitBtn.Pressed -= Global.Application.Quit;
+        
+        Global.TryResume();
+        
+        QueueFree();
+    }
+
+    private void OpenSettingsPanel()
+    {
+        Wizard.LoadPackedScene(Settings.TscnFilePath)
+            .CreatePanel<Settings>()
+            .OpenPanel(SaveManager.Instance.UserPreferences);
+    }
+
+    private void BackToStartMenu()
+    {
+        ClosePanel();
+        Global.Application.BackToStartMenu();
     }
 }

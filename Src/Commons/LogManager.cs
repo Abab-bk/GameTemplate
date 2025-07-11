@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace Game.Scripts;
+namespace Game.Commons;
 
 public static class LogManager
 {
