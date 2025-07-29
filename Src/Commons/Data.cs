@@ -1,11 +1,13 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.IO;
+using System.Text.Json;
 using cfg;
 
-namespace DataBase;
+namespace Game.Commons;
 
 public static class Data
 {
-    public static Tables Tables;
+    public static readonly Tables Tables;
     public static readonly TbConstants Constants;
 
     static Data()
