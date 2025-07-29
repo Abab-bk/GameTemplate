@@ -22,8 +22,19 @@ public partial class InventoryUi : PanelContainer
 
         foreach (var item in Inventory.GetItems())
         {
-            var itemUi = ItemCellUi.Instantiate(item);
+            var itemUi = ItemCellUi.Instantiate(item, Inventory);
             Items.AddChild(itemUi);
         }
+    }
+
+    public override bool _CanDropData(Vector2 atPosition, Variant data)
+    {
+        return (GodotObject)data is ItemWrapper itemWrapper && Inventory.CanAddItem(itemWrapper.Item);
+    }
+
+    public override void _DropData(Vector2 atPosition, Variant data)
+    {
+        if ((GodotObject)data is not ItemWrapper itemWrapper) return;
+        ItemTransfer.Transfer(itemWrapper.Source, Inventory, itemWrapper.Item);
     }
 }

@@ -8,6 +8,7 @@ namespace Game.UI;
 public partial class ItemCellUi : PanelContainer
 {
     public Item Item { get; private set; } = default!;
+    public IItemContainer ItemContainer { get; private set; } = default!;
     
     private event Action OnClick = delegate { };
 
@@ -27,9 +28,10 @@ public partial class ItemCellUi : PanelContainer
     }
 
     [OnInstantiate]
-    private void Init(Item item)
+    private void Init(Item item, IItemContainer itemContainer)
     {
         Item = item;
+        ItemContainer = itemContainer;
         UpdateUi();
     }
 
@@ -37,5 +39,15 @@ public partial class ItemCellUi : PanelContainer
     {
         Icon.Texture = GD.Load<Texture2D>(Item.GetIconPath());
         CountLabel.Text = Item.Count.ToString();
+    }
+
+    public override Variant _GetDragData(Vector2 atPosition)
+    {
+        SetDragPreview(Item.MakePreview());
+        return new ItemWrapper
+        {
+            Item = Item,
+            Source = ItemContainer
+        };
     }
 }
