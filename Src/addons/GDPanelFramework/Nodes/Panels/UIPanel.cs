@@ -8,24 +8,32 @@ public abstract partial class UIPanel : UIPanelBase<Empty, Empty>
     private InputActionPhase? _registeredInputActionPhase;
 
     /// <inheritdoc cref="UIPanelBase{TOpenArg,TCloseArg}()"/>
-
     /// <summary>
     /// Close this panel.
     /// </summary>
     /// <remarks>
     /// The call to this method is ignored if the current panel is not opened.
     /// </remarks>
-    protected void ClosePanel() => ClosePanelInternal(Empty.Default);
+    protected void ClosePanel()
+    {
+        ClosePanelInternal(Empty.Default);
+    }
 
     /// <summary>
     /// Override the parameterless version <see cref="_OnPanelClose()"/> instead.
     /// </summary>
-    protected sealed override void _OnPanelClose(Empty closeArg) => _OnPanelClose();
+    protected sealed override void _OnPanelClose(Empty closeArg)
+    {
+        _OnPanelClose();
+    }
 
     /// <summary>
     /// Override the parameterless version <see cref="_OnPanelOpen()"/> instead.
     /// </summary>
-    protected sealed override void _OnPanelOpen(Empty openArg) => _OnPanelOpen();
+    protected sealed override void _OnPanelOpen(Empty openArg)
+    {
+        _OnPanelOpen();
+    }
 
     /// <summary>
     /// Called when the system is opening the panel.
@@ -54,7 +62,7 @@ public abstract partial class UIPanel : UIPanelBase<Empty, Empty>
     /// </remarks>
     protected void EnableCloseWithCancelKey(InputActionPhase actionPhase = InputActionPhase.Released)
     {
-        if(_registeredInputActionPhase != null) return;
+        if (_registeredInputActionPhase != null) return;
         _registeredInputActionPhase = actionPhase;
         RegisterInputCancel(ClosePanel, actionPhase);
     }
@@ -67,7 +75,7 @@ public abstract partial class UIPanel : UIPanelBase<Empty, Empty>
     /// </remarks>
     protected void DisableCloseWithCancelKey()
     {
-        if(_registeredInputActionPhase == null) return;
+        if (_registeredInputActionPhase == null) return;
         RemoveInputCancel(ClosePanel, _registeredInputActionPhase!.Value);
         _registeredInputActionPhase = null;
     }

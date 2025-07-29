@@ -15,7 +15,7 @@ public partial class Credits : UIPanel
         base._OnPanelInitialize();
         CancelBtn.Pressed += ClosePanel;
     }
-    
+
     protected override void _OnPanelOpen()
     {
         var data = JsonSerializer.Deserialize<Dictionary<string, string[]>>(

@@ -1,52 +1,50 @@
 <Project Sdk="Godot.NET.Sdk/4.4.1">
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <EnableDynamicLoading>true</EnableDynamicLoading>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <RootNamespace>Game</RootNamespace>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <EnableDynamicLoading>true</EnableDynamicLoading>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <RootNamespace>Game</RootNamespace>
 
-    <WarningsAsErrors>CS9057</WarningsAsErrors>
+        <WarningsAsErrors>CS9057</WarningsAsErrors>
 
-    <Nullable>enable</Nullable>
+        <Nullable>enable</Nullable>
 
-    <RestoreAdditionalProjectSources>../Libs/LocalPackages</RestoreAdditionalProjectSources>
-  </PropertyGroup>
+        <RestoreAdditionalProjectSources>../Libs/LocalPackages</RestoreAdditionalProjectSources>
+    </PropertyGroup>
 
-  <PropertyGroup>
-    <DefineConstants Condition="'$(Configuration)'!='ExportRelease' And&#xA;        $(DefineConstants.Contains('GODOT_PC'))">$(DefineConstants);IMGUI</DefineConstants>
-  </PropertyGroup>
+    <PropertyGroup>
+        <DefineConstants Condition="'$(Configuration)'!='ExportRelease' And&#xA;        $(DefineConstants.Contains('GODOT_PC'))">$(DefineConstants);IMGUI</DefineConstants>
+    </PropertyGroup>
 
-  <Choose>
-    <When Condition="$(DefineConstants.Contains('IMGUI'))">
-      <ItemGroup>
-        <PackageReference Include="ImGui.NET" Version="1.91.6.1" />
-      </ItemGroup>
-    </When>
-    <Otherwise>
-      <ItemGroup>
-        <Compile Remove="addons/imgui-godot/**" />
-      </ItemGroup>
-    </Otherwise>
-  </Choose>
-  
-  <ItemGroup>
-    <ProjectReference Include="..\Libs\AcidUtilities\AcidUtilities.csproj" />
-    <ProjectReference Include="..\Libs\DataBase\DataBase.csproj" />
-    <ProjectReference Include="..\Libs\Luban\Luban.csproj" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="Chickensoft.GameTools" Version="2.0.28" />
-    <PackageReference Include="GDTask" Version="1.5.0" />
-    <PackageReference Include="MemoryPack" Version="1.21.4" />
-    <PackageReference Include="RandomEx" Version="1.0.4" />
-    <PackageReference Include="Stateless" Version="5.17.0" />
-    <PackageReference Include="ZLogger" Version="2.5.10" />
-    
-    <PackageReference Include="GodotSharp.SourceGenerators" Version="2.6.0-250131-2115.Release" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="Combat\" />
-  </ItemGroup>
+    <Choose>
+        <When Condition="$(DefineConstants.Contains('IMGUI'))">
+            <ItemGroup>
+                <PackageReference Include="ImGui.NET" Version="1.91.6.1"/>
+            </ItemGroup>
+        </When>
+        <Otherwise>
+            <ItemGroup>
+                <Compile Remove="addons/imgui-godot/**"/>
+            </ItemGroup>
+        </Otherwise>
+    </Choose>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Libs\AcidUtilities\AcidUtilities.csproj"/>
+        <ProjectReference Include="..\Libs\DataBase\DataBase.csproj"/>
+        <ProjectReference Include="..\Libs\Luban\Luban.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Chickensoft.GameTools" Version="2.0.28"/>
+        <PackageReference Include="FlowerRpg.Stats" Version="2.2.5" />
+        <PackageReference Include="GDTask" Version="1.5.0"/>
+        <PackageReference Include="MemoryPack" Version="1.21.4"/>
+        <PackageReference Include="RandomEx" Version="1.0.4"/>
+        <PackageReference Include="Stateless" Version="5.17.0"/>
+
+        <PackageReference Include="GodotSharp.SourceGenerators" Version="2.6.0-250131-2115.Release"/>
+
+        <PackageReference Include="ZeroLog" Version="2.2.0"/>
+    </ItemGroup>
 </Project>

@@ -3,6 +3,7 @@ using System.Text.Json;
 using AcidWallStudio;
 using GDPanelFramework.Panels;
 using Godot;
+using GodotTask;
 
 namespace Game.Ui;
 
@@ -11,10 +12,10 @@ public partial class BootSplash : UIPanel
 {
     public override void _Ready()
     {
-        Play();
+        Play().Forget();
     }
 
-    private async void Play()
+    private async GDTask Play()
     {
         var data = JsonSerializer.Deserialize<Dictionary<string, string>>(
             Wizard.ReadAllText("res://Assets/BootSplash.json"));
@@ -41,7 +42,7 @@ public partial class BootSplash : UIPanel
 
                 icon.QueueFree();
             }
-        
+
         ClosePanel();
     }
 

@@ -3,6 +3,7 @@ using System.Threading;
 using Godot;
 
 namespace GDPanelFramework.Panels;
+
 /// <summary>
 /// The fundamental type for all panels, do not inherit this type.
 /// </summary>
@@ -16,10 +17,10 @@ public abstract partial class UIPanelBase<TOpenArg, TCloseArg> : UIPanelBaseCore
         Action<TCloseArg>? OnPanelCloseCallback,
         Action? UntypedOnPanelCloseCallback);
 
-    
+
     private PanelOpeningMetadata? _metadata;
 
-    
+
     /// <summary>
     /// The argument passed to the panel when opening.
     /// </summary>
@@ -39,14 +40,14 @@ public abstract partial class UIPanelBase<TOpenArg, TCloseArg> : UIPanelBaseCore
         _metadata = panelOpeningMetadata;
         CurrentPanelStatus = PanelStatus.Opened;
         OpenArg = openArg;
-		ShowPanel(() => FinishAndResetTokenSource(ref PanelOpenTweenFinishTokenSource));
+        ShowPanel(() => FinishAndResetTokenSource(ref PanelOpenTweenFinishTokenSource));
         SetPanelChildAvailability(true);
         DelegateRunner.RunProtected(_OnPanelOpen, openArg, "Open Panel", LocalName);
-	}
+    }
 
     internal void ClosePanelInternal(TCloseArg closeArg)
     {
-        if(CurrentPanelStatus != PanelStatus.Opened) return;
+        if (CurrentPanelStatus != PanelStatus.Opened) return;
         CurrentPanelStatus = PanelStatus.Closed;
         FinishAndResetTokenSource(ref PanelCloseTokenSource);
         DelegateRunner.RunProtected(_OnPanelClose, closeArg, "Close Panel", LocalName);
@@ -55,17 +56,17 @@ public abstract partial class UIPanelBase<TOpenArg, TCloseArg> : UIPanelBaseCore
 
         var metadataValue = _metadata!.Value;
         _metadata = null;
-        
+
         PanelManager.HandlePanelClose(this, metadataValue.PreviousPanelVisual, metadataValue.ClosePolicy);
         HidePanel(() => FinishAndResetTokenSource(ref PanelCloseTweenFinishTokenSource));
 
         metadataValue.UntypedOnPanelCloseCallback?.Invoke();
         metadataValue.OnPanelCloseCallback?.Invoke(closeArg);
-	}
+    }
 
     private static void FinishAndResetTokenSource(ref CancellationTokenSource? cancellationTokenSource)
     {
-        if(cancellationTokenSource == null) return;
+        if (cancellationTokenSource == null) return;
         cancellationTokenSource.Cancel();
         cancellationTokenSource.Dispose();
     }
@@ -83,7 +84,7 @@ public abstract partial class UIPanelBase<TOpenArg, TCloseArg> : UIPanelBaseCore
     public sealed override void _Notification(int what)
     {
         base._Notification(what);
-        
+
         DelegateRunner.RunProtected(_OnPanelNotification, what, "Panel Notification", LocalName);
 
         if (what == NotificationPredelete)
@@ -92,10 +93,7 @@ public abstract partial class UIPanelBase<TOpenArg, TCloseArg> : UIPanelBaseCore
             Cleanup();
         }
 
-        if (what == NotificationWMWindowFocusOut)
-        {
-            CancelPressedInput();
-        }
+        if (what == NotificationWMWindowFocusOut) CancelPressedInput();
     }
 
     /// <summary>

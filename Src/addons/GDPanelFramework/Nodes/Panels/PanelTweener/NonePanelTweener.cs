@@ -12,16 +12,26 @@ public class NonePanelTweener : IPanelTweener
     /// <summary>
     /// The unified instance of this <see cref="NonePanelTweener"/>.
     /// </summary>
-    public static NonePanelTweener Instance => Singleton<NonePanelTweener>.GetInstance(() => new());
-    
-    private NonePanelTweener() { }
+    public static NonePanelTweener Instance => Singleton<NonePanelTweener>.GetInstance(() => new NonePanelTweener());
+
+    private NonePanelTweener()
+    {
+    }
 
     /// <inheritdoc/>
-    public void Init(Control panel) { }
+    public void Init(Control panel)
+    {
+    }
 
     /// <inheritdoc/>
-    public void Show(Control panel, Action? onFinish) => onFinish?.Invoke();
+    public void Show(Control panel, Action? onFinish)
+    {
+        onFinish?.Invoke();
+    }
 
     /// <inheritdoc/>
-    public void Hide(Control panel, Action? onFinish) => onFinish?.Invoke();
+    public void Hide(Control panel, Action? onFinish)
+    {
+        onFinish?.Invoke();
+    }
 }

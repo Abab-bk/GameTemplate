@@ -25,6 +25,7 @@ internal sealed class InputLocal : Input
             mm.Dispose();
             return io.WantCaptureMouse;
         }
+
         return HandleEvent(evt);
     }
 }

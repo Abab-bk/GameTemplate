@@ -13,28 +13,28 @@ public partial class PauseMenu : UIPanel
     protected override void _OnPanelOpen()
     {
         base._Ready();
-        
+
         ResumeBtn.Pressed += ClosePanel;
         SettingsBtn.Pressed += OpenSettingsPanel;
         BackToStartMenuBtn.Pressed += BackToStartMenu;
         ExitBtn.Pressed += Global.Application.Quit;
-        
+
         EnableCloseWithCancelKey();
-        
+
         Global.TryPause();
     }
 
     protected override void _OnPanelClose()
     {
         base._OnPanelClose();
-        
+
         ResumeBtn.Pressed -= ClosePanel;
         SettingsBtn.Pressed -= OpenSettingsPanel;
         BackToStartMenuBtn.Pressed -= BackToStartMenu;
         ExitBtn.Pressed -= Global.Application.Quit;
-        
+
         Global.TryResume();
-        
+
         QueueFree();
     }
 

@@ -1,5 +1,5 @@
 ﻿using System;
-using Game.Scripts.I18n;
+using Game.Commons;
 using Godot;
 using MemoryPack;
 
@@ -15,22 +15,26 @@ public partial class UserPreferences : ISavableModel
     public float MasterVolume { get; set; } = 0.8f;
     public float MusicVolume { get; set; } = 0.8f;
     public float SoundVolume { get; set; } = 0.8f;
-    
+
     public bool Fullscreen { get; set; }
     public bool VSync { get; set; }
-    public Vector2I Resolution { get; set; } = new (1280, 720);
+    public Vector2I Resolution { get; set; } = new(1280, 720);
 
     public void Apply()
     {
         TryApplyChanged?.Invoke();
     }
-    
-    public DisplayServer.VSyncMode GetVSyncMode() =>
-        VSync ? DisplayServer.VSyncMode.Enabled : DisplayServer.VSyncMode.Disabled;
 
-    public DisplayServer.WindowMode GetWindowMode() =>
-        Fullscreen ? DisplayServer.WindowMode.Fullscreen : DisplayServer.WindowMode.Windowed;
-    
+    public DisplayServer.VSyncMode GetVSyncMode()
+    {
+        return VSync ? DisplayServer.VSyncMode.Enabled : DisplayServer.VSyncMode.Disabled;
+    }
+
+    public DisplayServer.WindowMode GetWindowMode()
+    {
+        return Fullscreen ? DisplayServer.WindowMode.Fullscreen : DisplayServer.WindowMode.Windowed;
+    }
+
     public override string ToString()
     {
         return $"""

@@ -50,8 +50,8 @@ internal sealed class BackendNative : IBackend
     {
         if (glyphRanges != null)
         {
-            int[] gr = new int[glyphRanges.Length];
-            for (int i = 0; i < glyphRanges.Length; ++i)
+            var gr = new int[glyphRanges.Length];
+            for (var i = 0; i < glyphRanges.Length; ++i)
                 gr[i] = glyphRanges[i];
             _gd.Call(MethodName.AddFont, fontData, fontSize, merge, gr);
         }
@@ -80,6 +80,7 @@ internal sealed class BackendNative : IBackend
     {
         _gd.Call(MethodName.ResetFonts);
     }
+
     public void SetMainViewport(Viewport vp)
     {
         _gd.Call(MethodName.SetMainViewport, vp);

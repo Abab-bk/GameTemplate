@@ -7,20 +7,20 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Luban\Luban.csproj" />
+        <ProjectReference Include="..\Luban\Luban.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
         <Content Include="Assets\**\*.json"
-                 CopyToOutputDirectory="PreserveNewest" />
-    </ItemGroup>
-    
-    <ItemGroup>
-      <Folder Include="DataExtensions\" />
+                 CopyToOutputDirectory="PreserveNewest"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="GodotSharp" Version="4.4.0" />
+        <Folder Include="DataExtensions\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="GodotSharp" Version="4.4.0"/>
     </ItemGroup>
 
 </Project>

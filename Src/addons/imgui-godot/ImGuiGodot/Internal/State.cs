@@ -38,14 +38,17 @@ internal sealed class State : IDisposable
         nint ctx,
         ImGuiViewportPtr vp,
         ImGuiPlatformImeDataPtr data);
+
     private static readonly PlatformSetImeDataFn _setImeData = SetImeData;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate void SetClipboardTextFn(nint ud, nint text);
+
     private static readonly SetClipboardTextFn _setClipboardText = SetClipboardText;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate nint GetClipboardTextFn(nint ud);
+
     private static readonly GetClipboardTextFn _getClipboardText = GetClipboardText;
 
     public State(IRenderer renderer)
@@ -54,10 +57,7 @@ internal sealed class State : IDisposable
         Input = new Input();
         Fonts = new Fonts();
 
-        if (ImGui.GetCurrentContext() != IntPtr.Zero)
-        {
-            ImGui.DestroyContext();
-        }
+        if (ImGui.GetCurrentContext() != IntPtr.Zero) ImGui.DestroyContext();
 
         var context = ImGui.CreateContext();
         ImGui.SetCurrentContext(context);
@@ -70,10 +70,7 @@ internal sealed class State : IDisposable
             ImGuiBackendFlags.RendererHasVtxOffset |
             ImGuiBackendFlags.RendererHasViewports;
 
-        if (_rendererName == IntPtr.Zero)
-        {
-            _rendererName = Marshal.StringToCoTaskMemAnsi(Renderer.Name);
-        }
+        if (_rendererName == IntPtr.Zero) _rendererName = Marshal.StringToCoTaskMemAnsi(Renderer.Name);
 
         unsafe
         {
@@ -103,7 +100,7 @@ internal sealed class State : IDisposable
         if (IntPtr.Size != sizeof(ulong))
             throw new PlatformNotSupportedException("imgui-godot requires 64-bit pointers");
 
-        RendererType rendererType = Enum.Parse<RendererType>((string)cfg.Get("Renderer"));
+        var rendererType = Enum.Parse<RendererType>((string)cfg.Get("Renderer"));
 
         if (DisplayServer.GetName() == "headless")
             rendererType = RendererType.Dummy;
@@ -111,12 +108,10 @@ internal sealed class State : IDisposable
         // fall back to Canvas in OpenGL compatibility mode
         if (rendererType == RendererType.RenderingDevice
             && RenderingServer.GetRenderingDevice() == null)
-        {
             rendererType = RendererType.Canvas;
-        }
 
         // there's no way to get the actual current thread model, eg if --render-thread is used
-        int threadModel = (int)ProjectSettings.GetSetting("rendering/driver/threads/thread_model");
+        var threadModel = (int)ProjectSettings.GetSetting("rendering/driver/threads/thread_model");
 
         IRenderer renderer;
         try
@@ -145,7 +140,7 @@ internal sealed class State : IDisposable
             }
         }
 
-        Instance = new(renderer)
+        Instance = new State(renderer)
         {
             Scale = (float)cfg.Get("Scale"),
             LayerNum = (int)cfg.Get("Layer")
@@ -155,17 +150,18 @@ internal sealed class State : IDisposable
 
         var fonts = (Godot.Collections.Array)cfg.Get("Fonts");
 
-        for (int i = 0; i < fonts.Count; ++i)
+        for (var i = 0; i < fonts.Count; ++i)
         {
             var fontres = (Resource)fonts[i];
             var fontData = (FontFile)fontres.Get("FontData");
-            int fontSize = (int)fontres.Get("FontSize");
-            bool merge = (bool)fontres.Get("Merge");
+            var fontSize = (int)fontres.Get("FontSize");
+            var merge = (bool)fontres.Get("Merge");
             if (i == 0)
                 ImGuiGD.AddFont(fontData, fontSize);
             else
                 ImGuiGD.AddFont(fontData, fontSize, merge);
         }
+
         if ((bool)cfg.Get("AddDefaultFont"))
             ImGuiGD.AddFontDefault();
         ImGuiGD.RebuildFontAtlas();
@@ -210,7 +206,7 @@ internal sealed class State : IDisposable
 
     private static void SetImeData(nint ctx, ImGuiViewportPtr vp, ImGuiPlatformImeDataPtr data)
     {
-        int windowID = (int)vp.PlatformHandle;
+        var windowID = (int)vp.PlatformHandle;
 
         DisplayServer.WindowSetImeActive(data.WantVisible, windowID);
         if (data.WantVisible)
@@ -218,7 +214,7 @@ internal sealed class State : IDisposable
             Vector2I pos = new(
                 (int)(data.InputPos.X - vp.Pos.X),
                 (int)(data.InputPos.Y - vp.Pos.Y + data.InputLineHeight)
-                );
+            );
             DisplayServer.WindowSetImePosition(pos, windowID);
         }
     }

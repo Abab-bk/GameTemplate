@@ -12,6 +12,7 @@ public enum CreatePolicy
     /// The framework will reuse a panel if there is cache available, otherwise creating a new instance.
     /// </summary>
     TryReuse,
+
     /// <summary>
     /// The framework will creating a new instance of panel regardless the cache status.
     /// </summary>
@@ -27,6 +28,7 @@ public enum ClosePolicy
     /// The framework will cache this instance of the panel, and, when specifying createPolicy as <see cref="CreatePolicy.TryReuse"/>, reuse it in the next <see cref="PanelManager.CreatePanel{T}"/> call.
     /// </summary>
     Cache,
+
     /// <summary>
     /// The framework will calls the <see cref="Node.QueueFree"/> on this panel for deletion.
     /// </summary>
@@ -58,10 +60,12 @@ public enum InputActionPhase
     /// Triggers when the <see cref="InputEvent.IsPressed"/> method of the <see cref="InputEvent"/> returns true 
     /// </summary>
     Pressed,
+
     /// <summary>
     /// Triggers when the <see cref="InputEvent.IsPressed"/> method of the <see cref="InputEvent"/> returns false 
     /// </summary>
     Released,
+
     /// <summary>
     /// Triggers regardless the return value of the <see cref="InputEvent.IsPressed"/>.
     /// </summary>
@@ -79,10 +83,12 @@ public enum CompositeInputActionState
     /// Triggers once when any of the associated input events presses.  
     /// </summary>
     Start,
+
     /// <summary>
     /// Triggers after <see cref="Start"/> whenever any of the associated input events presses.
     /// </summary>
     Update,
+
     /// <summary>
     /// Triggers when the last associated input event releases.
     /// </summary>

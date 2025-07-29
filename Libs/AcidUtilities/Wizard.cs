@@ -7,14 +7,14 @@ namespace AcidWallStudio;
 
 public static class Wizard
 {
-    private static readonly List<Vector2> EightDirs = new ();
-    
+    private static readonly List<Vector2> EightDirs = new();
+
     static Wizard()
     {
-        for (int i = 0; i < 8; i++)
+        for (var i = 0; i < 8; i++)
         {
             float angle = i * 45; // 计算每个方向的角度（0, 45, 90, ...）
-            Vector2 direction = Vector2.Right.Rotated(Mathf.DegToRad(angle)); // 使用向量旋转计算方向
+            var direction = Vector2.Right.Rotated(Mathf.DegToRad(angle)); // 使用向量旋转计算方向
             EightDirs.Add(direction);
         }
     }
@@ -39,7 +39,7 @@ public static class Wizard
     {
         return EightDirs.PickRandom();
     }
-    
+
     public static Vector2 Bezier(Vector2 p0, Vector2 p1, Vector2 p2, float t)
     {
         var q0 = p0.Lerp(p1, t);
@@ -51,7 +51,7 @@ public static class Wizard
 
     public static string GetRandomTexturePath(string path)
     {
-        List<string> list = new List<string>();
+        var list = new List<string>();
 
         var dir = DirAccess.Open(path);
 
@@ -60,19 +60,16 @@ public static class Wizard
 
         while (fileName != "")
         {
-            if (fileName.EndsWith(".png") || fileName.EndsWith(".tres"))
-            {
-                list.Add(fileName);
-            }
+            if (fileName.EndsWith(".png") || fileName.EndsWith(".tres")) list.Add(fileName);
             fileName = dir.GetNext();
         }
 
         return path + list.PickRandom();
     }
-    
+
     public static Timer CreateTimer(float time)
     {
-        Timer timer = new Timer();
+        var timer = new Timer();
         timer.WaitTime = time;
         return timer;
     }
@@ -84,7 +81,7 @@ public static class Wizard
 
         if (u <= f)
             return min + (float)Math.Sqrt(u * (max - min) * (mode - min));
-        
+
         return max - (float)Math.Sqrt((1 - u) * (max - min) * (max - mode));
     }
 
@@ -92,7 +89,7 @@ public static class Wizard
     {
         return new Vector2(-vector.X, vector.Y);
     }
-    
+
     public static Vector2 ReverseVectorY(Vector2 vector)
     {
         return new Vector2(vector.X, -vector.Y);
@@ -102,16 +99,17 @@ public static class Wizard
     {
         return new Vector2(-vector.X, -vector.Y);
     }
-    
+
     public static Vector2 Reverse(this Vector2 vector)
     {
         return new Vector2(-vector.X, -vector.Y);
     }
 
-    public static float FloatRange(this Random random, float min = 0.0f, float max = 1.0f) {
-        return (float) (random.NextDouble() * (max - min) + min);
+    public static float FloatRange(this Random random, float min = 0.0f, float max = 1.0f)
+    {
+        return (float)(random.NextDouble() * (max - min) + min);
     }
-    
+
     public static T GetRandomEnum<T>(this Random random)
         where T : struct, Enum
     {
@@ -150,7 +148,7 @@ public static class Wizard
     {
         Node2D target = null;
         var minDistance = float.MaxValue;
-        
+
         foreach (var child in node.GetTree().GetNodesInGroup(groupName))
         {
             if (child is not Node2D node2D) continue;
@@ -159,15 +157,17 @@ public static class Wizard
             minDistance = distance;
             target = node2D;
         }
-        
+
         return target;
     }
-    
+
     public static T Instantiate<T>(string path) where T : Node
     {
         return GD.Load<PackedScene>(path).Instantiate<T>();
     }
-    
+
     public static PackedScene LoadPackedScene(string path)
-        => GD.Load<PackedScene>(path);
+    {
+        return GD.Load<PackedScene>(path);
+    }
 }

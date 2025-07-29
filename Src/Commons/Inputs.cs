@@ -3,7 +3,6 @@
 namespace Game.Commons;
 
 [InputMap]
-public partial class Inputs
+public static partial class Inputs
 {
-    
 }

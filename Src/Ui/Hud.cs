@@ -23,8 +23,11 @@ public partial class Hud : UIPanel
             }
         );
     }
-    
-    public void Close() => ClosePanel();
+
+    public void Close()
+    {
+        ClosePanel();
+    }
 
     protected override void _OnPanelOpen()
     {

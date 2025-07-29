@@ -16,8 +16,9 @@ internal partial class RootPanelContainer : CanvasLayer
             if (PanelRootInstance != null) return PanelRootInstance;
 
             var panelContainer = new RootPanelContainer();
-            
+
             PanelRootInstance = panelContainer._container;
+            PanelRootInstance.MouseFilter = Control.MouseFilterEnum.Ignore;
             return PanelRootInstance;
         }
     }
@@ -25,22 +26,23 @@ internal partial class RootPanelContainer : CanvasLayer
     public RootPanelContainer()
     {
         _root = ((SceneTree)Engine.GetMainLoop()).Root;
-        
+
         FollowViewportEnabled = false;
-        
+
         Name = "RootPanelViewport";
-        _container = new() { Name = "PanelRoot" };
-        
+        _container = new Control { Name = "PanelRoot" };
+
         AddChild(_container);
 
         _root.CallDeferred(Node.MethodName.AddChild, this, false, Variant.From(InternalMode.Front));
-        _container.CallDeferred(Control.MethodName.SetAnchorsAndOffsetsPreset, Variant.From(Control.LayoutPreset.FullRect));
+        _container.CallDeferred(Control.MethodName.SetAnchorsAndOffsetsPreset,
+            Variant.From(Control.LayoutPreset.FullRect));
     }
 
     public override void _Input(InputEvent inputEvent)
     {
         var accept = PanelManager.ProcessInputEvent(inputEvent);
         if (accept && IsInstanceValid(_root)) _root.SetInputAsHandled();
-        if(IsInstanceValid(inputEvent)) inputEvent.Dispose();
+        if (IsInstanceValid(inputEvent)) inputEvent.Dispose();
     }
 }

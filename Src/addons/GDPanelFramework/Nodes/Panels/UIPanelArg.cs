@@ -12,5 +12,8 @@ public abstract partial class UIPanelArg<TOpenArg, TCloseArg> : UIPanelBase<TOpe
     /// <remarks>
     /// The call to this method is ignored if the current panel is not opened.
     /// </remarks>
-    protected void ClosePanel(TCloseArg closeArg) => ClosePanelInternal(closeArg);
+    protected void ClosePanel(TCloseArg closeArg)
+    {
+        ClosePanelInternal(closeArg);
+    }
 }

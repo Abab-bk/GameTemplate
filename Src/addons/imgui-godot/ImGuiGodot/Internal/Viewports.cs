@@ -26,14 +26,12 @@ internal sealed class GodotImGuiWindow : IDisposable
 
         Rect2I winRect = new(_vp.Pos.ToVector2I(), _vp.Size.ToVector2I());
 
-        Window mainWindow = ImGuiController.Instance.GetWindow();
+        var mainWindow = ImGuiController.Instance.GetWindow();
         if (mainWindow.GuiEmbedSubwindows)
         {
             if ((bool)ProjectSettings.GetSetting("display/window/subwindows/embed_subwindows"))
-            {
                 GD.PushWarning(
                     "ImGui Viewports: 'display/window/subwindows/embed_subwindows' needs to be disabled");
-            }
             mainWindow.GuiEmbedSubwindows = false;
         }
 
@@ -89,6 +87,7 @@ internal sealed class GodotImGuiWindow : IDisposable
                 _window.GetParent().RemoveChild(_window);
                 _window.Free();
             }
+
             _gcHandle.Free();
         }
     }
@@ -159,6 +158,7 @@ internal sealed partial class Viewports
     private static unsafe partial void ImGuiPlatformIO_Set_Platform_GetWindowPos(
         ImGuiPlatformIO* platform_io,
         IntPtr funcPtr);
+
     [LibraryImport("cimgui")]
     [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     private static unsafe partial void ImGuiPlatformIO_Set_Platform_GetWindowSize(
@@ -167,47 +167,58 @@ internal sealed partial class Viewports
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate void Platform_CreateWindow(ImGuiViewportPtr vp);
+
     private static readonly Platform_CreateWindow _createWindow = Godot_CreateWindow;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate void Platform_DestroyWindow(ImGuiViewportPtr vp);
+
     private static readonly Platform_DestroyWindow _destroyWindow = Godot_DestroyWindow;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate void Platform_ShowWindow(ImGuiViewportPtr vp);
+
     private static readonly Platform_ShowWindow _showWindow = Godot_ShowWindow;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate void Platform_SetWindowPos(ImGuiViewportPtr vp, Vector2 pos);
+
     private static readonly Platform_SetWindowPos _setWindowPos = Godot_SetWindowPos;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate void Platform_GetWindowPos(ImGuiViewportPtr vp, out Vector2 pos);
+
     private static readonly Platform_GetWindowPos _getWindowPos = Godot_GetWindowPos;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate void Platform_SetWindowSize(ImGuiViewportPtr vp, Vector2 pos);
+
     private static readonly Platform_SetWindowSize _setWindowSize = Godot_SetWindowSize;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate void Platform_GetWindowSize(ImGuiViewportPtr vp, out Vector2 size);
+
     private static readonly Platform_GetWindowSize _getWindowSize = Godot_GetWindowSize;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate void Platform_SetWindowFocus(ImGuiViewportPtr vp);
+
     private static readonly Platform_SetWindowFocus _setWindowFocus = Godot_SetWindowFocus;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate bool Platform_GetWindowFocus(ImGuiViewportPtr vp);
+
     private static readonly Platform_GetWindowFocus _getWindowFocus = Godot_GetWindowFocus;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate bool Platform_GetWindowMinimized(ImGuiViewportPtr vp);
+
     private static readonly Platform_GetWindowMinimized _getWindowMinimized
         = Godot_GetWindowMinimized;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate void Platform_SetWindowTitle(ImGuiViewportPtr vp, string title);
+
     private static readonly Platform_SetWindowTitle _setWindowTitle = Godot_SetWindowTitle;
 
     private GodotImGuiWindow _mainWindow = null!;
@@ -215,12 +226,12 @@ internal sealed partial class Viewports
     private static void UpdateMonitors()
     {
         var pio = ImGui.GetPlatformIO();
-        int screenCount = DisplayServer.GetScreenCount();
+        var screenCount = DisplayServer.GetScreenCount();
 
         // workaround for lack of ImVector constructor
         unsafe
         {
-            int bytes = screenCount * sizeof(ImGuiPlatformMonitor);
+            var bytes = screenCount * sizeof(ImGuiPlatformMonitor);
             if (pio.NativePtr->Monitors.Data != IntPtr.Zero)
                 ImGui.MemFree(pio.NativePtr->Monitors.Data);
             *&pio.NativePtr->Monitors.Data = ImGui.MemAlloc((uint)bytes);
@@ -228,7 +239,7 @@ internal sealed partial class Viewports
             *&pio.NativePtr->Monitors.Size = screenCount;
         }
 
-        for (int i = 0; i < screenCount; ++i)
+        for (var i = 0; i < screenCount; ++i)
         {
             var monitor = pio.Monitors[i];
             monitor.MainPos = DisplayServer.ScreenGetPosition(i).ToImVec2();

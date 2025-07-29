@@ -2,8 +2,7 @@
 
 namespace Game.Combat;
 
-public readonly struct Defense(DefenseType type, float amount)
-{
-    public DefenseType Type => type;
-    public float Amount => amount;
-}
+public record struct Defense(
+    DamageType Type,
+    float Amount
+    );

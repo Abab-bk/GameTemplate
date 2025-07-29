@@ -10,5 +10,8 @@ public static class Node2DExtension
         return node;
     }
 
-    public static Vector2 GetCanvasPosition(this Node2D node2D) => node2D.GetGlobalTransformWithCanvas().Origin;
+    public static Vector2 GetCanvasPosition(this Node2D node2D)
+    {
+        return node2D.GetGlobalTransformWithCanvas().Origin;
+    }
 }

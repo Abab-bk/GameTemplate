@@ -10,7 +10,7 @@ public partial class Modal : UIPanel
     public Modal Config(ModalConfig config)
     {
         CancelBtn.Visible = config.OnCancel != null;
-        
+
         ConfirmBtn.Pressed += () =>
         {
             config.OnConfirm?.Invoke();
@@ -21,13 +21,13 @@ public partial class Modal : UIPanel
             config.OnCancel?.Invoke();
             QueueFree();
         };
-        
+
         ConfirmBtn.Text = config.ConfirmText;
         CancelBtn.Text = config.CancelText;
-        
+
         TitleLabel.Text = config.Title;
         TextLabel.Text = config.Text;
-        
+
         return this;
     }
 

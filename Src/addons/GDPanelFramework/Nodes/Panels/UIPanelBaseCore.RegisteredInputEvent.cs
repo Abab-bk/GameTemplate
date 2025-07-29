@@ -13,9 +13,15 @@ public abstract partial class UIPanelBaseCore
 
         public bool Empty => _pressedCall is null && _releasedCall is null && _anyCall is null;
 
-        public void RegisterCall(Action<InputEvent> call, InputActionPhase inputActionPhase) => GetCall(inputActionPhase) += call;
+        public void RegisterCall(Action<InputEvent> call, InputActionPhase inputActionPhase)
+        {
+            GetCall(inputActionPhase) += call;
+        }
 
-        public void RemoveCall(Action<InputEvent> call, InputActionPhase inputActionPhase) => GetCall(inputActionPhase) -= call;
+        public void RemoveCall(Action<InputEvent> call, InputActionPhase inputActionPhase)
+        {
+            GetCall(inputActionPhase) -= call;
+        }
 
         public bool Call(InputEvent inputEvent, InputActionPhase inputActionPhase, string name)
         {
@@ -24,7 +30,8 @@ public abstract partial class UIPanelBaseCore
             if (call != null)
             {
                 called = true;
-                DelegateRunner.RunProtected(call, inputEvent, "Input Call", name, inputActionPhase == InputActionPhase.Pressed ? "Pressed" : "Released");
+                DelegateRunner.RunProtected(call, inputEvent, "Input Call", name,
+                    inputActionPhase == InputActionPhase.Pressed ? "Pressed" : "Released");
             }
 
             if (_anyCall != null)
@@ -58,7 +65,7 @@ public abstract partial class UIPanelBaseCore
             _anyCall = null;
         }
     }
-    
+
     private class MappedInputAxis
     {
         public MappedInputAxis(string target)
@@ -67,42 +74,42 @@ public abstract partial class UIPanelBaseCore
             NegativeInputActionPressed = inputEvent =>
             {
                 _isNegativePressed = true;
-                
+
                 if (inputEvent is InputEventJoypadMotion motion) _negativeAxisVector = motion.AxisValue;
                 else _negativeAxisVector = 1;
-                
+
                 var currentValue = GetCurrentValue();
-                if(!_isPositivePressed) InvokeStart(currentValue);
+                if (!_isPositivePressed) InvokeStart(currentValue);
                 InvokeUpdate(currentValue);
             };
             PositiveInputActionPressed = inputEvent =>
             {
                 _isPositivePressed = true;
-                
+
                 if (inputEvent is InputEventJoypadMotion motion) _positiveAxisVector = motion.AxisValue;
                 else _positiveAxisVector = 1;
-                
+
                 var currentValue = GetCurrentValue();
-                if(!_isNegativePressed) InvokeStart(currentValue);
+                if (!_isNegativePressed) InvokeStart(currentValue);
                 InvokeUpdate(currentValue);
             };
             NegativeInputActionReleased = _ =>
             {
                 _isNegativePressed = false;
                 _negativeAxisVector = 0;
-                
+
                 var currentValue = GetCurrentValue();
                 InvokeUpdate(currentValue);
-                if(!_isPositivePressed) InvokeEnd(currentValue);
+                if (!_isPositivePressed) InvokeEnd(currentValue);
             };
             PositiveInputActionReleased = _ =>
             {
                 _isPositivePressed = false;
                 _positiveAxisVector = 0;
-                
+
                 var currentValue = GetCurrentValue();
                 InvokeUpdate(currentValue);
-                if(!_isNegativePressed) InvokeEnd(currentValue);
+                if (!_isNegativePressed) InvokeEnd(currentValue);
             };
         }
 
@@ -110,7 +117,7 @@ public abstract partial class UIPanelBaseCore
         public readonly Action<InputEvent> PositiveInputActionPressed;
         public readonly Action<InputEvent> NegativeInputActionReleased;
         public readonly Action<InputEvent> PositiveInputActionReleased;
-        
+
         public event Action<float>? OnStart;
         public event Action<float>? OnUpdate;
         public event Action<float>? OnEnd;
@@ -124,27 +131,36 @@ public abstract partial class UIPanelBaseCore
         private float _positiveAxisVector;
         private float _cachedValue = float.NaN;
 
-        private float GetCurrentValue() => _positiveAxisVector - _negativeAxisVector;
-        
-        private void InvokeStart(float currentValue) => DelegateRunner.RunProtected(
-            OnStart,
-            currentValue,
-            "Input Axis Composite Start",
-            _target
-        );
+        private float GetCurrentValue()
+        {
+            return _positiveAxisVector - _negativeAxisVector;
+        }
 
-        private void InvokeEnd(float currentValue) => DelegateRunner.RunProtected(
-            OnEnd,
-            currentValue,
-            "Input Axis Composite End",
-            _target
-        );
+        private void InvokeStart(float currentValue)
+        {
+            DelegateRunner.RunProtected(
+                OnStart,
+                currentValue,
+                "Input Axis Composite Start",
+                _target
+            );
+        }
+
+        private void InvokeEnd(float currentValue)
+        {
+            DelegateRunner.RunProtected(
+                OnEnd,
+                currentValue,
+                "Input Axis Composite End",
+                _target
+            );
+        }
 
         private void InvokeUpdate(float currentValue)
         {
-            if(Mathf.IsZeroApprox(currentValue - _cachedValue)) return;
+            if (Mathf.IsZeroApprox(currentValue - _cachedValue)) return;
             _cachedValue = currentValue;
-            
+
             DelegateRunner.RunProtected(
                 OnUpdate,
                 _cachedValue,
@@ -158,65 +174,65 @@ public abstract partial class UIPanelBaseCore
     {
         public MappedInputVector2(string target)
         {
-            HorizontalAxis = new(target);
-            VerticalAxis = new(target);
+            HorizontalAxis = new MappedInputAxis(target);
+            VerticalAxis = new MappedInputAxis(target);
 
             HorizontalAxis.OnStart += horizontalAxisValue =>
             {
                 _isHorizontalPressed = true;
                 _horizontalAxisValue = horizontalAxisValue;
-                
+
                 var currentValue = GetCurrentValue();
-                if(!_isVerticalPressed) InvokeStart(ref currentValue);
+                if (!_isVerticalPressed) InvokeStart(ref currentValue);
                 InvokeUpdate(ref currentValue);
             };
             VerticalAxis.OnStart += verticalAxisValue =>
             {
                 _isVerticalPressed = true;
                 _verticalAxisValue = verticalAxisValue;
-                
+
                 var currentValue = GetCurrentValue();
-                if(!_isHorizontalPressed) InvokeStart(ref currentValue);
+                if (!_isHorizontalPressed) InvokeStart(ref currentValue);
                 InvokeUpdate(ref currentValue);
-            };    
-            
+            };
+
             HorizontalAxis.OnUpdate += horizontalAxisValue =>
             {
                 _horizontalAxisValue = horizontalAxisValue;
                 var currentValue = GetCurrentValue();
                 InvokeUpdate(ref currentValue);
             };
-            
+
             VerticalAxis.OnUpdate += verticalAxisValue =>
             {
                 _verticalAxisValue = verticalAxisValue;
                 var currentValue = GetCurrentValue();
                 InvokeUpdate(ref currentValue);
             };
-            
+
             HorizontalAxis.OnEnd += horizontalAxisValue =>
             {
                 _isHorizontalPressed = false;
                 _horizontalAxisValue = horizontalAxisValue;
-                
+
                 var currentValue = GetCurrentValue();
                 InvokeUpdate(ref currentValue);
-                if(!_isVerticalPressed) InvokeEnd(ref currentValue);
+                if (!_isVerticalPressed) InvokeEnd(ref currentValue);
             };
-            
+
             VerticalAxis.OnEnd += horizontalAxisValue =>
             {
                 _isVerticalPressed = false;
                 _verticalAxisValue = horizontalAxisValue;
-                
+
                 var currentValue = GetCurrentValue();
                 InvokeUpdate(ref currentValue);
-                if(!_isHorizontalPressed) InvokeEnd(ref currentValue);
+                if (!_isHorizontalPressed) InvokeEnd(ref currentValue);
             };
-            
+
             _target = target;
         }
-        
+
         public readonly MappedInputAxis HorizontalAxis;
         public readonly MappedInputAxis VerticalAxis;
 
@@ -227,15 +243,18 @@ public abstract partial class UIPanelBaseCore
         private Vector2 _cachedValue = new(float.NaN, float.NaN);
 
         private readonly string _target;
-                
+
         public event Action<Vector2>? OnStart;
         public event Action<Vector2>? OnUpdate;
         public event Action<Vector2>? OnEnd;
-        
+
         public bool IsEmpty => OnStart == null && OnUpdate == null && OnEnd == null;
 
-        private Vector2 GetCurrentValue() => new(_horizontalAxisValue, _verticalAxisValue);
-        
+        private Vector2 GetCurrentValue()
+        {
+            return new Vector2(_horizontalAxisValue, _verticalAxisValue);
+        }
+
         private void InvokeStart(ref readonly Vector2 currentValue)
         {
             DelegateRunner.RunProtected(
@@ -258,7 +277,8 @@ public abstract partial class UIPanelBaseCore
 
         private void InvokeUpdate(ref readonly Vector2 currentValue)
         {
-            if(Mathf.IsZeroApprox(_cachedValue.X - currentValue.X) && Mathf.IsZeroApprox(_cachedValue.Y - currentValue.Y)) return;
+            if (Mathf.IsZeroApprox(_cachedValue.X - currentValue.X) &&
+                Mathf.IsZeroApprox(_cachedValue.Y - currentValue.Y)) return;
 
             _cachedValue = currentValue;
 
@@ -272,5 +292,6 @@ public abstract partial class UIPanelBaseCore
     }
 
     private record struct InputAxisBinding(string NegativeInputName, string PositiveInputName);
+
     private record struct InputVectorBinding(InputAxisBinding HorizontalInputAxis, InputAxisBinding VerticalInputAxis);
 }

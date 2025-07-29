@@ -2,11 +2,9 @@
 using System.IO;
 using Game.Commons;
 using Game.Persistent.Models;
-using Game.Scripts;
 using Godot;
 using GodotTask;
-using Microsoft.Extensions.Logging;
-using ZLogger;
+using ZeroLog;
 
 namespace Game.Persistent;
 
@@ -15,30 +13,30 @@ public partial class SaveManager(ISaveSystem saveSystem) : Node
     private const string FileExtension = ".bin";
     private const string UserPreferencesFileName = "UserPreferences";
     private const string GameSaveFilePrefix = "GameSave";
-    
+
     public event Action OnSaveGameSave = delegate { };
     public event Action OnSaveGameSaveFinished = delegate { };
-    
-    private static ILogger<SaveManager> Logger { get; } = LogManager.GetLogger<SaveManager>();
+
+    private static Log Logger { get; } = LogManager.GetLogger<SaveManager>();
     public static SaveManager Instance { get; private set; } = default!;
     public GameSave CurrentSave { get; private set; } = default!;
     public UserPreferences UserPreferences { get; private set; } = default!;
 
     private const float MinSaveIntervalSeconds = 5f;
     private DateTime LastSaveTime { get; set; } = DateTime.MinValue;
-    
+
     public override void _Ready()
     {
         base._Ready();
         if (IsInstanceValid(Instance))
         {
-            Logger.ZLogError($"SaveManager already exists.");
+            Logger.Error("SaveManager already exists.");
             return;
         }
 
         Instance = this;
     }
-    
+
     public async GDTask LoadUserPreferencesAsync()
     {
         UserPreferences = await LoadOrCreateAsync(
@@ -47,7 +45,7 @@ public partial class SaveManager(ISaveSystem saveSystem) : Node
             "Flower",
             "UserPreferences"
         );
-        Logger.ZLogInformation($"UserPreferences loaded: {UserPreferences.ToString()}");
+        Logger.Info($"UserPreferences loaded: {UserPreferences.ToString()}");
     }
 
     public async GDTask LoadGameSaveAsync(string slotId)
@@ -64,7 +62,7 @@ public partial class SaveManager(ISaveSystem saveSystem) : Node
     {
         if ((DateTime.UtcNow - LastSaveTime).TotalSeconds < MinSaveIntervalSeconds)
         {
-            Logger.ZLogInformation($"Save skipped: not enough time has passed since last save.");
+            Logger.Info($"Save skipped: not enough time has passed since last save.");
             return;
         }
 
@@ -76,7 +74,7 @@ public partial class SaveManager(ISaveSystem saveSystem) : Node
     {
         if ((DateTime.UtcNow - LastSaveTime).TotalSeconds < MinSaveIntervalSeconds)
         {
-            Logger.ZLogInformation($"Save skipped: not enough time has passed since last save.");
+            Logger.Info($"Save skipped: not enough time has passed since last save.");
             return;
         }
 
@@ -89,14 +87,14 @@ public partial class SaveManager(ISaveSystem saveSystem) : Node
         OnSaveGameSave();
         await saveSystem.SaveAsync(GetSlotPath(GetGameSaveFileName(slotId)), CurrentSave);
         OnSaveGameSaveFinished();
-        Logger.ZLogInformation($"GameSave saved.");
+        Logger.Info($"GameSave saved.");
     }
-    
+
     public async GDTask SaveUserPreferences()
     {
         await saveSystem.SaveAsync(GetSlotPath(UserPreferencesFileName), UserPreferences);
         ApplyUserPreferences();
-        Logger.ZLogInformation($"UserPreferences saved: {UserPreferences.ToString()}");
+        Logger.Info($"UserPreferences saved: {UserPreferences.ToString()}");
     }
 
     private async GDTask<T> LoadOrCreateAsync<T>(
@@ -110,7 +108,7 @@ public partial class SaveManager(ISaveSystem saveSystem) : Node
 
         if (!File.Exists(filePath))
         {
-            Logger.ZLogInformation($"{label} file not found for slot {slotId}. Create one.");
+            Logger.Info($"{label} file not found for slot {slotId}. Create one.");
             var defaultValue = createDefault();
             await saveSystem.SaveAsync(filePath, defaultValue);
             return defaultValue;
@@ -119,24 +117,24 @@ public partial class SaveManager(ISaveSystem saveSystem) : Node
         var model = await saveSystem.LoadAsync<T>(filePath);
         if (model == null)
         {
-            Logger.ZLogWarning($"{label} file found for slot {slotId} but it's null.");
+            Logger.Warn($"{label} file found for slot {slotId} but it's null.");
             return createDefault();
         }
 
-        Logger.ZLogInformation($"{label} file found for slot {slotId}.");
+        Logger.Info($"{label} file found for slot {slotId}.");
         return model;
     }
-    
-    private string GetSlotPath(string fileName) 
+
+    private string GetSlotPath(string fileName)
     {
-        if (!fileName.EndsWith(FileExtension, StringComparison.OrdinalIgnoreCase))
-        {
-            fileName += FileExtension;
-        }
+        if (!fileName.EndsWith(FileExtension, StringComparison.OrdinalIgnoreCase)) fileName += FileExtension;
         return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName);
     }
 
-    private string GetGameSaveFileName(string slotId) => $"{slotId}.{GameSaveFilePrefix}";
+    private string GetGameSaveFileName(string slotId)
+    {
+        return $"{slotId}.{GameSaveFilePrefix}";
+    }
 
     public void ApplyUserPreferences()
     {

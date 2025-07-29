@@ -9,8 +9,16 @@ internal static class Pool
     private static class BackingPool<T>
     {
         private static readonly Stack<T> Pool = new();
-        public static bool TryPop([MaybeNullWhen(false)] out T result) => Pool.TryPop(out result);
-        public static void Push(T item) => Pool.Push(item);
+
+        public static bool TryPop([MaybeNullWhen(false)] out T result)
+        {
+            return Pool.TryPop(out result);
+        }
+
+        public static void Push(T item)
+        {
+            Pool.Push(item);
+        }
     }
 
     internal static T Get<T>(Func<T> creationHandler)
@@ -19,5 +27,8 @@ internal static class Pool
         return instance;
     }
 
-    internal static void Collect<T>(T instance) => BackingPool<T>.Push(instance);
+    internal static void Collect<T>(T instance)
+    {
+        BackingPool<T>.Push(instance);
+    }
 }

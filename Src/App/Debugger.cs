@@ -11,7 +11,7 @@ public partial class Debugger : Node
     {
         ImGuiGD.Connect(OnImGuiLayout);
     }
-    
+
     private void OnImGuiLayout()
     {
         ImGui.Begin("Debugger");

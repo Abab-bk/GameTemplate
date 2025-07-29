@@ -1,6 +1,4 @@
-﻿using Game.Scripts.I18n;
-
-namespace Game.Commons;
+﻿namespace Game.Commons;
 
 public static class Utils
 {

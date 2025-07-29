@@ -13,14 +13,12 @@ public static class GDPanelFrameworkExceptionHandler
     /// </summary>
     public static event Action<Exception>? OnProtectedException;
 
-    internal static void PublishProtectedException(Exception e, string actionName, string targetName, string? methodName)
+    internal static void PublishProtectedException(Exception e, string actionName, string targetName,
+        string? methodName)
     {
         if (OnProtectedException != null)
-        {
             OnProtectedException.Invoke(e);
-        }
         else
-        {
             GD.PushError(
                 $"""
 
@@ -32,6 +30,5 @@ public static class GDPanelFrameworkExceptionHandler
                  {e.StackTrace}
                  """
             );
-        }
     }
 }

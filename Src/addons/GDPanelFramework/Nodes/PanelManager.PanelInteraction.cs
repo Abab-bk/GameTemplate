@@ -39,7 +39,9 @@ public static partial class PanelManager
     {
         panel.ThrowIfUninitialized();
         PushPanelToPanelStack(panel, previousPanelVisual);
-        panel.OpenPanelInternal(Empty.Default, new(previousPanelVisual, closePolicy, null, onPanelCloseCallback));
+        panel.OpenPanelInternal(Empty.Default,
+            new UIPanelBase<Empty, Empty>.PanelOpeningMetadata(previousPanelVisual, closePolicy, null,
+                onPanelCloseCallback));
     }
 
     /// <summary>
@@ -56,7 +58,8 @@ public static partial class PanelManager
     {
         panel.ThrowIfUninitialized();
         PushPanelToPanelStack(panel, previousPanelVisual);
-        panel.OpenPanelInternal(Empty.Default, new(previousPanelVisual, closePolicy, null, null));
+        panel.OpenPanelInternal(Empty.Default,
+            new UIPanelBase<Empty, Empty>.PanelOpeningMetadata(previousPanelVisual, closePolicy, null, null));
     }
 
 
@@ -77,10 +80,11 @@ public static partial class PanelManager
         PreviousPanelVisual previousPanelVisual = PreviousPanelVisual.Visible,
         ClosePolicy closePolicy = ClosePolicy.Cache)
     {
-        return AsyncInterop.ToAsync<TCloseArg>(continuation => OpenPanel(panel, openArg, continuation, previousPanelVisual, closePolicy));
+        return AsyncInterop.ToAsync<TCloseArg>(continuation =>
+            OpenPanel(panel, openArg, continuation, previousPanelVisual, closePolicy));
     }
 
-    
+
     /// <summary>
     /// Opens this panel with the specified argument and stops the previous panel from receiving inputs until this panel closes.
     /// </summary>
@@ -99,7 +103,9 @@ public static partial class PanelManager
     {
         panel.ThrowIfUninitialized();
         PushPanelToPanelStack(panel, previousPanelVisual);
-        panel.OpenPanelInternal(openArg, new(previousPanelVisual, closePolicy, onPanelCloseCallback, null));
+        panel.OpenPanelInternal(openArg,
+            new UIPanelBase<TOpenArg, TCloseArg>.PanelOpeningMetadata(previousPanelVisual, closePolicy,
+                onPanelCloseCallback, null));
     }
 
     /// <summary>
@@ -118,6 +124,7 @@ public static partial class PanelManager
     {
         panel.ThrowIfUninitialized();
         PushPanelToPanelStack(panel, previousPanelVisual);
-        panel.OpenPanelInternal(openArg, new(previousPanelVisual, closePolicy, null, null));
+        panel.OpenPanelInternal(openArg,
+            new UIPanelBase<TOpenArg, TCloseArg>.PanelOpeningMetadata(previousPanelVisual, closePolicy, null, null));
     }
 }

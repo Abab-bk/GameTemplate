@@ -9,7 +9,7 @@ public class ModalConfig(
     Action? onCancel = null,
     string confirmText = "confirm",
     string cancelText = "cancel"
-    )
+)
 {
     public string Title { get; set; } = title;
     public string Text { get; set; } = text;

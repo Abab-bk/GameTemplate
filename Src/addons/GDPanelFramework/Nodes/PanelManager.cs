@@ -39,24 +39,20 @@ public static partial class PanelManager
         public bool TryGetPanel(PackedScene prefab, [NotNullWhen(true)] out UIPanelBaseCore? instance)
         {
             instance = null;
-            if (!_bufferedPanels.Remove(prefab, out var panelInstanceStack))
-            {
-                return false;
-            }
+            if (!_bufferedPanels.Remove(prefab, out var panelInstanceStack)) return false;
             if (!panelInstanceStack.TryPop(out var panelInstance))
             {
                 _bufferedPanels.Remove(prefab);
                 return false;
             }
-            if (panelInstanceStack.Count == 0)
-            {
-                _bufferedPanels.Remove(prefab);
-            }
+
+            if (panelInstanceStack.Count == 0) _bufferedPanels.Remove(prefab);
             if (!GodotObject.IsInstanceValid(panelInstance))
             {
                 panelInstance.Dispose();
                 return false;
             }
+
             instance = panelInstance;
             return true;
         }
@@ -68,6 +64,7 @@ public static partial class PanelManager
                 panelInstanceStack = [];
                 _bufferedPanels.Add(prefab, panelInstanceStack);
             }
+
             panelInstanceStack.Push(instance);
         }
     }
@@ -82,14 +79,15 @@ public static partial class PanelManager
     {
         if (IsPanelRootInitialized) return PanelContainers.Peek().Root;
 
-        PanelContainers.Push(new(null, RootPanelContainer.PanelRoot));
+        PanelContainers.Push(new PanelRootInfo(null, RootPanelContainer.PanelRoot));
         IsPanelRootInitialized = true;
 
         return PanelContainers.Peek().Root;
     }
 
 
-    private static void PushPanelToPanelStack<TPanel>(TPanel panelInstance, PreviousPanelVisual previousPreviousPanelVisual) where TPanel : UIPanelBaseCore
+    private static void PushPanelToPanelStack<TPanel>(TPanel panelInstance,
+        PreviousPanelVisual previousPreviousPanelVisual) where TPanel : UIPanelBaseCore
     {
         // Ensure the current panel is at the front most.
         var parent = GetCurrentPanelRoot();
@@ -99,16 +97,14 @@ public static partial class PanelManager
 
         // Pushes a panel to new layer, disables gui handling for the previous panel. 
         if (PanelStack.TryPeek(out var topmostPanel))
-        {
             topmostPanel.SetPanelActiveState(false, previousPreviousPanelVisual);
-        }
 
         PanelStack.Push(panelInstance);
     }
 
-    internal static void HandlePanelClose<TPanel>(TPanel closingPanel, PreviousPanelVisual previousPreviousPanelVisual, ClosePolicy closePolicy) where TPanel : UIPanelBaseCore
+    internal static void HandlePanelClose<TPanel>(TPanel closingPanel, PreviousPanelVisual previousPreviousPanelVisual,
+        ClosePolicy closePolicy) where TPanel : UIPanelBaseCore
     {
-
         var topPanel = PanelStack.Peek();
 
         ExceptionUtils.ThrowIfClosingPanelIsNotTopPanel(closingPanel, topPanel);
@@ -130,7 +126,7 @@ public static partial class PanelManager
         var sourcePrefab = closingPanel.SourcePrefab!;
 
         Buffer.BufferPanel(sourcePrefab, closingPanel);
-        
+
         var currentParent = closingPanel.GetParent();
         var defaultPanelRoot = RootPanelContainer.PanelRoot;
         if (currentParent != defaultPanelRoot) closingPanel.Reparent(defaultPanelRoot, false);
@@ -143,7 +139,7 @@ public static partial class PanelManager
         var cachedWrapper = new CachedInputEvent(inputEvent);
 
         var hasAccepted = topPanel.ProcessPanelInput(ref cachedWrapper);
-        
+
         cachedWrapper.Dispose();
 
         return hasAccepted;
@@ -198,7 +194,7 @@ public static partial class PanelManager
     /// <param name="newRoot">The <see cref="Control"/> that is becoming the container for subsequent opening panels.</param>
     public static void PushPanelContainer(Node owner, Control newRoot)
     {
-        PanelContainers.Push(new(owner, newRoot));
+        PanelContainers.Push(new PanelRootInfo(owner, newRoot));
     }
 
     /// <summary>
@@ -216,9 +212,7 @@ public static partial class PanelManager
         ExceptionUtils.ThrowIfUnauthorizedPanelRootOwner(requester, PanelContainers.Peek().Owner);
         var (_, control) = PanelContainers.Pop();
         foreach (var panel in control.GetChildren().OfType<UIPanelBaseCore>())
-        {
             panel.Reparent(RootPanelContainer.PanelRoot);
-        }
     }
 
     /// <summary>
@@ -230,7 +224,8 @@ public static partial class PanelManager
     /// <typeparam name="TPanel">The panel type to create from the <see cref="PackedScene"/></typeparam>
     /// <returns>The instance of the specified panel.</returns>
     /// <exception cref="InvalidOperationException">Throws when the system is unable to cast the instance of the <paramref name="packedPanel"/> to desired <typeparamref name="TPanel"/> type.</exception>
-    public static TPanel CreatePanel<TPanel>(this PackedScene packedPanel, CreatePolicy createPolicy = CreatePolicy.TryReuse,
+    public static TPanel CreatePanel<TPanel>(this PackedScene packedPanel,
+        CreatePolicy createPolicy = CreatePolicy.TryReuse,
         Action<TPanel>? initializeCallback = null) where TPanel : UIPanelBaseCore
     {
         TPanel panelInstance;
@@ -244,9 +239,7 @@ public static partial class PanelManager
 
         panelInstance = packedPanel.InstantiateOrNull<TPanel>();
         if (panelInstance is null)
-        {
             throw new InvalidOperationException($"Unable to cast {packedPanel.ResourceName} to {typeof(TPanel)}!");
-        }
 
         GetCurrentPanelRoot().AddChild(panelInstance);
         initializeCallback?.Invoke(panelInstance);

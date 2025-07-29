@@ -10,7 +10,7 @@ public class ScreenHelper
     {
         return (float)ProjectSettings.GetSetting("display/window/size/viewport_width") / 2;
     }
-    
+
     public static float GetScreenCenterY()
     {
         return (float)ProjectSettings.GetSetting("display/window/size/viewport_height") / 2;
@@ -36,7 +36,7 @@ public class ScreenHelper
     {
         return Random.Shared.FloatRange(0f, (float)ProjectSettings.GetSetting("display/window/size/viewport_width"));
     }
-    
+
     public static float GetRandomScreenY()
     {
         return Random.Shared.FloatRange(0f, (float)ProjectSettings.GetSetting("display/window/size/viewport_height"));
@@ -46,7 +46,7 @@ public class ScreenHelper
     {
         return (float)ProjectSettings.GetSetting("display/window/size/viewport_width");
     }
-    
+
     public static float GetMaxScreenY()
     {
         return (float)ProjectSettings.GetSetting("display/window/size/viewport_height");

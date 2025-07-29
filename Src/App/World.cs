@@ -1,20 +1,19 @@
 ﻿using AcidWallStudio;
-using Game.Commons;
 using Game.Ui;
 using GDPanelFramework;
 using Godot;
-using Microsoft.Extensions.Logging;
-using ZLogger;
+using ZeroLog;
 
 namespace Game.App;
 
 [SceneTree]
 public partial class World : Node2D
 {
-    private readonly ILogger<World> _logger = LogManager.GetLogger<World>();
+    private static readonly Log Logger = LogManager.GetLogger<World>();
+
     private PackedScene HudScene { get; set; } =
         Wizard.LoadPackedScene(Hud.TscnFilePath);
-    
+
     public override void _Ready()
     {
         Global.World = this;
@@ -26,13 +25,13 @@ public partial class World : Node2D
 
         Global.Game = new GameManager();
         Global.Game.NewGame();
-        
-        _logger.ZLogInformation($"Ready");
+
+        Logger.Info("Ready");
     }
-    
+
     public void Destroy()
     {
-        _logger.ZLogInformation($"Destroy");
+        Logger.Info("Destroy");
         QueueFree();
     }
 }

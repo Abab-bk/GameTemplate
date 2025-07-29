@@ -1,7 +1,7 @@
-﻿namespace Game.Scripts.I18n;
+﻿namespace Game.Commons;
 
 public enum Language
 {
     English,
-    Chinese,
+    Chinese
 }

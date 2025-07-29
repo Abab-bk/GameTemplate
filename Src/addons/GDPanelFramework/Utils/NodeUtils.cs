@@ -45,17 +45,18 @@ internal static class NodeUtils
         var mouseFilter = control.MouseFilter;
         var isMouseOnly = mouseOnlyControls.Contains(control);
 
-        if (!isMouseOnly && focusMode is Control.FocusModeEnum.None && mouseFilter is Control.MouseFilterEnum.Ignore) goto Children;
+        if (!isMouseOnly && focusMode is Control.FocusModeEnum.None &&
+            mouseFilter is Control.MouseFilterEnum.Ignore) goto Children;
 
         control.FocusMode = Control.FocusModeEnum.None;
         control.MouseFilter = Control.MouseFilterEnum.Ignore;
 
         if (isMouseOnly) goto Children;
-        
-        cachedChildrenControlInfos[control] = new(focusMode, mouseFilter);
+
+        cachedChildrenControlInfos[control] = new UIPanelBaseCore.CachedControlInfo(focusMode, mouseFilter);
 
         Children:
-        
+
         foreach (var child in root.GetChildren(includeInternal))
         {
             if (child is UIPanelBaseCore) continue;
@@ -83,7 +84,7 @@ internal static class NodeUtils
         }
 
         Children:
-        
+
         foreach (var child in root.GetChildren(includeInternal))
         {
             if (child is UIPanelBaseCore) continue;

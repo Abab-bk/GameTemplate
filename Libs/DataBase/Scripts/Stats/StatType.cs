@@ -9,11 +9,12 @@
 
 
 
-namespace cfg.Combat
+namespace cfg.Stats
 { 
-    public enum DefenseType
+    public enum StatType
     {
-        Normal = 0,
+        Health = 0,
+        Speed = 1,
     }
 
 } 

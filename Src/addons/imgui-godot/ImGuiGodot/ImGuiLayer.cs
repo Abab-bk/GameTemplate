@@ -1,4 +1,5 @@
 using Godot;
+
 #if GODOT_PC
 #nullable enable
 
@@ -57,17 +58,15 @@ public partial class ImGuiLayer : CanvasLayer
 
     public override void _Input(InputEvent @event)
     {
-        if (Internal.State.Instance.Input.ProcessInput(@event))
-        {
-            _parentViewport.SetInputAsHandled();
-        }
+        if (Internal.State.Instance.Input.ProcessInput(@event)) _parentViewport.SetInputAsHandled();
     }
 
     public Vector2I UpdateViewport()
     {
-        Vector2I vpSize = _parentViewport is Window w ? w.Size
+        var vpSize = _parentViewport is Window w
+            ? w.Size
             : (_parentViewport as SubViewport)?.Size
-            ?? throw new System.InvalidOperationException();
+              ?? throw new System.InvalidOperationException();
 
         if (_visible)
         {
@@ -81,12 +80,12 @@ public partial class ImGuiLayer : CanvasLayer
                     _subViewportRid,
                     _subViewportSize.X,
                     _subViewportSize.Y);
-                Rid vptex = RenderingServer.ViewportGetTexture(_subViewportRid);
+                var vptex = RenderingServer.ViewportGetTexture(_subViewportRid);
                 RenderingServer.CanvasItemClear(_canvasItem);
                 RenderingServer.CanvasItemSetTransform(_canvasItem, ft.AffineInverse());
                 RenderingServer.CanvasItemAddTextureRect(
                     _canvasItem,
-                    new(0, 0, _subViewportSize.X, _subViewportSize.Y),
+                    new Rect2(0, 0, _subViewportSize.X, _subViewportSize.Y),
                     vptex);
             }
         }
@@ -96,7 +95,7 @@ public partial class ImGuiLayer : CanvasLayer
 
     private static Rid AddLayerSubViewport(Node parent)
     {
-        Rid svp = RenderingServer.ViewportCreate();
+        var svp = RenderingServer.ViewportCreate();
         RenderingServer.ViewportSetTransparentBackground(svp, true);
         RenderingServer.ViewportSetUpdateMode(svp, RenderingServer.ViewportUpdateMode.Always);
         RenderingServer.ViewportSetClearMode(svp, RenderingServer.ViewportClearMode.Always);

@@ -12,13 +12,14 @@ public partial class StartMenu : UIPanel
 {
     private PackedScene SettingsScene { get; set; } =
         Wizard.LoadPackedScene(Settings.TscnFilePath);
+
     private PackedScene CreditsScene { get; set; } =
         Wizard.LoadPackedScene(Credits.TscnFilePath);
-    
+
     protected override void _OnPanelInitialize()
     {
         base._OnPanelInitialize();
-        
+
         StartBtn.Pressed += () =>
         {
             ClosePanel();
@@ -28,7 +29,7 @@ public partial class StartMenu : UIPanel
         CreditsBtn.Pressed += () => CreditsScene
             .CreatePanel<Credits>()
             .OpenPanel();
-        
+
         SettingsBtn.Pressed += () =>
         {
             SettingsScene

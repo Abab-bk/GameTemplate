@@ -1,8 +1,6 @@
+namespace Luban;
 
-namespace Luban
+public abstract class BeanBase
 {
-    public abstract class BeanBase
-    {
-        public abstract int GetTypeId();
-    }
+    public abstract int GetTypeId();
 }

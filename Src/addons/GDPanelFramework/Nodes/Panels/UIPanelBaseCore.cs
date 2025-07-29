@@ -47,17 +47,19 @@ public abstract partial class UIPanelBaseCore : Control
     /// <summary>
     /// A <see cref="CancellationToken"/> that gets canceled when the <see cref="UIPanel.ClosePanel"/> / <see cref="UIPanelArg{TOpenArg,TCloseArg}.ClosePanel"/> calls.
     /// </summary>
-    public CancellationToken PanelCloseToken => (PanelCloseTokenSource ??= new()).Token;
+    public CancellationToken PanelCloseToken => (PanelCloseTokenSource ??= new CancellationTokenSource()).Token;
 
     /// <summary>
     /// A <see cref="CancellationToken"/> that gets canceled when the opening animation finishes.
     /// </summary>
-    public CancellationToken PanelOpenTweenFinishToken => (PanelOpenTweenFinishTokenSource ??= new()).Token;
+    public CancellationToken PanelOpenTweenFinishToken =>
+        (PanelOpenTweenFinishTokenSource ??= new CancellationTokenSource()).Token;
 
     /// <summary>
     /// A <see cref="CancellationToken"/> that gets canceled when the opening animation finishes.
     /// </summary>
-    public CancellationToken PanelCloseTweenFinishToken => (PanelCloseTweenFinishTokenSource ??= new()).Token;
+    public CancellationToken PanelCloseTweenFinishToken =>
+        (PanelCloseTweenFinishTokenSource ??= new CancellationTokenSource()).Token;
 
     /// <summary>
     /// The <see cref="IPanelTweener"/> assigned to this panel, assigning null will cause this panel fallbacks to the <see cref="PanelManager.DefaultPanelTweener"/>.
@@ -77,7 +79,7 @@ public abstract partial class UIPanelBaseCore : Control
         if (control.MouseFilter != MouseFilterEnum.Ignore) control.MouseFilter = MouseFilterEnum.Stop;
         control.FocusMode = FocusModeEnum.None;
     }
-    
+
     internal void CacheCurrentSelection(ref Control? currentSelection)
     {
         _cachedSelection = null;
@@ -121,8 +123,11 @@ public abstract partial class UIPanelBaseCore : Control
             ShowPanel(useNoneTweener: useNoneTweener);
         }
     }
-    
-    internal void SetPanelChildAvailability(bool enabled) => NodeUtils.SetNodeChildAvailability(this, _mouseOnlyControls, _cachedChildrenControlInfos, enabled);
+
+    internal void SetPanelChildAvailability(bool enabled)
+    {
+        NodeUtils.SetNodeChildAvailability(this, _mouseOnlyControls, _cachedChildrenControlInfos, enabled);
+    }
 
     private static IPanelTweener GetPanelTweener(IPanelTweener panelTweener, bool useNonTweener)
     {

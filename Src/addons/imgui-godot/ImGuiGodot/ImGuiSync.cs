@@ -12,19 +12,16 @@ public partial class ImGuiSync : GodotObject
 
     public static void SyncPtrs()
     {
-        GodotObject gd = Engine.GetSingleton("ImGuiGD");
-        long[] ptrs = (long[])gd.Call(GetImGuiPtrs,
+        var gd = Engine.GetSingleton("ImGuiGD");
+        var ptrs = (long[])gd.Call(GetImGuiPtrs,
             ImGui.GetVersion(),
             Marshal.SizeOf<ImGuiIO>(),
             Marshal.SizeOf<ImDrawVert>(),
             sizeof(ushort),
             sizeof(ushort)
-            );
+        );
 
-        if (ptrs.Length != 3)
-        {
-            throw new NotSupportedException("ImGui version mismatch");
-        }
+        if (ptrs.Length != 3) throw new NotSupportedException("ImGui version mismatch");
 
         checked
         {
