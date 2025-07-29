@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://cy4xipogeunka"]
+
+[ext_resource type="Theme" uid="uid://dcu258d8wjk74" path="res://Assets/Themes/Default.tres" id="1_g4ji5"]
+[ext_resource type="Script" uid="uid://cuqu6p5rq8fr8" path="res://Ui/InventoryUi.cs" id="2_yho12"]
+
+[node name="InventoryUi" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_g4ji5")
+script = ExtResource("2_yho12")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="Items" type="GridContainer" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 5

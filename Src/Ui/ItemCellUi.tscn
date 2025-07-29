@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://cygvsmsvg1gke"]
+
+[ext_resource type="Theme" uid="uid://dcu258d8wjk74" path="res://Assets/Themes/Default.tres" id="1_7kfpv"]
+[ext_resource type="Script" uid="uid://clok2axfc3q8w" path="res://Ui/ItemCellUi.cs" id="2_3t3a6"]
+
+[node name="ItemCellUi" type="PanelContainer"]
+custom_minimum_size = Vector2(100, 100)
+offset_right = 40.0
+offset_bottom = 40.0
+theme = ExtResource("1_7kfpv")
+script = ExtResource("2_3t3a6")
+
+[node name="Icon" type="TextureRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Button" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"EmptyBtn"
+
+[node name="CountLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
