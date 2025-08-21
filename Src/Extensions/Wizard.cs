@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-namespace AcidWallStudio;
+namespace Game.Extensions;
 
 public static class Wizard
 {
@@ -13,15 +13,14 @@ public static class Wizard
     {
         for (var i = 0; i < 8; i++)
         {
-            float angle = i * 45; // 计算每个方向的角度（0, 45, 90, ...）
-            var direction = Vector2.Right.Rotated(Mathf.DegToRad(angle)); // 使用向量旋转计算方向
+            float angle = i * 45;
+            var direction = Vector2.Right.Rotated(Mathf.DegToRad(angle));
             EightDirs.Add(direction);
         }
     }
 
     public static bool FileExists(string path)
     {
-        // return FileAccess.FileExists(path);
         return ResourceLoader.Exists(path);
     }
 
@@ -138,15 +137,10 @@ public static class Wizard
         return source.OrderBy(x => Guid.NewGuid());
     }
 
-    /// <summary>
-    /// 寻找 groupName 组中最近的 node
-    /// </summary>
-    /// <param name="node"></param> Node2D 自身
-    /// <param name="groupName"></param> 组名
-    /// <returns></returns>
-    public static Node2D GetClosestTarget(this Node2D node, string groupName)
+
+    public static Node2D? GetClosestTarget(this Node2D node, string groupName)
     {
-        Node2D target = null;
+        Node2D? target = null;
         var minDistance = float.MaxValue;
 
         foreach (var child in node.GetTree().GetNodesInGroup(groupName))

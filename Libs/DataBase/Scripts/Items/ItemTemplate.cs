@@ -8,22 +8,21 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using System.Text.Json;
 
 
 namespace cfg.Items
 {
 public sealed partial class ItemTemplate : Luban.BeanBase
 {
-    public ItemTemplate(JsonElement _buf) 
+    public ItemTemplate(ByteBuf _buf) 
     {
-        Id = _buf.GetProperty("id").GetString();
-        Desc = _buf.GetProperty("desc").GetString();
-        ItemType = (Items.ItemType)_buf.GetProperty("item_type").GetInt32();
-        MaxStack = _buf.GetProperty("max_stack").GetInt32();
+        Id = _buf.ReadString();
+        Desc = _buf.ReadString();
+        ItemType = (Items.ItemType)_buf.ReadInt();
+        MaxStack = _buf.ReadInt();
     }
 
-    public static ItemTemplate DeserializeItemTemplate(JsonElement _buf)
+    public static ItemTemplate DeserializeItemTemplate(ByteBuf _buf)
     {
         return new Items.ItemTemplate(_buf);
     }

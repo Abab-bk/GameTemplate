@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using System.Text.Json;
 
 
 namespace cfg
@@ -20,22 +19,15 @@ public partial class TbConstants
 
      public Constants Data => _data;
 
-    public TbConstants(JsonElement _buf)
+    public TbConstants(ByteBuf _buf)
     {
-        int n = _buf.GetArrayLength();
+        int n = _buf.ReadSize();
         if (n != 1) throw new SerializationException("table mode=one, but size != 1");
-        _data = Constants.DeserializeConstants(_buf[0]);
+        _data = Constants.DeserializeConstants(_buf);
     }
 
 
-    /// <summary>
-    /// GameName
-    /// </summary>
      public string GameName => _data.GameName;
-    /// <summary>
-    /// Resolutions
-    /// </summary>
-     public Godot.Vector2[] Resolutions => _data.Resolutions;
     
     public void ResolveRef(Tables tables)
     {

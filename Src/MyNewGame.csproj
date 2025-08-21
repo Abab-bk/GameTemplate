@@ -10,41 +10,50 @@
         <Nullable>enable</Nullable>
 
         <RestoreAdditionalProjectSources>../Libs/LocalPackages</RestoreAdditionalProjectSources>
+        
+        <PublishAot>true</PublishAot>
     </PropertyGroup>
 
     <PropertyGroup>
-        <DefineConstants Condition="'$(Configuration)'!='ExportRelease' And&#xA;        $(DefineConstants.Contains('GODOT_PC'))">$(DefineConstants);IMGUI</DefineConstants>
+        <DefineConstants
+                Condition="'$(Configuration)'!='ExportRelease' And
+        $(DefineConstants.Contains('GODOT_PC'))">$(DefineConstants);IMGUI</DefineConstants>
     </PropertyGroup>
 
     <Choose>
         <When Condition="$(DefineConstants.Contains('IMGUI'))">
             <ItemGroup>
-                <PackageReference Include="ImGui.NET" Version="1.91.6.1"/>
+                <PackageReference Include="ImGui.NET" Version="1.91.6.1" />
             </ItemGroup>
         </When>
         <Otherwise>
             <ItemGroup>
-                <Compile Remove="addons/imgui-godot/**"/>
+                <Compile Remove="addons/imgui-godot/**" />
             </ItemGroup>
         </Otherwise>
     </Choose>
 
     <ItemGroup>
-        <ProjectReference Include="..\Libs\AcidUtilities\AcidUtilities.csproj"/>
+        <!-- Root the assemblies to avoid trimming. -->
+        <TrimmerRootAssembly Include="GodotSharp" />
+        <TrimmerRootAssembly Include="$(TargetName)" />
+    </ItemGroup>
+    
+    <ItemGroup>
         <ProjectReference Include="..\Libs\DataBase\DataBase.csproj"/>
         <ProjectReference Include="..\Libs\Luban\Luban.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Chickensoft.GameTools" Version="2.0.28"/>
+        <PackageReference Include="Chickensoft.GameTools" Version="2.0.37" />
         <PackageReference Include="FlowerRpg.Stats" Version="2.2.5" />
         <PackageReference Include="GDTask" Version="1.5.0"/>
         <PackageReference Include="MemoryPack" Version="1.21.4"/>
-        <PackageReference Include="RandomEx" Version="1.0.4"/>
-        <PackageReference Include="Stateless" Version="5.17.0"/>
+        <PackageReference Include="NRandom" Version="2.0.1" />
+        <PackageReference Include="Stateless" Version="5.18.0" />
 
         <PackageReference Include="GodotSharp.SourceGenerators" Version="2.6.0-250131-2115.Release"/>
 
-        <PackageReference Include="ZeroLog" Version="2.2.0"/>
+        <PackageReference Include="ZeroLog" Version="2.3.0" />
     </ItemGroup>
 </Project>

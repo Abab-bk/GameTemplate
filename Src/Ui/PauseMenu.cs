@@ -1,6 +1,5 @@
-using AcidWallStudio;
 using Game.App;
-using Game.Persistent;
+using Game.Extensions;
 using GDPanelFramework;
 using GDPanelFramework.Panels;
 using Godot;
@@ -42,7 +41,7 @@ public partial class PauseMenu : UIPanel
     {
         Wizard.LoadPackedScene(Settings.TscnFilePath)
             .CreatePanel<Settings>()
-            .OpenPanel(SaveManager.Instance.UserPreferences);
+            .OpenPanel(Global.SaveManager);
     }
 
     private void BackToStartMenu()

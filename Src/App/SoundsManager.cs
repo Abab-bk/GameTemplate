@@ -1,5 +1,4 @@
-﻿using System;
-using Godot;
+﻿using Godot;
 using ZeroLog;
 
 namespace Game.App;
@@ -7,15 +6,19 @@ namespace Game.App;
 public partial class SoundsManager : Node
 {
     private static readonly Log Logger = LogManager.GetLogger<SoundsManager>();
-
-    public static SoundsManager Instance { get; private set; } = default!;
-
+    
     private AudioStreamPlayer UiSoundPlayer { get; set; } = default!;
 
     public override void _Ready()
     {
-        if (Instance != null) throw new Exception("SoundsManager already exists");
-        Instance = this;
+        if (IsInstanceValid(Global.SoundsManager))
+        {
+            Logger.Error("SoundsManager already exists.");
+            QueueFree();
+            return;
+        }
+
+        Global.SoundsManager = this;
 
         UiSoundPlayer = new AudioStreamPlayer()
         {

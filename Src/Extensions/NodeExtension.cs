@@ -1,7 +1,7 @@
 ﻿using System;
 using Godot;
 
-namespace AcidUtilities;
+namespace Game.Extensions;
 
 public static class NodeExtension
 {
@@ -12,7 +12,7 @@ public static class NodeExtension
     /// <param name="result"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static bool FindNode<T>(this Node node, out T result) where T : Node
+    public static bool FindNode<T>(this Node node, out T? result) where T : Node
     {
         foreach (var child in node.GetChildren())
         {
@@ -33,7 +33,7 @@ public static class NodeExtension
             return t;
         }
 
-        return null;
+        return null!;
     }
 
     public static void RemoveAllChildren(this Node node)

@@ -1,6 +1,5 @@
-using AcidWallStudio;
 using Game.App;
-using Game.Persistent;
+using Game.Extensions;
 using GDPanelFramework;
 using GDPanelFramework.Panels;
 using Godot;
@@ -34,7 +33,7 @@ public partial class StartMenu : UIPanel
         {
             SettingsScene
                 .CreatePanel<Settings>()
-                .OpenPanel(SaveManager.Instance.UserPreferences);
+                .OpenPanel(Global.SaveManager);
         };
     }
 

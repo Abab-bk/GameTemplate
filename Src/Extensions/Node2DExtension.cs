@@ -1,6 +1,6 @@
 ﻿using Godot;
 
-namespace AcidUtilities;
+namespace Game.Extensions;
 
 public static class Node2DExtension
 {

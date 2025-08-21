@@ -1,8 +1,7 @@
 ﻿using System;
-using AcidWallStudio;
 using Godot;
 
-namespace AcidUtilities;
+namespace Game.Extensions;
 
 public class ScreenHelper
 {

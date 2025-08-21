@@ -1,4 +1,4 @@
-using AcidUtilities;
+using Game.Extensions;
 using Godot;
 using Game.Items;
 

@@ -9,60 +9,61 @@ using UserPreferences = Game.Persistent.Models.UserPreferences;
 namespace Game.Ui;
 
 [SceneTree]
-public partial class Settings : UIPanelArg<UserPreferences, bool>
+public partial class Settings : UIPanelArg<SaveManager, bool>
 {
-    private string Vector2ToString(Vector2 vector2)
-    {
-        return $"{vector2.X} * {vector2.Y}";
-    }
-
+    private readonly Vector2I[] _resolutions = [
+    new Vector2I(1280, 720),
+    new Vector2I(1920, 1080)
+    ];
+    
     private void Close()
     {
         ClosePanel(true);
     }
 
-    protected override void _OnPanelOpen(UserPreferences openArg)
+    protected override void _OnPanelOpen(SaveManager saveManager)
     {
         var languagePopupMenu = LanguageMenu.GetPopup();
-        foreach (var name in Enum.GetNames<Language>())
-            languagePopupMenu.AddItem(
-                name,
-                (int)Enum.Parse(typeof(Language), name)
-            );
+        foreach (var lang in Enum.GetValues<Language>())
+        {
+            languagePopupMenu.AddItem(lang.ToString(), (int)lang);
+        }
 
         var resolutionPopupMenu = ResolutionMenu.GetPopup();
-        foreach (var resolution in Data.Constants.Resolutions)
+        foreach (var resolution in _resolutions)
             resolutionPopupMenu.AddItem(
-                Vector2ToString(resolution),
-                Array.IndexOf(Data.Constants.Resolutions, resolution)
+                $"{resolution.X} * {resolution.Y}",
+                Array.IndexOf(_resolutions, resolution)
             );
 
         ConfirmBtn.Pressed += () =>
         {
-            openArg.Language = (Language)Enum.Parse(
+            var userPreferences = saveManager.UserPreferences;
+            
+            userPreferences.Language = (Language)Enum.Parse(
                 typeof(Language),
                 LanguageMenu.GetPopup().GetItemText(
                     LanguageMenu.Selected
                 )
             );
-            openArg.Fullscreen = FullscreenCheckbox.ButtonPressed;
-            openArg.VSync = VSyncCheckbox.ButtonPressed;
+            userPreferences.Fullscreen = FullscreenCheckbox.ButtonPressed;
+            userPreferences.VSync = VSyncCheckbox.ButtonPressed;
 
-            openArg.MasterVolume = (float)MasterVolumeSlider.Value / 100f;
-            openArg.MusicVolume = (float)MusicVolumeSlider.Value / 100f;
-            openArg.SoundVolume = (float)SoundVolumeSlider.Value / 100f;
+            userPreferences.MasterVolume = (float)MasterVolumeSlider.Value / 100f;
+            userPreferences.MusicVolume = (float)MusicVolumeSlider.Value / 100f;
+            userPreferences.SoundVolume = (float)SoundVolumeSlider.Value / 100f;
 
-            openArg.Resolution = (Vector2I)Data.Constants.Resolutions[ResolutionMenu.Selected];
+            userPreferences.Resolution = _resolutions[ResolutionMenu.Selected];
 
-            SaveManager.Instance.SaveUserPreferences().Forget();
-            openArg.Apply();
+            saveManager.SaveUserPreferences().Forget();
+            userPreferences.Apply();
 
-            UpdateUi(openArg);
+            UpdateUi(userPreferences);
         };
 
         CancelBtn.Pressed += Close;
 
-        UpdateUi(openArg);
+        UpdateUi(saveManager.UserPreferences);
     }
 
     protected override void _OnPanelClose(bool closeArg)
@@ -75,7 +76,7 @@ public partial class Settings : UIPanelArg<UserPreferences, bool>
     {
         LanguageMenu.Select((int)userPreferences.Language);
         ResolutionMenu.Select(
-            Array.IndexOf(Data.Constants.Resolutions, userPreferences.Resolution)
+            Array.IndexOf(_resolutions, userPreferences.Resolution)
         );
 
         FullscreenCheckbox.ButtonPressed = userPreferences.Fullscreen;

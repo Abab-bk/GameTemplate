@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using Game.App;
 using Game.Commons;
 using Game.Persistent.Models;
 using Godot;
@@ -8,17 +10,19 @@ using ZeroLog;
 
 namespace Game.Persistent;
 
-public partial class SaveManager(ISaveSystem saveSystem) : Node
+public partial class SaveManager(
+    string saveFolderPath,
+    ISaveSystem saveSystem
+) : Node
 {
     private const string FileExtension = ".bin";
     private const string UserPreferencesFileName = "UserPreferences";
     private const string GameSaveFilePrefix = "GameSave";
 
-    public event Action OnSaveGameSave = delegate { };
-    public event Action OnSaveGameSaveFinished = delegate { };
+    public event Action? OnSaveGameSave;
+    public event Action? OnSaveGameSaveFinished;
 
     private static Log Logger { get; } = LogManager.GetLogger<SaveManager>();
-    public static SaveManager Instance { get; private set; } = default!;
     public GameSave CurrentSave { get; private set; } = default!;
     public UserPreferences UserPreferences { get; private set; } = default!;
 
@@ -28,13 +32,14 @@ public partial class SaveManager(ISaveSystem saveSystem) : Node
     public override void _Ready()
     {
         base._Ready();
-        if (IsInstanceValid(Instance))
+        if (IsInstanceValid(Global.SaveManager))
         {
             Logger.Error("SaveManager already exists.");
+            QueueFree();
             return;
         }
 
-        Instance = this;
+        Global.SaveManager = this;
     }
 
     public async GDTask LoadUserPreferencesAsync()
@@ -62,7 +67,7 @@ public partial class SaveManager(ISaveSystem saveSystem) : Node
     {
         if ((DateTime.UtcNow - LastSaveTime).TotalSeconds < MinSaveIntervalSeconds)
         {
-            Logger.Info($"Save skipped: not enough time has passed since last save.");
+            Logger.Info("Save skipped: not enough time has passed since last save.");
             return;
         }
 
@@ -74,7 +79,7 @@ public partial class SaveManager(ISaveSystem saveSystem) : Node
     {
         if ((DateTime.UtcNow - LastSaveTime).TotalSeconds < MinSaveIntervalSeconds)
         {
-            Logger.Info($"Save skipped: not enough time has passed since last save.");
+            Logger.Info("Save skipped: not enough time has passed since last save.");
             return;
         }
 
@@ -84,10 +89,10 @@ public partial class SaveManager(ISaveSystem saveSystem) : Node
 
     public async GDTask SaveGameSaveAsync(string slotId)
     {
-        OnSaveGameSave();
+        OnSaveGameSave?.Invoke();
         await saveSystem.SaveAsync(GetSlotPath(GetGameSaveFileName(slotId)), CurrentSave);
-        OnSaveGameSaveFinished();
-        Logger.Info($"GameSave saved.");
+        OnSaveGameSaveFinished?.Invoke();
+        Logger.Info("GameSave saved.");
     }
 
     public async GDTask SaveUserPreferences()
@@ -97,7 +102,9 @@ public partial class SaveManager(ISaveSystem saveSystem) : Node
         Logger.Info($"UserPreferences saved: {UserPreferences.ToString()}");
     }
 
-    private async GDTask<T> LoadOrCreateAsync<T>(
+    private async GDTask<T> LoadOrCreateAsync<
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>
+    (
         string fileName,
         Func<T> createDefault,
         string slotId,
@@ -108,7 +115,7 @@ public partial class SaveManager(ISaveSystem saveSystem) : Node
 
         if (!File.Exists(filePath))
         {
-            Logger.Info($"{label} file not found for slot {slotId}. Create one.");
+            Logger.Info($"{label} file not found for slot {slotId} at {filePath}. Create one.");
             var defaultValue = createDefault();
             await saveSystem.SaveAsync(filePath, defaultValue);
             return defaultValue;
@@ -127,8 +134,18 @@ public partial class SaveManager(ISaveSystem saveSystem) : Node
 
     private string GetSlotPath(string fileName)
     {
-        if (!fileName.EndsWith(FileExtension, StringComparison.OrdinalIgnoreCase)) fileName += FileExtension;
-        return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName);
+        if (!fileName.EndsWith(FileExtension, StringComparison.OrdinalIgnoreCase))
+            fileName += FileExtension;
+
+        var fullPath = Path.Combine(saveFolderPath, fileName);
+        var directoryPath = Path.GetDirectoryName(fullPath)!;
+
+        if (Directory.Exists(directoryPath)) return fullPath;
+        
+        Directory.CreateDirectory(directoryPath);
+        Logger.Info($"Created save directory: {directoryPath}");
+        
+        return fullPath;
     }
 
     private string GetGameSaveFileName(string slotId)

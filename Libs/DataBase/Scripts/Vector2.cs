@@ -8,20 +8,19 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using System.Text.Json;
 
 
 namespace cfg
 {
 public partial struct Vector2
 {
-    public Vector2(JsonElement _buf) 
+    public Vector2(ByteBuf _buf) 
     {
-        X = _buf.GetProperty("x").GetSingle();
-        Y = _buf.GetProperty("y").GetSingle();
+        X = _buf.ReadFloat();
+        Y = _buf.ReadFloat();
     }
 
-    public static Vector2 DeserializeVector2(JsonElement _buf)
+    public static Vector2 DeserializeVector2(ByteBuf _buf)
     {
         return new Vector2(_buf);
     }

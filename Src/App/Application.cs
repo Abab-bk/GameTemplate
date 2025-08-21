@@ -1,7 +1,6 @@
 using System;
 using System.IO;
-using System.Linq;
-using AcidWallStudio;
+using Game.Extensions;
 using Game.Persistent;
 using Game.Ui;
 using GDPanelFramework;
@@ -38,14 +37,14 @@ public partial class Application : Node2D
     }
 
     private StateMachine<State, Trigger> _stateMachine = default!;
-    private Log _logger = default!;
+    private static Log _logger = default!;
 
     private PackedScene BootSplashScene { get; set; } = default!;
     private PackedScene StartMenuScene { get; set; } = default!;
 
     public override void _Ready()
     {
-        var formatter = new DefaultFormatter()
+        var formatter = new DefaultFormatter
         {
             PrefixPattern = "[%level] [%logger] "
         };
@@ -64,7 +63,9 @@ public partial class Application : Node2D
             }
         };
 
-        if (Environment.GetCommandLineArgs().Contains("--LogToFile"))
+        var launchConfig = LaunchConfig.Parse(Environment.GetCommandLineArgs());
+
+        if (launchConfig.LogToFile)
         {
             var dir = Path.Combine(
                 AppDomain.CurrentDomain.BaseDirectory,
@@ -91,13 +92,13 @@ public partial class Application : Node2D
 
         _stateMachine.Configure(State.InBootSplash)
             .Permit(Trigger.Next, State.InStartMenu)
-            .OnEntry(InBootSplash);
+            .OnEntry(() => InBootSplash(launchConfig));
 
         _stateMachine.Configure(State.InStartMenu)
             .Permit(Trigger.Next, State.InGame)
             .Permit(Trigger.ToEnd, State.End)
             .Permit(Trigger.ToGame, State.InGame)
-            .OnEntry(InStartMenu);
+            .OnEntry(() => InStartMenu(launchConfig));
 
         _stateMachine.Configure(State.InGame)
             .Permit(Trigger.ToEnd, State.End)
@@ -114,7 +115,7 @@ public partial class Application : Node2D
         _stateMachine.OnTransitionCompleted(transition =>
         {
             _logger.Info(
-                $"Transitioned from {transition.Source} to {transition.Destination}"
+                $"Transitioned from {transition.Source.ToString()} to {transition.Destination.ToString()}"
             );
         });
 
@@ -129,10 +130,15 @@ public partial class Application : Node2D
     private async GDTask Booting()
     {
         Global.Application = this;
-        AddChild(new SaveManager(new FileSaveSystem()));
+        AddChild(
+            new SaveManager(
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "saves"),
+                new FileSaveSystem()
+                )
+            );
 
-        await SaveManager.Instance.LoadUserPreferencesAsync();
-        SaveManager.Instance.ApplyUserPreferences();
+        await Global.SaveManager.LoadUserPreferencesAsync();
+        Global.SaveManager.ApplyUserPreferences();
 
         PanelManager.DefaultPanelTweener = new FadePanelTweener();
 
@@ -161,9 +167,9 @@ public partial class Application : Node2D
         _stateMachine.Fire(Trigger.ToStartMenu);
     }
 
-    private void InBootSplash()
+    private void InBootSplash(LaunchConfig launchConfig)
     {
-        if (Environment.GetCommandLineArgs().Contains("--SkipBootSplash"))
+        if (launchConfig.SkipBootSplash)
         {
             _logger.Info("Has --SkipBootSplash");
             Global.Flags.Add("SkippedBootSplash");
@@ -178,9 +184,9 @@ public partial class Application : Node2D
             );
     }
 
-    private void InStartMenu()
+    private void InStartMenu(LaunchConfig launchConfig)
     {
-        if (Environment.GetCommandLineArgs().Contains("--SkipStartMenu") &&
+        if (launchConfig.SkipStartMenu &&
             !Global.Flags.Contains("SkippedStartMenu"))
         {
             _logger.Info("Has --SkipStartMenu");

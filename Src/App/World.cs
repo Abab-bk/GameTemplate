@@ -1,4 +1,4 @@
-﻿using AcidWallStudio;
+﻿using Game.Extensions;
 using Game.Ui;
 using GDPanelFramework;
 using Godot;
@@ -17,7 +17,6 @@ public partial class World : Node2D
     public override void _Ready()
     {
         Global.World = this;
-        HudScene.CreatePanel<Hud>().OpenPanel();
 
 #if IMGUI
         AddChild(new Debugger());
@@ -26,6 +25,8 @@ public partial class World : Node2D
         Global.Game = new GameManager();
         Global.Game.NewGame();
 
+        HudScene.CreatePanel<Hud>().OpenPanel();
+        
         Logger.Info("Ready");
     }
 

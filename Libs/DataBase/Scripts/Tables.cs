@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using System.Text.Json;
 
 namespace cfg
 {
@@ -16,7 +15,7 @@ public partial class Tables
 {
     public TbConstants TbConstants {get; }
 
-    public Tables(System.Func<string, JsonElement> loader)
+    public Tables(System.Func<string, ByteBuf> loader)
     {
         TbConstants = new TbConstants(loader("tbconstants"));
         ResolveRef();

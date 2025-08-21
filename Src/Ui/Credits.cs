@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using System.Text.Json;
-using AcidWallStudio;
+using Game.Commons;
+using Game.Extensions;
 using GDPanelFramework.Panels;
 using Godot;
 using GodotTask;
@@ -18,8 +18,10 @@ public partial class Credits : UIPanel
 
     protected override void _OnPanelOpen()
     {
-        var data = JsonSerializer.Deserialize<Dictionary<string, string[]>>(
-            Wizard.ReadAllText("res://Assets/Credits.json"));
+        var data = JsonSerializer.Deserialize(
+            Wizard.ReadAllText("res://Assets/Credits.json"),
+            MyJsonContext.Default.DictionaryStringStringArray
+            );
 
         if (data != null)
             foreach (var keyPair in data)

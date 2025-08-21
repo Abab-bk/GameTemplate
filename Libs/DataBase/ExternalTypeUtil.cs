@@ -1,6 +1,4 @@
-﻿using Godot;
-
-namespace cfg;
+﻿namespace cfg;
 
 public static class ExternalTypeUtil
 {

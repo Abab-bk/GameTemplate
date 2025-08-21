@@ -1,5 +1,6 @@
 ﻿using System.Buffers;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using GodotTask;
 using MemoryPack;
@@ -16,7 +17,9 @@ public class FileSaveSystem : ISaveSystem
         throw new System.NotImplementedException();
     }
 
-    public async GDTask<T?> LoadAsync<T>(string filePath) where T : ISavableModel
+    public async GDTask<T?> LoadAsync<
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
+        T>(string filePath) where T : ISavableModel
     {
         await using var stream = new FileStream(filePath, FileMode.Open);
         Logger.Info($"Loading {filePath}");

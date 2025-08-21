@@ -4,8 +4,8 @@ set CONF_ROOT=.
 
 dotnet %LUBAN_DLL% ^
     -t all ^
-    -d json ^
-    -c cs-dotnet-json ^
+    -d bin ^
+    -c cs-bin ^
     --conf %CONF_ROOT%\Luban.conf ^
     -x outputDataDir=..\..\Libs\DataBase\Assets ^
     -x outputCodeDir=..\..\Libs\DataBase\Scripts

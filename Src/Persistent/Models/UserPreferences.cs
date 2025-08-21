@@ -8,7 +8,7 @@ namespace Game.Persistent.Models;
 [MemoryPackable]
 public partial class UserPreferences : ISavableModel
 {
-    public event Action TryApplyChanged = delegate { };
+    public event Action? OnTryApplyChanged;
 
     public Language Language { get; set; } = Language.English;
 
@@ -22,7 +22,7 @@ public partial class UserPreferences : ISavableModel
 
     public void Apply()
     {
-        TryApplyChanged?.Invoke();
+        OnTryApplyChanged?.Invoke();
     }
 
     public DisplayServer.VSyncMode GetVSyncMode()

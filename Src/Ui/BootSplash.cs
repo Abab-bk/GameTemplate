@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Text.Json;
-using AcidWallStudio;
+using Game.Commons;
+using Game.Extensions;
 using GDPanelFramework.Panels;
 using Godot;
 using GodotTask;
@@ -17,8 +18,10 @@ public partial class BootSplash : UIPanel
 
     private async GDTask Play()
     {
-        var data = JsonSerializer.Deserialize<Dictionary<string, string>>(
-            Wizard.ReadAllText("res://Assets/BootSplash.json"));
+        var data = JsonSerializer.Deserialize(
+            Wizard.ReadAllText("res://Assets/BootSplash.json"),
+            MyJsonContext.Default.DictionaryStringString
+            );
 
         if (data != null)
             foreach (var (_, value) in data)
