@@ -1,9 +1,9 @@
 ﻿using System;
-using MemoryPack;
+using MessagePack;
 
 namespace Game.Persistent.Models;
 
-[MemoryPackable]
+[MessagePackObject(true)]
 public partial class GameSave : ISavableModel
 {
     public event Action? OnTryApplyChanged;

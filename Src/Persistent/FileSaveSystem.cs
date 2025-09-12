@@ -1,9 +1,8 @@
-﻿using System.Buffers;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using GodotTask;
-using MemoryPack;
+using MessagePack;
 using ZeroLog;
 
 namespace Game.Persistent;
@@ -23,15 +22,14 @@ public class FileSaveSystem : ISaveSystem
     {
         await using var stream = new FileStream(filePath, FileMode.Open);
         Logger.Info($"Loading {filePath}");
-        return await MemoryPackSerializer.DeserializeAsync<T>(stream);
+        return await MessagePackSerializer.DeserializeAsync<T>(stream);
     }
 
     public async GDTask SaveAsync<T>(string filePath, T data) where T : ISavableModel
     {
-        var writer = new ArrayBufferWriter<byte>();
-        MemoryPackSerializer.Serialize(in writer, in data);
+        var bytes = MessagePackSerializer.Serialize(data);
         Logger.Info($"Saving {filePath}");
-        await File.WriteAllBytesAsync(filePath, writer.WrittenMemory.ToArray());
+        await File.WriteAllBytesAsync(filePath, bytes);
     }
 
     public GDTask DeleteAsync(string filePath)

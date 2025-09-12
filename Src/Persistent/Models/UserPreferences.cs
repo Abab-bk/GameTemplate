@@ -1,12 +1,12 @@
 ﻿using System;
 using Game.Commons;
 using Godot;
-using MemoryPack;
+using MessagePack;
 
 namespace Game.Persistent.Models;
 
-[MemoryPackable]
-public partial class UserPreferences : ISavableModel
+[MessagePackObject(true)]
+public class UserPreferences : ISavableModel
 {
     public event Action? OnTryApplyChanged;
 
@@ -18,7 +18,19 @@ public partial class UserPreferences : ISavableModel
 
     public bool Fullscreen { get; set; }
     public bool VSync { get; set; }
-    public Vector2I Resolution { get; set; } = new(1280, 720);
+    public int ResolutionX { get; set; } = 1280;
+    public int ResolutionY { get; set; } = 720;
+
+    [IgnoreMember]
+    public Vector2I Resolution
+    {
+        get => new(ResolutionX, ResolutionY);
+        set
+        {
+            ResolutionX = value.X;
+            ResolutionY = value.Y;
+        }
+    }
 
     public void Apply()
     {
