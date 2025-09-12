@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using Appccelerate.StateMachine;
+using Appccelerate.StateMachine.Machine;
 using Game.Extensions;
 using Game.Persistent;
 using Game.Ui;
@@ -7,7 +9,6 @@ using GDPanelFramework;
 using GDPanelFramework.Panels.Tweener;
 using Godot;
 using GodotTask;
-using Stateless;
 using ZeroLog;
 using ZeroLog.Appenders;
 using ZeroLog.Configuration;
@@ -20,7 +21,6 @@ public partial class Application : Node2D
 {
     private enum State
     {
-        Unknown,
         Booting,
         InBootSplash,
         InStartMenu,
@@ -36,7 +36,8 @@ public partial class Application : Node2D
         ToEnd
     }
 
-    private StateMachine<State, Trigger> _stateMachine = default!;
+    private PassiveStateMachine<State, Trigger> StateMachine { get; set; } = default!;
+
     private static Log _logger = default!;
 
     private PackedScene BootSplashScene { get; set; } = default!;
@@ -81,45 +82,65 @@ public partial class Application : Node2D
 
         _logger = LogManager.GetLogger<Application>();
 
-        _stateMachine = new StateMachine<State, Trigger>(State.Unknown);
+        var builder = new StateMachineDefinitionBuilder<State, Trigger>();
+        
+        builder.In(State.Booting)
+            .ExecuteOnEntry(() => Booting().Forget())
+            .On(Trigger.Next)
+            .Goto(State.InBootSplash);
 
-        _stateMachine.Configure(State.Unknown)
-            .Permit(Trigger.Next, State.Booting);
+        builder.In(State.InBootSplash)
+            .ExecuteOnEntry(() => InBootSplash(launchConfig))
+            .On(Trigger.Next)
+            .Goto(State.InStartMenu);
 
-        _stateMachine.Configure(State.Booting)
-            .Permit(Trigger.Next, State.InBootSplash)
-            .OnEntry(() => { Booting().Forget(); });
+        builder.In(State.InStartMenu)
+            .ExecuteOnEntry(() => InStartMenu(launchConfig))
+            .On(Trigger.Next)
+                .Goto(State.InGame)
+            .On(Trigger.ToEnd)
+                .Goto(State.End)
+            .On(Trigger.ToGame)
+                .Goto(State.InGame);
 
-        _stateMachine.Configure(State.InBootSplash)
-            .Permit(Trigger.Next, State.InStartMenu)
-            .OnEntry(() => InBootSplash(launchConfig));
+        builder.In(State.InGame)
+            .ExecuteOnEntry(InGame)
+            .On(Trigger.ToEnd)
+            .Goto(State.End)
+            .On(Trigger.ToStartMenu)
+            .Goto(State.InStartMenu);
 
-        _stateMachine.Configure(State.InStartMenu)
-            .Permit(Trigger.Next, State.InGame)
-            .Permit(Trigger.ToEnd, State.End)
-            .Permit(Trigger.ToGame, State.InGame)
-            .OnEntry(() => InStartMenu(launchConfig));
+        builder.In(State.End)
+            .ExecuteOnEntry(InEnd);
+        
+        builder.WithInitialState(State.Booting);
 
-        _stateMachine.Configure(State.InGame)
-            .Permit(Trigger.ToEnd, State.End)
-            .Permit(Trigger.ToStartMenu, State.InStartMenu)
-            .OnEntry(InGame);
-
-        _stateMachine.Configure(State.End)
-            .OnEntry(() =>
-            {
-                LogManager.Shutdown();
-                GetTree().Quit();
-            });
-
-        _stateMachine.OnTransitionCompleted(transition =>
+        StateMachine = builder.Build().CreatePassiveStateMachine();
+        
+        StateMachine.TransitionCompleted += (_, transition) =>
         {
             _logger.Info(
-                $"Transitioned from {transition.Source.ToString()} to {transition.Destination.ToString()}"
+                $"Transitioned from {transition.StateId.ToString()} to {transition.NewStateId.ToString()}"
             );
-        });
+        };
+        
+        StateMachine.Start();
+    }
 
-        _stateMachine.Fire(Trigger.Next);
+    private void InEnd()
+    {
+        GetTree().Root.PropagateNotification((int)NotificationWMCloseRequest);
+    }
+
+    public override void _Notification(int what)
+    {
+        base._Notification(what);
+        if (what != NotificationWMCloseRequest) return;
+        
+        LogManager.Shutdown();
+        Global.World.Destroy();
+        
+        GetTree().Quit();
     }
 
     private void InGame()
@@ -146,25 +167,25 @@ public partial class Application : Node2D
         StartMenuScene = Wizard.LoadPackedScene(StartMenu.TscnFilePath);
 
         AddChild(new SoundsManager());
-
-        await _stateMachine.FireAsync(Trigger.Next);
+        
+        StateMachine.Fire(Trigger.Next);
     }
 
     public void Quit()
     {
-        _stateMachine.Fire(Trigger.ToEnd);
+        StateMachine.Fire(Trigger.ToEnd);
     }
 
     public void StartGame()
     {
-        _stateMachine.Fire(Trigger.ToGame);
+        StateMachine.Fire(Trigger.ToGame);
     }
 
     public void BackToStartMenu()
     {
         if (IsInstanceValid(Global.World)) Global.World.Destroy();
         if (IsInstanceValid(Global.Hud)) Global.Hud.Close();
-        _stateMachine.Fire(Trigger.ToStartMenu);
+        StateMachine.Fire(Trigger.ToStartMenu);
     }
 
     private void InBootSplash(LaunchConfig launchConfig)
@@ -173,14 +194,14 @@ public partial class Application : Node2D
         {
             _logger.Info("Has --SkipBootSplash");
             Global.Flags.Add("SkippedBootSplash");
-            _stateMachine.Fire(Trigger.Next);
+            StateMachine.Fire(Trigger.Next);
             return;
         }
 
         BootSplashScene
             .CreatePanel<BootSplash>()
             .OpenPanel(
-                () => { _stateMachine.Fire(Trigger.Next); }
+                () => { StateMachine.Fire(Trigger.Next); }
             );
     }
 
@@ -191,7 +212,7 @@ public partial class Application : Node2D
         {
             _logger.Info("Has --SkipStartMenu");
             Global.Flags.Add("SkippedStartMenu");
-            _stateMachine.Fire(Trigger.Next);
+            StateMachine.Fire(Trigger.Next);
             return;
         }
 
