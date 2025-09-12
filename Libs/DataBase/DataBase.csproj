@@ -7,10 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Luban\Luban.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <Content Include="Assets\**\*.json"
                  CopyToOutputDirectory="PreserveNewest"/>
         <Content Include="Assets\**\*.bytes"
@@ -18,11 +14,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="DataExtensions\"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="GodotSharp" Version="4.4.1" />
+        <PackageReference Include="MasterMemory" Version="3.0.4" />
+        <PackageReference Include="VYaml" Version="1.2.0" />
     </ItemGroup>
 
 </Project>

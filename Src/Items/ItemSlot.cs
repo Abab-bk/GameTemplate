@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using cfg.Items;
+using DataBase;
 
 namespace Game.Items;
 

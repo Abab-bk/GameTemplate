@@ -1,23 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using cfg;
-using Luban;
+using DataBase;
+using Godot;
+using MasterMemory;
+using VYaml.Serialization;
+using ZeroLog;
 
 namespace Game.Commons;
 
 public static class Data
 {
-    public static readonly Tables Tables;
-    public static readonly TbConstants Constants;
+    private static Log Logger { get; } = LogManager.GetLogger("Data");
+    public static readonly MemoryDatabaseBase Tables;
 
     static Data()
     {
-        Tables = new Tables(file =>
-            new ByteBuf(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"Assets/{file}.bytes")))
-        );
-        Constants = Tables.TbConstants;
+        var builder = new DatabaseBuilder();
+        
+        builder.Append(GetDocumentsInFolder<ItemTemplate>("ItemTemplates"));
+        
+        Tables = new MemoryDatabase(builder.Build());
+    }
+    
+    private static IEnumerable<T> GetDocuments<T>(string fileName)
+    {
+        var path = $"res://Assets/Tables/{fileName}";
+        Logger.Info($"Loading {path}");
+        foreach (var document in YamlSerializer.DeserializeMultipleDocuments<T>(
+                     FileAccess.GetFileAsBytes(path)
+                 ))
+        {
+            yield return document;
+        }
+    }
+    
+    private static IEnumerable<T> GetDocumentsInFolder<T>(string folderName)
+    {
+        Logger.Info($"Loading {folderName}");
+        var files = DirAccess.GetFilesAt($"res://Assets/Tables/{folderName}/");
+        foreach (var file in files)
+        {
+            foreach (var document in GetDocuments<T>($"{folderName}/{file}"))
+            {
+                yield return document;
+            }
+        }
     }
 }
 

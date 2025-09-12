@@ -1,4 +1,4 @@
-﻿using cfg.Combat;
+﻿using DataBase;
 
 namespace Game.Combat;
 
