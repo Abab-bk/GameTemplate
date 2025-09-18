@@ -1,5 +1,6 @@
 using Game.App;
 using Game.Extensions;
+using Game.Persistent;
 using GDPanelFramework;
 using GDPanelFramework.Panels;
 using Godot;
@@ -22,9 +23,9 @@ public partial class StartMenu : UIPanel
         StartBtn.Pressed += () =>
         {
             ClosePanel();
-            Global.Application.StartGame();
+            Locator.Get<Application>().StartGame();
         };
-        ExitBtn.Pressed += Global.Application.Quit;
+        ExitBtn.Pressed += Locator.Get<Application>().Quit;
         CreditsBtn.Pressed += () => CreditsScene
             .CreatePanel<Credits>()
             .OpenPanel();
@@ -33,7 +34,7 @@ public partial class StartMenu : UIPanel
         {
             SettingsScene
                 .CreatePanel<Settings>()
-                .OpenPanel(Global.SaveManager);
+                .OpenPanel(Locator.Get<SaveManager>());
         };
     }
 

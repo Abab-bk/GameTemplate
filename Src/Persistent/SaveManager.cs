@@ -23,8 +23,8 @@ public partial class SaveManager(
     public event Action? OnSaveGameSaveFinished;
 
     private static Log Logger { get; } = LogManager.GetLogger<SaveManager>();
-    public GameSave CurrentSave { get; private set; } = default!;
-    public UserPreferences UserPreferences { get; private set; } = default!;
+    public GameSave CurrentSave { get; private set; } = null!;
+    public UserPreferences UserPreferences { get; private set; } = null!;
 
     private const float MinSaveIntervalSeconds = 5f;
     private DateTime LastSaveTime { get; set; } = DateTime.MinValue;
@@ -32,14 +32,14 @@ public partial class SaveManager(
     public override void _Ready()
     {
         base._Ready();
-        if (IsInstanceValid(Global.SaveManager))
+        if (!Locator.TryGet<SaveManager>(out _))
         {
-            Logger.Error("SaveManager already exists.");
-            QueueFree();
+            Locator.Register(this);
             return;
         }
 
-        Global.SaveManager = this;
+        Logger.Error("SaveManager already exists.");
+        QueueFree();
     }
 
     public async GDTask LoadUserPreferencesAsync()

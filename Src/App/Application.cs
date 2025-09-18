@@ -19,6 +19,9 @@ namespace Game.App;
 
 public partial class Application : Node2D
 {
+    private bool _isSkippingBootSplash;
+    private bool _isSkippingStartMenu;
+    
     private enum State
     {
         Booting,
@@ -64,9 +67,10 @@ public partial class Application : Node2D
             }
         };
 
-        Global.LaunchConfig = LaunchConfig.Parse(Environment.GetCommandLineArgs());
+        var launchConfig = LaunchConfig.Parse(Environment.GetCommandLineArgs());
+        Locator.Register(launchConfig);
 
-        if (Global.LaunchConfig.LogToFile)
+        if (launchConfig.LogToFile)
         {
             var dir = Path.Combine(
                 AppDomain.CurrentDomain.BaseDirectory,
@@ -90,12 +94,12 @@ public partial class Application : Node2D
             .Goto(State.InBootSplash);
 
         builder.In(State.InBootSplash)
-            .ExecuteOnEntry(() => InBootSplash(Global.LaunchConfig))
+            .ExecuteOnEntry(() => InBootSplash(Locator.Get<LaunchConfig>()))
             .On(Trigger.Next)
             .Goto(State.InStartMenu);
 
         builder.In(State.InStartMenu)
-            .ExecuteOnEntry(() => InStartMenu(Global.LaunchConfig))
+            .ExecuteOnEntry(() => InStartMenu(Locator.Get<LaunchConfig>()))
             .On(Trigger.Next)
             .Goto(State.InGame)
             .On(Trigger.ToEnd)
@@ -137,35 +141,37 @@ public partial class Application : Node2D
         if (what != NotificationWMCloseRequest) return;
 
         LogManager.Shutdown();
-        Global.World.Destroy();
+        Locator.Get<World>().Destroy();
 
         GetTree().Quit();
     }
 
     private void InGame()
     {
-        AddChild(Wizard.Instantiate<World>(World.TscnFilePath));
+        var world = Wizard.Instantiate<World>(World.TscnFilePath);
+        Locator.Register(world);
+        AddChild(world);
     }
 
     private async GDTask Booting()
     {
-        Global.Application = this;
-        AddChild(
-            new SaveManager(
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "saves"),
-                new FileSaveSystem()
-            )
+        Locator.Register(this);
+        var saveManager = new SaveManager(
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "saves"),
+            new FileSaveSystem()
         );
+        AddChild(saveManager);
 
-        await Global.SaveManager.LoadUserPreferencesAsync();
-        Global.SaveManager.ApplyUserPreferences();
+        await saveManager.LoadUserPreferencesAsync();
+        saveManager.ApplyUserPreferences();
 
         PanelManager.DefaultPanelTweener = new FadePanelTweener();
 
         BootSplashScene = Wizard.LoadPackedScene(BootSplash.TscnFilePath);
         StartMenuScene = Wizard.LoadPackedScene(StartMenu.TscnFilePath);
 
-        AddChild(new SoundsManager());
+        var soundsManager = new SoundsManager();
+        AddChild(soundsManager);
 
         StateMachine.Fire(Trigger.Next);
     }
@@ -182,8 +188,9 @@ public partial class Application : Node2D
 
     public void BackToStartMenu()
     {
-        if (IsInstanceValid(Global.World)) Global.World.Destroy();
-        if (IsInstanceValid(Global.Hud)) Global.Hud.Close();
+        var world = Locator.Get<World>();
+        if (IsInstanceValid(world)) world.Destroy();
+        if (IsInstanceValid(Locator.Get<Hud>())) Locator.Get<Hud>().Close();
         StateMachine.Fire(Trigger.ToStartMenu);
     }
 
@@ -192,7 +199,7 @@ public partial class Application : Node2D
         if (launchConfig.SkipBootSplash)
         {
             _logger.Info("Has --SkipBootSplash");
-            Global.Flags.Add("SkippedBootSplash");
+            _isSkippingBootSplash = true;
             StateMachine.Fire(Trigger.Next);
             return;
         }
@@ -206,10 +213,10 @@ public partial class Application : Node2D
     private void InStartMenu(LaunchConfig launchConfig)
     {
         if (launchConfig.SkipStartMenu &&
-            !Global.Flags.Contains("SkippedStartMenu"))
+            !_isSkippingStartMenu)
         {
             _logger.Info("Has --SkipStartMenu");
-            Global.Flags.Add("SkippedStartMenu");
+            _isSkippingStartMenu = true;
             StateMachine.Fire(Trigger.Next);
             return;
         }
@@ -217,5 +224,21 @@ public partial class Application : Node2D
         StartMenuScene
             .CreatePanel<StartMenu>()
             .OpenPanel();
+    }
+    
+    
+    private int _pauseCount;
+    public bool IsPaused => _pauseCount > 0;
+
+    public void TryPause()
+    {
+        _pauseCount++;
+        GetTree().Paused = _pauseCount > 0;
+    }
+
+    public void TryResume()
+    {
+        _pauseCount--;
+        GetTree().Paused = _pauseCount > 0;
     }
 }

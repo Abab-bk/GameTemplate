@@ -31,7 +31,7 @@ public partial class Hud : UIPanel
 
     protected override void _OnPanelOpen()
     {
-        Global.Hud = this;
+        Locator.Register(this);
     }
 
     protected override void _OnPanelClose()

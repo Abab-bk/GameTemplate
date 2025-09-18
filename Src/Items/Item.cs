@@ -5,7 +5,7 @@ namespace Game.Items;
 
 public class Item
 {
-    public required ItemTemplate Template { get; set; }
+    public required ItemTemplate Template { get; init; }
 
     public string GetIconPath()
     {

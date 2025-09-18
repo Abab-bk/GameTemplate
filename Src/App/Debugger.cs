@@ -18,7 +18,7 @@ public partial class Debugger : Node
     private void OnImGuiLayout()
     {
         ImGui.Begin("Debugger");
-        ImGui.Text($"Paused: {Global.IsPaused}");
+        ImGui.Text($"Paused: {Locator.Get<Application>().IsPaused}");
         ImGui.End();
     }
 #endif

@@ -11,15 +11,14 @@ public partial class SoundsManager : Node
 
     public override void _Ready()
     {
-        if (IsInstanceValid(Global.SoundsManager))
+        if (Locator.TryGet<SoundsManager>(out _))
         {
             Logger.Error("SoundsManager already exists.");
             QueueFree();
             return;
         }
 
-        Global.SoundsManager = this;
-
+        Locator.Register(this);
         UiSoundPlayer = new AudioStreamPlayer
         {
             Bus = "Sound"

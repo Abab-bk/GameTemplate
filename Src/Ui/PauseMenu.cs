@@ -1,5 +1,6 @@
 using Game.App;
 using Game.Extensions;
+using Game.Persistent;
 using GDPanelFramework;
 using GDPanelFramework.Panels;
 using Godot;
@@ -16,11 +17,11 @@ public partial class PauseMenu : UIPanel
         ResumeBtn.Pressed += ClosePanel;
         SettingsBtn.Pressed += OpenSettingsPanel;
         BackToStartMenuBtn.Pressed += BackToStartMenu;
-        ExitBtn.Pressed += Global.Application.Quit;
+        ExitBtn.Pressed += Locator.Get<Application>().Quit;
 
         EnableCloseWithCancelKey();
 
-        Global.TryPause();
+        Locator.Get<Application>().TryPause();
     }
 
     protected override void _OnPanelClose()
@@ -30,9 +31,9 @@ public partial class PauseMenu : UIPanel
         ResumeBtn.Pressed -= ClosePanel;
         SettingsBtn.Pressed -= OpenSettingsPanel;
         BackToStartMenuBtn.Pressed -= BackToStartMenu;
-        ExitBtn.Pressed -= Global.Application.Quit;
+        ExitBtn.Pressed -= Locator.Get<Application>().Quit;
 
-        Global.TryResume();
+        Locator.Get<Application>().TryResume();
 
         QueueFree();
     }
@@ -41,12 +42,12 @@ public partial class PauseMenu : UIPanel
     {
         Wizard.LoadPackedScene(Settings.TscnFilePath)
             .CreatePanel<Settings>()
-            .OpenPanel(Global.SaveManager);
+            .OpenPanel(Locator.Get<SaveManager>());
     }
 
     private void BackToStartMenu()
     {
         ClosePanel();
-        Global.Application.BackToStartMenu();
+        Locator.Get<Application>().BackToStartMenu();
     }
 }

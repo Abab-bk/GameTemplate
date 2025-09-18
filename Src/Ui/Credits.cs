@@ -26,9 +26,11 @@ public partial class Credits : UIPanel
         if (data != null)
             foreach (var keyPair in data)
             {
-                var item = Wizard.Instantiate<CreditItem>(CreditItem.TscnFilePath);
+                var item = CreditItem.Instantiate(
+                    keyPair.Key,
+                    keyPair.Value
+                    );
                 Items.AddChild(item);
-                item.Config(keyPair.Key, data[keyPair.Key]);
             }
 
         GDTask.Delay(2000).ContinueWith(() =>
