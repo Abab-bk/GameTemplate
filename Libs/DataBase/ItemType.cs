@@ -3,5 +3,4 @@
 [Flags]
 public enum ItemType
 {
-    
 }

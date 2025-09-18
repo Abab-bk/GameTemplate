@@ -73,11 +73,11 @@ public static partial class ImGuiGD
     /// <param name="glyphRanges">pointer to an array of ushorts terminated by 0</param>
     public static unsafe void AddFont(FontFile fontData, int fontSize, bool merge, nint glyphRanges)
     {
-        var p = (ushort*)glyphRanges;
-        var len = 1;
+        ushort* p = (ushort*)glyphRanges;
+        int len = 1;
         while (p[len++] != 0) ;
-        var gr = new ushort[len];
-        for (var i = 0; i < len; ++i)
+        ushort[] gr = new ushort[len];
+        for (int i = 0; i < len; ++i)
             gr[i] = p[i];
         _backend.AddFont(fontData, fontSize, merge, gr);
     }

@@ -21,7 +21,7 @@ public partial class BootSplash : UIPanel
         var data = JsonSerializer.Deserialize(
             Wizard.ReadAllText("res://Assets/BootSplash.json"),
             MyJsonContext.Default.DictionaryStringString
-            );
+        );
 
         if (data != null)
             foreach (var (_, value) in data)

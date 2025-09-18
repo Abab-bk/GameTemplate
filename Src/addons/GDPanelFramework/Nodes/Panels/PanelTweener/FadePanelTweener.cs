@@ -34,8 +34,7 @@ public class FadePanelTweener : IPanelTweener
             .Dispose();
         runningTween
             .TweenCallback(
-                Callable.From(
-                    () =>
+                Callable.From(() =>
                     {
                         if (onFinish != null) DelegateRunner.RunProtected(onFinish, "OnFinish", panel.Name, methodName);
                         if (!_activeTween.Remove(panel, out var tween)) return;

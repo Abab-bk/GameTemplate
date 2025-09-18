@@ -1,25 +1,26 @@
 using Game.Commons;
+using GDPanelFramework;
 using GDPanelFramework.Panels;
 using Godot;
 
 namespace Game.Ui;
 
 [SceneTree]
-public partial class Modal : UIPanel
+public partial class Modal : UIPanelArg<ModalConfig, Empty>
 {
-    public Modal Config(ModalConfig config)
+    protected override void _OnPanelOpen(ModalConfig config)
     {
         CancelBtn.Visible = config.OnCancel != null;
 
         ConfirmBtn.Pressed += () =>
         {
             config.OnConfirm?.Invoke();
-            QueueFree();
+            ClosePanel(Empty.Default);
         };
         CancelBtn.Pressed += () =>
         {
             config.OnCancel?.Invoke();
-            QueueFree();
+            ClosePanel(Empty.Default);
         };
 
         ConfirmBtn.Text = config.ConfirmText;
@@ -27,17 +28,11 @@ public partial class Modal : UIPanel
 
         TitleLabel.Text = config.Title;
         TextLabel.Text = config.Text;
-
-        return this;
     }
 
-    protected override void _OnPanelOpen()
+    protected override void _OnPanelClose(Empty closeArg)
     {
-    }
-
-    protected override void _OnPanelClose()
-    {
-        base._OnPanelClose();
+        base._OnPanelClose(closeArg);
         QueueFree();
     }
 }

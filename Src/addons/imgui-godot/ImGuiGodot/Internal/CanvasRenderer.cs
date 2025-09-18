@@ -21,25 +21,25 @@ internal sealed class CanvasRenderer : IRenderer
 
     public void InitViewport(Rid vprid)
     {
-        var canvas = RenderingServer.CanvasCreate();
-        var canvasItem = RenderingServer.CanvasItemCreate();
+        Rid canvas = RenderingServer.CanvasCreate();
+        Rid canvasItem = RenderingServer.CanvasItemCreate();
         RenderingServer.ViewportAttachCanvas(vprid, canvas);
         RenderingServer.CanvasItemSetParent(canvasItem, canvas);
 
         _vpData[vprid] = new ViewportData()
         {
             Canvas = canvas,
-            RootCanvasItem = canvasItem
+            RootCanvasItem = canvasItem,
         };
     }
 
     public void Render()
     {
         var pio = ImGui.GetPlatformIO();
-        for (var vpidx = 0; vpidx < pio.Viewports.Size; vpidx++)
+        for (int vpidx = 0; vpidx < pio.Viewports.Size; vpidx++)
         {
             var vp = pio.Viewports[vpidx];
-            var vprid = Util.ConstructRid((ulong)vp.RendererUserData);
+            Rid vprid = Util.ConstructRid((ulong)vp.RendererUserData);
 
             RenderOne(vprid, vp.DrawData);
         }
@@ -47,8 +47,8 @@ internal sealed class CanvasRenderer : IRenderer
 
     private void RenderOne(Rid vprid, ImDrawDataPtr drawData)
     {
-        var vd = _vpData[vprid];
-        var parent = vd.RootCanvasItem;
+        ViewportData vd = _vpData[vprid];
+        Rid parent = vd.RootCanvasItem;
 
         if (!_canvasItemPools.ContainsKey(parent))
             _canvasItemPools[parent] = [];
@@ -56,19 +56,21 @@ internal sealed class CanvasRenderer : IRenderer
         var children = _canvasItemPools[parent];
 
         // allocate our CanvasItem pool as needed
-        var neededNodes = 0;
-        for (var i = 0; i < drawData.CmdLists.Size; ++i)
+        int neededNodes = 0;
+        for (int i = 0; i < drawData.CmdLists.Size; ++i)
         {
             var cmdBuf = drawData.CmdLists[i].CmdBuffer;
             neededNodes += cmdBuf.Size;
-            for (var j = 0; j < cmdBuf.Size; ++j)
+            for (int j = 0; j < cmdBuf.Size; ++j)
+            {
                 if (cmdBuf[j].ElemCount == 0)
                     --neededNodes;
+            }
         }
 
         while (children.Count < neededNodes)
         {
-            var newChild = RenderingServer.CanvasItemCreate();
+            Rid newChild = RenderingServer.CanvasItemCreate();
             RenderingServer.CanvasItemSetParent(newChild, parent);
             RenderingServer.CanvasItemSetDrawIndex(newChild, children.Count);
             children.Add(newChild);
@@ -77,56 +79,61 @@ internal sealed class CanvasRenderer : IRenderer
         // trim unused nodes
         while (children.Count > neededNodes)
         {
-            var idx = children.Count - 1;
+            int idx = children.Count - 1;
             RenderingServer.FreeRid(children[idx]);
             children.RemoveAt(idx);
         }
 
         // render
         drawData.ScaleClipRects(ImGui.GetIO().DisplayFramebufferScale);
-        var nodeN = 0;
+        int nodeN = 0;
 
-        for (var n = 0; n < drawData.CmdLists.Size; ++n)
+        for (int n = 0; n < drawData.CmdLists.Size; ++n)
         {
-            var cmdList = drawData.CmdLists[n];
+            ImDrawListPtr cmdList = drawData.CmdLists[n];
 
-            var nVert = cmdList.VtxBuffer.Size;
+            int nVert = cmdList.VtxBuffer.Size;
 
             var vertices = new Vector2[nVert];
             var colors = new Color[nVert];
             var uvs = new Vector2[nVert];
 
-            for (var i = 0; i < cmdList.VtxBuffer.Size; ++i)
+            for (int i = 0; i < cmdList.VtxBuffer.Size; ++i)
             {
                 var v = cmdList.VtxBuffer[i];
-                vertices[i] = new Vector2(v.pos.X, v.pos.Y);
+                vertices[i] = new(v.pos.X, v.pos.Y);
                 // need to reverse the color bytes
-                var rgba = v.col;
-                var r = (rgba & 0xFFu) / 255f;
+                uint rgba = v.col;
+                float r = (rgba & 0xFFu) / 255f;
                 rgba >>= 8;
-                var g = (rgba & 0xFFu) / 255f;
+                float g = (rgba & 0xFFu) / 255f;
                 rgba >>= 8;
-                var b = (rgba & 0xFFu) / 255f;
+                float b = (rgba & 0xFFu) / 255f;
                 rgba >>= 8;
-                var a = (rgba & 0xFFu) / 255f;
-                colors[i] = new Color(r, g, b, a);
-                uvs[i] = new Vector2(v.uv.X, v.uv.Y);
+                float a = (rgba & 0xFFu) / 255f;
+                colors[i] = new(r, g, b, a);
+                uvs[i] = new(v.uv.X, v.uv.Y);
             }
 
-            for (var cmdi = 0; cmdi < cmdList.CmdBuffer.Size; ++cmdi)
+            for (int cmdi = 0; cmdi < cmdList.CmdBuffer.Size; ++cmdi)
             {
-                var drawCmd = cmdList.CmdBuffer[cmdi];
+                ImDrawCmdPtr drawCmd = cmdList.CmdBuffer[cmdi];
 
-                if (drawCmd.ElemCount == 0) continue;
+                if (drawCmd.ElemCount == 0)
+                {
+                    continue;
+                }
 
                 var indices = new int[drawCmd.ElemCount];
-                var idxOffset = drawCmd.IdxOffset;
+                uint idxOffset = drawCmd.IdxOffset;
                 for (uint i = idxOffset, j = 0; i < idxOffset + drawCmd.ElemCount; ++i, ++j)
+                {
                     indices[j] = cmdList.IdxBuffer[(int)i];
+                }
 
-                var cmdvertices = vertices;
-                var cmdcolors = colors;
-                var cmduvs = uvs;
+                Vector2[] cmdvertices = vertices;
+                Color[] cmdcolors = colors;
+                Vector2[] cmduvs = uvs;
                 if (drawCmd.VtxOffset > 0)
                 {
                     // this implementation of RendererHasVtxOffset is awful,
@@ -140,13 +147,15 @@ internal sealed class CanvasRenderer : IRenderer
                     Array.Copy(uvs, drawCmd.VtxOffset, cmduvs, 0, localSize);
                 }
 
-                var child = children[nodeN++];
+                Rid child = children[nodeN++];
 
-                var texrid = Util.ConstructRid((ulong)drawCmd.GetTexID());
+                Rid texrid = Util.ConstructRid((ulong)drawCmd.GetTexID());
                 RenderingServer.CanvasItemClear(child);
-                var xform = Transform2D.Identity;
+                Transform2D xform = Transform2D.Identity;
                 if (drawData.DisplayPos != System.Numerics.Vector2.Zero)
+                {
                     xform = xform.Translated(drawData.DisplayPos.ToVector2I()).Inverse();
+                }
                 RenderingServer.CanvasItemSetTransform(child, xform);
                 RenderingServer.CanvasItemSetClip(child, true);
                 RenderingServer.CanvasItemSetCustomRect(child, true, new Rect2(
@@ -172,7 +181,7 @@ internal sealed class CanvasRenderer : IRenderer
 
     public void CloseViewport(Rid vprid)
     {
-        var vd = _vpData[vprid];
+        ViewportData vd = _vpData[vprid];
         ClearCanvasItems(vd.RootCanvasItem);
         RenderingServer.FreeRid(vd.RootCanvasItem);
         RenderingServer.FreeRid(vd.Canvas);
@@ -186,7 +195,7 @@ internal sealed class CanvasRenderer : IRenderer
     public void Dispose()
     {
         ClearCanvasItems();
-        foreach (var vd in _vpData.Values)
+        foreach (ViewportData vd in _vpData.Values)
         {
             RenderingServer.FreeRid(vd.RootCanvasItem);
             RenderingServer.FreeRid(vd.Canvas);
@@ -195,12 +204,18 @@ internal sealed class CanvasRenderer : IRenderer
 
     private void ClearCanvasItems(Rid rootci)
     {
-        foreach (var ci in _canvasItemPools[rootci]) RenderingServer.FreeRid(ci);
+        foreach (Rid ci in _canvasItemPools[rootci])
+        {
+            RenderingServer.FreeRid(ci);
+        }
     }
 
     private void ClearCanvasItems()
     {
-        foreach (var parent in _canvasItemPools.Keys) ClearCanvasItems(parent);
+        foreach (Rid parent in _canvasItemPools.Keys)
+        {
+            ClearCanvasItems(parent);
+        }
         _canvasItemPools.Clear();
     }
 }

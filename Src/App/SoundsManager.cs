@@ -6,8 +6,8 @@ namespace Game.App;
 public partial class SoundsManager : Node
 {
     private static readonly Log Logger = LogManager.GetLogger<SoundsManager>();
-    
-    private AudioStreamPlayer UiSoundPlayer { get; set; } = default!;
+
+    private AudioStreamPlayer UiSoundPlayer { get; set; } = null!;
 
     public override void _Ready()
     {
@@ -20,7 +20,7 @@ public partial class SoundsManager : Node
 
         Global.SoundsManager = this;
 
-        UiSoundPlayer = new AudioStreamPlayer()
+        UiSoundPlayer = new AudioStreamPlayer
         {
             Bus = "Sound"
         };

@@ -5,6 +5,7 @@ using ImGuiNET;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+
 using SharedList = ImGuiGodot.Internal.DisposableList<Godot.Rid,
     ImGuiGodot.Internal.ClonedDrawData>;
 
@@ -22,14 +23,17 @@ internal sealed class ClonedDrawData : IDisposable
         long ddsize = Marshal.SizeOf<ImDrawData>();
 
         // start with a shallow copy
-        Data = new ImDrawDataPtr(ImGui.MemAlloc((uint)ddsize));
+        Data = new(ImGui.MemAlloc((uint)ddsize));
         Buffer.MemoryCopy(inp.NativePtr, Data.NativePtr, ddsize, ddsize);
 
         // clone the draw data
-        var numLists = inp.CmdLists.Size;
-        var cmdListPtrs = ImGui.MemAlloc((uint)(Marshal.SizeOf<IntPtr>() * numLists));
+        int numLists = inp.CmdLists.Size;
+        IntPtr cmdListPtrs = ImGui.MemAlloc((uint)(Marshal.SizeOf<IntPtr>() * numLists));
         Data.NativePtr->CmdLists = new ImVector(numLists, numLists, cmdListPtrs);
-        for (var i = 0; i < inp.CmdLists.Size; ++i) Data.CmdLists[i] = (IntPtr)inp.CmdLists[i].CloneOutput().NativePtr;
+        for (int i = 0; i < inp.CmdLists.Size; ++i)
+        {
+            Data.CmdLists[i] = (IntPtr)inp.CmdLists[i].CloneOutput().NativePtr;
+        }
     }
 
     public unsafe void Dispose()
@@ -37,25 +41,26 @@ internal sealed class ClonedDrawData : IDisposable
         if (Data.NativePtr == null)
             return;
 
-        for (var i = 0; i < Data.CmdListsCount; ++i) Data.CmdLists[i].Destroy();
+        for (int i = 0; i < Data.CmdListsCount; ++i)
+        {
+            Data.CmdLists[i].Destroy();
+        }
         Data.Destroy();
-        Data = new ImDrawDataPtr(null);
+        Data = new(null);
     }
 }
 
 internal sealed class DisposableList<T, U> : List<Tuple<T, U>>, IDisposable where U : IDisposable
 {
-    public DisposableList()
-    {
-    }
-
-    public DisposableList(int capacity) : base(capacity)
-    {
-    }
+    public DisposableList() { }
+    public DisposableList(int capacity) : base(capacity) { }
 
     public void Dispose()
     {
-        foreach (var (_, u) in this) u.Dispose();
+        foreach (var (_, u) in this)
+        {
+            u.Dispose();
+        }
         Clear();
     }
 }
@@ -70,14 +75,14 @@ internal sealed class RdRendererThreadSafe : RdRenderer, IRenderer
         var pio = ImGui.GetPlatformIO();
         var newData = new SharedList(pio.Viewports.Size);
 
-        for (var i = 0; i < pio.Viewports.Size; ++i)
+        for (int i = 0; i < pio.Viewports.Size; ++i)
         {
             var vp = pio.Viewports[i];
             if (vp.Flags.HasFlag(ImGuiViewportFlags.IsMinimized))
                 continue;
 
-            var vprid = Util.ConstructRid((ulong)vp.RendererUserData);
-            newData.Add(new Tuple<Rid, ClonedDrawData>(vprid, new ClonedDrawData(vp.DrawData)));
+            Rid vprid = Util.ConstructRid((ulong)vp.RendererUserData);
+            newData.Add(new(vprid, new(vp.DrawData)));
         }
 
         RenderingServer.CallOnRenderThread(Callable.From(() => DrawOnRenderThread(newData)));
@@ -87,7 +92,7 @@ internal sealed class RdRendererThreadSafe : RdRenderer, IRenderer
     {
         foreach (var (vprid, clone) in dataArray)
         {
-            var fb = GetFramebuffer(vprid);
+            Rid fb = GetFramebuffer(vprid);
             if (RD.FramebufferIsValid(fb))
             {
                 ReplaceTextureRids(clone.Data);

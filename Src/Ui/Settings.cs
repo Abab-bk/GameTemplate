@@ -11,11 +11,12 @@ namespace Game.Ui;
 [SceneTree]
 public partial class Settings : UIPanelArg<SaveManager, bool>
 {
-    private readonly Vector2I[] _resolutions = [
-    new Vector2I(1280, 720),
-    new Vector2I(1920, 1080)
+    private readonly Vector2I[] _resolutions =
+    [
+        new(1280, 720),
+        new(1920, 1080)
     ];
-    
+
     private void Close()
     {
         ClosePanel(true);
@@ -24,10 +25,7 @@ public partial class Settings : UIPanelArg<SaveManager, bool>
     protected override void _OnPanelOpen(SaveManager saveManager)
     {
         var languagePopupMenu = LanguageMenu.GetPopup();
-        foreach (var lang in Enum.GetValues<Language>())
-        {
-            languagePopupMenu.AddItem(lang.ToString(), (int)lang);
-        }
+        foreach (var lang in Enum.GetValues<Language>()) languagePopupMenu.AddItem(lang.ToString(), (int)lang);
 
         var resolutionPopupMenu = ResolutionMenu.GetPopup();
         foreach (var resolution in _resolutions)
@@ -39,7 +37,7 @@ public partial class Settings : UIPanelArg<SaveManager, bool>
         ConfirmBtn.Pressed += () =>
         {
             var userPreferences = saveManager.UserPreferences;
-            
+
             userPreferences.Language = (Language)Enum.Parse(
                 typeof(Language),
                 LanguageMenu.GetPopup().GetItemText(

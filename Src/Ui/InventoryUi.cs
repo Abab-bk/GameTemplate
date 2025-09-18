@@ -8,7 +8,7 @@ namespace Game.UI;
 public partial class InventoryUi : PanelContainer
 {
     public Inventory Inventory { get; private set; } = default!;
-    
+
     public void SetInventory(Inventory inventory)
     {
         Inventory = inventory;

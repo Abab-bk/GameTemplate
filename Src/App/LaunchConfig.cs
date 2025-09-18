@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Game.App;
 
-public record struct LaunchConfig(
+public record LaunchConfig(
     bool SkipStartMenu,
     bool SkipBootSplash,
     bool LogToFile
@@ -17,7 +17,9 @@ public record struct LaunchConfig(
             HasArg("--LogToFile")
         );
 
-        bool HasArg(string arg) =>
-            args.Any(a => a.Equals(arg, StringComparison.OrdinalIgnoreCase));
+        bool HasArg(string arg)
+        {
+            return args.Any(a => a.Equals(arg, StringComparison.OrdinalIgnoreCase));
+        }
     }
 }

@@ -27,14 +27,11 @@ internal class RdRenderer : IRenderer
     private readonly ArrayPool<byte> _bufPool = ArrayPool<byte>.Create();
 
     private Rid _idxBuffer;
-
     /// <summary>
     /// size in indices
     /// </summary>
     private int _idxBufferSize = 0;
-
     private Rid _vtxBuffer;
-
     /// <summary>
     /// size in vertices
     /// </summary>
@@ -43,7 +40,7 @@ internal class RdRenderer : IRenderer
     private readonly Dictionary<IntPtr, Rid> _uniformSets = new(8);
     private readonly HashSet<IntPtr> _usedTextures = new(8);
 
-    private readonly Rect2 _zeroRect = new(new Vector2(0f, 0f), new Vector2(0f, 0f));
+    private readonly Rect2 _zeroRect = new(new(0f, 0f), new(0f, 0f));
 #if !GODOT4_4_OR_GREATER
     private readonly Godot.Collections.Array<Rid> _storageTextures = [];
 #endif
@@ -68,7 +65,7 @@ internal class RdRenderer : IRenderer
             throw new RdRendererException("failed to create shader");
 
         // create vertex format
-        var vtxStride = (uint)Marshal.SizeOf<ImDrawVert>();
+        uint vtxStride = (uint)Marshal.SizeOf<ImDrawVert>();
 
         using RDVertexAttribute attrPoints = new()
         {
@@ -94,12 +91,10 @@ internal class RdRenderer : IRenderer
             Offset = sizeof(float) * 4
         };
 
-        var vattrs = new Godot.Collections.Array<RDVertexAttribute>()
-        {
+        var vattrs = new Godot.Collections.Array<RDVertexAttribute>() {
             attrPoints,
             attrUvs,
-            attrColors
-        };
+            attrColors };
         _vtxFormat = RD.VertexFormatCreate(vattrs);
 
         // blend state
@@ -113,12 +108,12 @@ internal class RdRenderer : IRenderer
 
             SrcAlphaBlendFactor = RenderingDevice.BlendFactor.One,
             DstAlphaBlendFactor = RenderingDevice.BlendFactor.OneMinusSrcAlpha,
-            AlphaBlendOp = RenderingDevice.BlendOperation.Add
+            AlphaBlendOp = RenderingDevice.BlendOperation.Add,
         };
 
         using var blendData = new RDPipelineColorBlendState
         {
-            BlendConstant = new Color(0, 0, 0, 0)
+            BlendConstant = new Color(0, 0, 0, 0),
         };
         blendData.Attachments.Add(bsa);
 
@@ -132,10 +127,10 @@ internal class RdRenderer : IRenderer
         {
             Format = RenderingDevice.DataFormat.R8G8B8A8Unorm,
             Samples = RenderingDevice.TextureSamples.Samples1,
-            UsageFlags = (uint)RenderingDevice.TextureUsageBits.ColorAttachmentBit
+            UsageFlags = (uint)RenderingDevice.TextureUsageBits.ColorAttachmentBit,
         };
 
-        var fbFormat = RD.FramebufferFormatCreate([af]);
+        long fbFormat = RD.FramebufferFormatCreate([af]);
 
         // pipeline
         _pipeline = RD.RenderPipelineCreate(
@@ -180,36 +175,36 @@ internal class RdRenderer : IRenderer
 
     private void SetupBuffers(ImDrawDataPtr drawData)
     {
-        var vertSize = Marshal.SizeOf<ImDrawVert>();
-        var globalIdxOffset = 0;
-        var globalVtxOffset = 0;
+        int vertSize = Marshal.SizeOf<ImDrawVert>();
+        int globalIdxOffset = 0;
+        int globalVtxOffset = 0;
 
-        var idxBufSize = drawData.TotalIdxCount * sizeof(ushort);
-        var idxBuf = _bufPool.Rent(idxBufSize);
+        int idxBufSize = drawData.TotalIdxCount * sizeof(ushort);
+        byte[] idxBuf = _bufPool.Rent(idxBufSize);
 
-        var vertBufSize = drawData.TotalVtxCount * vertSize;
-        var vertBuf = _bufPool.Rent(vertBufSize);
+        int vertBufSize = drawData.TotalVtxCount * vertSize;
+        byte[] vertBuf = _bufPool.Rent(vertBufSize);
 
-        for (var i = 0; i < drawData.CmdLists.Size; ++i)
+        for (int i = 0; i < drawData.CmdLists.Size; ++i)
         {
-            var cmdList = drawData.CmdLists[i];
+            ImDrawListPtr cmdList = drawData.CmdLists[i];
 
-            var vertBytes = cmdList.VtxBuffer.Size * vertSize;
+            int vertBytes = cmdList.VtxBuffer.Size * vertSize;
             Marshal.Copy(cmdList.VtxBuffer.Data, vertBuf, globalVtxOffset, vertBytes);
             globalVtxOffset += vertBytes;
 
-            var idxBytes = cmdList.IdxBuffer.Size * sizeof(ushort);
+            int idxBytes = cmdList.IdxBuffer.Size * sizeof(ushort);
             Marshal.Copy(cmdList.IdxBuffer.Data, idxBuf, globalIdxOffset, idxBytes);
             globalIdxOffset += idxBytes;
 
             // create a uniform set for each texture
-            for (var cmdi = 0; cmdi < cmdList.CmdBuffer.Size; ++cmdi)
+            for (int cmdi = 0; cmdi < cmdList.CmdBuffer.Size; ++cmdi)
             {
-                var drawCmd = cmdList.CmdBuffer[cmdi];
-                var texid = drawCmd.GetTexID();
+                ImDrawCmdPtr drawCmd = cmdList.CmdBuffer[cmdi];
+                IntPtr texid = drawCmd.GetTexID();
                 if (texid == IntPtr.Zero)
                     continue;
-                var texrid = Util.ConstructRid((ulong)texid);
+                Rid texrid = Util.ConstructRid((ulong)texid);
                 if (!RD.TextureIsValid(texrid))
                     continue;
 
@@ -228,7 +223,6 @@ internal class RdRenderer : IRenderer
                 }
             }
         }
-
         RD.BufferUpdate(_idxBuffer, 0, (uint)idxBufSize, idxBuf);
         _bufPool.Return(idxBuf);
         RD.BufferUpdate(_vtxBuffer, 0, (uint)vertBufSize, vertBuf);
@@ -237,12 +231,12 @@ internal class RdRenderer : IRenderer
 
     protected static void ReplaceTextureRids(ImDrawDataPtr drawData)
     {
-        for (var i = 0; i < drawData.CmdLists.Size; ++i)
+        for (int i = 0; i < drawData.CmdLists.Size; ++i)
         {
-            var cmdList = drawData.CmdLists[i];
-            for (var cmdi = 0; cmdi < cmdList.CmdBuffer.Size; ++cmdi)
+            ImDrawListPtr cmdList = drawData.CmdLists[i];
+            for (int cmdi = 0; cmdi < cmdList.CmdBuffer.Size; ++cmdi)
             {
-                var drawCmd = cmdList.CmdBuffer[cmdi];
+                ImDrawCmdPtr drawCmd = cmdList.CmdBuffer[cmdi];
                 drawCmd.TextureId = (IntPtr)RenderingServer.TextureGetRdTexture(
                     Util.ConstructRid((ulong)drawCmd.TextureId)).Id;
             }
@@ -252,30 +246,30 @@ internal class RdRenderer : IRenderer
     protected void FreeUnusedTextures()
     {
         // clean up unused textures
-        foreach (var texid in _uniformSets.Keys)
+        foreach (IntPtr texid in _uniformSets.Keys)
+        {
             if (!_usedTextures.Contains(texid))
             {
                 RD.FreeRid(_uniformSets[texid]);
                 _uniformSets.Remove(texid);
             }
-
+        }
         _usedTextures.Clear();
     }
 
     public void Render()
     {
         var pio = ImGui.GetPlatformIO();
-        for (var i = 0; i < pio.Viewports.Size; ++i)
+        for (int i = 0; i < pio.Viewports.Size; ++i)
         {
             var vp = pio.Viewports[i];
             if (!vp.Flags.HasFlag(ImGuiViewportFlags.IsMinimized))
             {
                 ReplaceTextureRids(vp.DrawData);
-                var vprid = Util.ConstructRid((ulong)vp.RendererUserData);
+                Rid vprid = Util.ConstructRid((ulong)vp.RendererUserData);
                 RenderOne(GetFramebuffer(vprid), vp.DrawData);
             }
         }
-
         FreeUnusedTextures();
     }
 
@@ -288,13 +282,13 @@ internal class RdRenderer : IRenderer
         if (!fb.IsValid)
             return;
 
-        var vertSize = Marshal.SizeOf<ImDrawVert>();
+        int vertSize = Marshal.SizeOf<ImDrawVert>();
 
         _scale[0] = 2.0f / drawData.DisplaySize.X;
         _scale[1] = 2.0f / drawData.DisplaySize.Y;
 
-        _translate[0] = -1.0f - drawData.DisplayPos.X * _scale[0];
-        _translate[1] = -1.0f - drawData.DisplayPos.Y * _scale[1];
+        _translate[0] = -1.0f - (drawData.DisplayPos.X * _scale[0]);
+        _translate[1] = -1.0f - (drawData.DisplayPos.Y * _scale[1]);
 
         Buffer.BlockCopy(_scale, 0, _pcbuf, 0, 8);
         Buffer.BlockCopy(_translate, 0, _pcbuf, 8, 8);
@@ -320,15 +314,17 @@ internal class RdRenderer : IRenderer
 
         // check if our font texture is still valid
         foreach (var (texid, uniformSetRid) in _uniformSets)
+        {
             if (!RD.UniformSetIsValid(uniformSetRid))
                 _uniformSets.Remove(texid);
+        }
 
         if (drawData.CmdListsCount > 0)
             SetupBuffers(drawData);
 
         // draw
 #if GODOT4_4_OR_GREATER
-        var dl = RD.DrawListBegin(
+        long dl = RD.DrawListBegin(
             fb,
             RenderingDevice.DrawFlags.ClearAll,
             _clearColors,
@@ -351,28 +347,28 @@ internal class RdRenderer : IRenderer
         RD.DrawListBindRenderPipeline(dl, _pipeline);
         RD.DrawListSetPushConstant(dl, _pcbuf, (uint)_pcbuf.Length);
 
-        var globalIdxOffset = 0;
-        var globalVtxOffset = 0;
-        for (var i = 0; i < drawData.CmdLists.Size; ++i)
+        int globalIdxOffset = 0;
+        int globalVtxOffset = 0;
+        for (int i = 0; i < drawData.CmdLists.Size; ++i)
         {
-            var cmdList = drawData.CmdLists[i];
+            ImDrawListPtr cmdList = drawData.CmdLists[i];
 
-            for (var cmdi = 0; cmdi < cmdList.CmdBuffer.Size; ++cmdi)
+            for (int cmdi = 0; cmdi < cmdList.CmdBuffer.Size; ++cmdi)
             {
-                var drawCmd = cmdList.CmdBuffer[cmdi];
+                ImDrawCmdPtr drawCmd = cmdList.CmdBuffer[cmdi];
                 if (drawCmd.ElemCount == 0)
                     continue;
                 if (!_uniformSets.ContainsKey(drawCmd.GetTexID()))
                     continue;
 
-                var idxArray = RD.IndexArrayCreate(_idxBuffer,
+                Rid idxArray = RD.IndexArrayCreate(_idxBuffer,
                     (uint)(drawCmd.IdxOffset + globalIdxOffset),
                     drawCmd.ElemCount);
 
-                var voff = (drawCmd.VtxOffset + globalVtxOffset) * vertSize;
+                long voff = (drawCmd.VtxOffset + globalVtxOffset) * vertSize;
                 _srcBuffers[0] = _srcBuffers[1] = _srcBuffers[2] = _vtxBuffer;
                 _vtxOffsets[0] = _vtxOffsets[1] = _vtxOffsets[2] = voff;
-                var vtxArray = RD.VertexArrayCreate(
+                Rid vtxArray = RD.VertexArrayCreate(
                     (uint)cmdList.VtxBuffer.Size,
                     _vtxFormat,
                     _srcBuffers,
@@ -395,11 +391,9 @@ internal class RdRenderer : IRenderer
                 RD.FreeRid(idxArray);
                 RD.FreeRid(vtxArray);
             }
-
             globalIdxOffset += cmdList.IdxBuffer.Size;
             globalVtxOffset += cmdList.VtxBuffer.Size;
         }
-
         RD.DrawListEnd();
 #if IMGUI_GODOT_DEV
         RD.DrawCommandEndLabel();
@@ -425,11 +419,13 @@ internal class RdRenderer : IRenderer
         if (!vprid.IsValid)
             return new Rid();
 
-        if (_framebuffers.TryGetValue(vprid, out var fb))
+        if (_framebuffers.TryGetValue(vprid, out Rid fb))
+        {
             if (RD.FramebufferIsValid(fb))
                 return fb;
+        }
 
-        var vptex = RenderingServer.TextureGetRdTexture(RenderingServer.ViewportGetTexture(vprid));
+        Rid vptex = RenderingServer.TextureGetRdTexture(RenderingServer.ViewportGetTexture(vprid));
         fb = RD.FramebufferCreate([vptex]);
         _framebuffers[vprid] = fb;
         return fb;

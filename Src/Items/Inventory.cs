@@ -68,10 +68,18 @@ public class Inventory : IItemContainer
         return true;
     }
 
-    public bool CanAddItem(Item item) => true;
+    public bool CanAddItem(Item item)
+    {
+        return true;
+    }
 
-    public bool HasItem(Item item) =>
-        Items.Any(i => i.Template == item.Template);
+    public bool HasItem(Item item)
+    {
+        return Items.Any(i => i.Template == item.Template);
+    }
 
-    public IEnumerable<Item> GetItems() => Items;
+    public IEnumerable<Item> GetItems()
+    {
+        return Items;
+    }
 }

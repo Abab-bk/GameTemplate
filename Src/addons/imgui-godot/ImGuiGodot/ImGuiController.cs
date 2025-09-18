@@ -2,7 +2,6 @@
 #nullable enable
 using Godot;
 using ImGuiNET;
-using Vector2 = System.Numerics.Vector2;
 
 namespace ImGuiGodot;
 
@@ -27,7 +26,7 @@ public partial class ImGuiController : Node
         {
             Internal.State.Instance.InProcessFrame = true;
             var vpSize = Internal.State.Instance.Layer.UpdateViewport();
-            Internal.State.Instance.Update(delta, new Vector2(vpSize.X, vpSize.Y));
+            Internal.State.Instance.Update(delta, new(vpSize.X, vpSize.Y));
         }
     }
 
@@ -38,13 +37,13 @@ public partial class ImGuiController : Node
 
         CheckContentScale();
 
-        var cfgPath = (string)ProjectSettings.GetSetting("addons/imgui/config", "");
+        string cfgPath = (string)ProjectSettings.GetSetting("addons/imgui/config", "");
         Resource? cfg = null;
         if (ResourceLoader.Exists(cfgPath))
         {
             cfg = ResourceLoader.Load(cfgPath);
-            var scale = (float)cfg.Get("Scale");
-            var cfgok = scale > 0.0f;
+            float scale = (float)cfg.Get("Scale");
+            bool cfgok = scale > 0.0f;
 
             if (!cfgok)
             {
@@ -58,7 +57,7 @@ public partial class ImGuiController : Node
         }
 
         Internal.State.Init(cfg ?? (Resource)((GDScript)GD.Load(
-            "res://addons/imgui-godot/scripts/ImGuiConfig.gd")).New());
+                "res://addons/imgui-godot/scripts/ImGuiConfig.gd")).New());
 
         _helper = new ImGuiControllerHelper();
         AddChild(_helper);
@@ -94,13 +93,15 @@ public partial class ImGuiController : Node
     {
         // an ImGuiLayer is being destroyed without calling SetMainViewport
         if (Internal.State.Instance.Layer.GetViewport() != _window)
+        {
             // revert to main window
             SetMainViewport(_window);
+        }
     }
 
     public void SetMainViewport(Viewport vp)
     {
-        var oldLayer = Internal.State.Instance.Layer;
+        ImGuiLayer? oldLayer = Internal.State.Instance.Layer;
         if (oldLayer != null)
         {
             oldLayer.TreeExiting -= OnLayerExiting;
@@ -118,7 +119,7 @@ public partial class ImGuiController : Node
             else
                 window.AddChild(newLayer);
             ImGui.GetIO().BackendFlags |= ImGuiBackendFlags.PlatformHasViewports
-                                          | ImGuiBackendFlags.HasMouseHoveredViewport;
+                | ImGuiBackendFlags.HasMouseHoveredViewport;
         }
         else if (vp is SubViewport svp)
         {
@@ -131,14 +132,15 @@ public partial class ImGuiController : Node
         {
             throw new System.ArgumentException("secret third kind of viewport??", nameof(vp));
         }
-
         Internal.State.Instance.Layer = newLayer;
     }
 
     private void CheckContentScale()
     {
         if (_window.ContentScaleMode == Window.ContentScaleModeEnum.Viewport)
+        {
             GD.PrintErr("imgui-godot: scale mode `viewport` is unsupported");
+        }
     }
 
     public static void WindowInputCallback(InputEvent evt)

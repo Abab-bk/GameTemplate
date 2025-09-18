@@ -47,8 +47,8 @@ internal sealed class BackendNet : IBackend
         if (State.Instance.InProcessFrame)
             throw new InvalidOperationException("fonts can't be changed during process");
 
-        var scaleToDpi = (bool)ProjectSettings.GetSetting("display/window/dpi/allow_hidpi");
-        var dpiFactor = Math.Max(1, DisplayServer.ScreenGetDpi() / 96);
+        bool scaleToDpi = (bool)ProjectSettings.GetSetting("display/window/dpi/allow_hidpi");
+        int dpiFactor = Math.Max(1, DisplayServer.ScreenGetDpi() / 96);
         State.Instance.Fonts.RebuildFontAtlas(scaleToDpi ? dpiFactor * Scale : Scale);
     }
 
@@ -84,7 +84,6 @@ internal sealed class BackendNet : IBackend
             State.Instance.Input.CurrentSubViewportPos = pos;
             return true;
         }
-
         return false;
     }
 }

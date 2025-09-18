@@ -2,4 +2,4 @@
 
 public record struct CombatContext(
     Attack Attack
-    );
+);

@@ -26,7 +26,7 @@ public partial class World : Node2D
         Global.Game.NewGame();
 
         HudScene.CreatePanel<Hud>().OpenPanel();
-        
+
         Logger.Info("Ready");
     }
 

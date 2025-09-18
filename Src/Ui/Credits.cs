@@ -21,7 +21,7 @@ public partial class Credits : UIPanel
         var data = JsonSerializer.Deserialize(
             Wizard.ReadAllText("res://Assets/Credits.json"),
             MyJsonContext.Default.DictionaryStringStringArray
-            );
+        );
 
         if (data != null)
             foreach (var keyPair in data)

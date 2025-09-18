@@ -103,7 +103,8 @@ public partial class SaveManager(
     }
 
     private async GDTask<T> LoadOrCreateAsync<
-        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
+        T>
     (
         string fileName,
         Func<T> createDefault,
@@ -141,10 +142,10 @@ public partial class SaveManager(
         var directoryPath = Path.GetDirectoryName(fullPath)!;
 
         if (Directory.Exists(directoryPath)) return fullPath;
-        
+
         Directory.CreateDirectory(directoryPath);
         Logger.Info($"Created save directory: {directoryPath}");
-        
+
         return fullPath;
     }
 

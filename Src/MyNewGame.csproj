@@ -1,4 +1,4 @@
-<Project Sdk="Godot.NET.Sdk/4.4.1">
+<Project Sdk="Godot.NET.Sdk/4.5.0">
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <EnableDynamicLoading>true</EnableDynamicLoading>
@@ -6,18 +6,14 @@
         <RootNamespace>Game</RootNamespace>
 
         <WarningsAsErrors>CS9057</WarningsAsErrors>
-
         <Nullable>enable</Nullable>
-
         <RestoreAdditionalProjectSources>../Libs/LocalPackages</RestoreAdditionalProjectSources>
-        
-        <PublishAot>true</PublishAot>
+
+        <DefineConstants>$(DefineConstants);GODOT_PC</DefineConstants>
     </PropertyGroup>
 
-    <PropertyGroup>
-        <DefineConstants
-                Condition="'$(Configuration)'!='ExportRelease' And
-        $(DefineConstants.Contains('GODOT_PC'))">$(DefineConstants);IMGUI</DefineConstants>
+    <PropertyGroup Condition="'$(Configuration)' != 'ExportRelease'">
+        <DefineConstants Condition="$(DefineConstants.Contains('GODOT_PC'))">$(DefineConstants);IMGUI</DefineConstants>
     </PropertyGroup>
 
     <Choose>
@@ -32,28 +28,24 @@
             </ItemGroup>
         </Otherwise>
     </Choose>
-
-    <ItemGroup>
-        <!-- Root the assemblies to avoid trimming. -->
-        <TrimmerRootAssembly Include="GodotSharp" />
-        <TrimmerRootAssembly Include="$(TargetName)" />
-    </ItemGroup>
     
     <ItemGroup>
         <ProjectReference Include="..\Libs\DataBase\DataBase.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Appccelerate.StateMachine" Version="6.0.0" />
-        <PackageReference Include="Chickensoft.GameTools" Version="2.0.37" />
+        <PackageReference Include="Appccelerate.StateMachine" Version="6.0.0"/>
+        <PackageReference Include="Chickensoft.GameTools" Version="2.0.37"/>
         <PackageReference Include="GDTask" Version="1.5.0"/>
-        <PackageReference Include="MasterMemory" Version="3.0.4" />
-        <PackageReference Include="NRandom" Version="2.0.1" />
+        <PackageReference Include="MasterMemory" Version="3.0.4"/>
+        <PackageReference Include="NRandom" Version="2.0.1"/>
 
         <PackageReference Include="GodotSharp.SourceGenerators" Version="2.6.0-250131-2115.Release"/>
 
-        <PackageReference Include="VYaml" Version="1.2.0" />
+        <PackageReference Include="VitalRouter" Version="1.7.0"/>
 
-        <PackageReference Include="ZeroLog" Version="2.3.0" />
+        <PackageReference Include="VYaml" Version="1.2.0"/>
+
+        <PackageReference Include="ZeroLog" Version="2.3.0"/>
     </ItemGroup>
 </Project>

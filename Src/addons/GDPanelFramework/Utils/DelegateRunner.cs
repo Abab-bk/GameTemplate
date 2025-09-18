@@ -6,7 +6,8 @@ namespace GDPanelFramework;
 internal static class DelegateRunner
 {
     internal static bool RunProtected<T>(Action<T>? call, in T arg, string actionName, string targetName,
-        [CallerArgumentExpression(nameof(call))] string? methodName = null)
+        [CallerArgumentExpression(nameof(call))]
+        string? methodName = null)
     {
         try
         {
@@ -21,7 +22,8 @@ internal static class DelegateRunner
     }
 
     internal static bool RunProtected(Action? call, string actionName, string targetName,
-        [CallerArgumentExpression(nameof(call))] string? methodName = null)
+        [CallerArgumentExpression(nameof(call))]
+        string? methodName = null)
     {
         try
         {

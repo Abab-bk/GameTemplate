@@ -66,44 +66,6 @@ public static class Wizard
         return path + list.PickRandom();
     }
 
-    public static Timer CreateTimer(float time)
-    {
-        var timer = new Timer();
-        timer.WaitTime = time;
-        return timer;
-    }
-
-    public static float GetTriangularSample(float max, float min, float mode)
-    {
-        var u = (float)Random.Shared.NextDouble();
-        var f = (mode - min) / (max - min);
-
-        if (u <= f)
-            return min + (float)Math.Sqrt(u * (max - min) * (mode - min));
-
-        return max - (float)Math.Sqrt((1 - u) * (max - min) * (max - mode));
-    }
-
-    public static Vector2 ReverseVectorX(Vector2 vector)
-    {
-        return new Vector2(-vector.X, vector.Y);
-    }
-
-    public static Vector2 ReverseVectorY(Vector2 vector)
-    {
-        return new Vector2(vector.X, -vector.Y);
-    }
-
-    public static Vector2 ReverseVector(Vector2 vector)
-    {
-        return new Vector2(-vector.X, -vector.Y);
-    }
-
-    public static Vector2 Reverse(this Vector2 vector)
-    {
-        return new Vector2(-vector.X, -vector.Y);
-    }
-
     public static float FloatRange(this Random random, float min = 0.0f, float max = 1.0f)
     {
         return (float)(random.NextDouble() * (max - min) + min);

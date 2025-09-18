@@ -9,15 +9,15 @@ public partial class ItemCellUi : PanelContainer
 {
     public Item Item { get; private set; } = default!;
     public IItemContainer ItemContainer { get; private set; } = default!;
-    
+
     private event Action OnClick = delegate { };
 
     public override void _Ready()
     {
         base._Ready();
-        
+
         Button.Pressed += OnClick.Invoke;
-        
+
         UpdateUi();
     }
 

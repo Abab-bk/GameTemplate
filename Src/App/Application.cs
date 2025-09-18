@@ -36,12 +36,12 @@ public partial class Application : Node2D
         ToEnd
     }
 
-    private PassiveStateMachine<State, Trigger> StateMachine { get; set; } = default!;
+    private PassiveStateMachine<State, Trigger> StateMachine { get; set; } = null!;
 
-    private static Log _logger = default!;
+    private static Log _logger = null!;
 
-    private PackedScene BootSplashScene { get; set; } = default!;
-    private PackedScene StartMenuScene { get; set; } = default!;
+    private PackedScene BootSplashScene { get; set; } = null!;
+    private PackedScene StartMenuScene { get; set; } = null!;
 
     public override void _Ready()
     {
@@ -56,7 +56,7 @@ public partial class Application : Node2D
             {
                 Appenders =
                 {
-                    new ConsoleAppender()
+                    new ConsoleAppender
                     {
                         Formatter = formatter
                     }
@@ -64,9 +64,9 @@ public partial class Application : Node2D
             }
         };
 
-        var launchConfig = LaunchConfig.Parse(Environment.GetCommandLineArgs());
+        Global.LaunchConfig = LaunchConfig.Parse(Environment.GetCommandLineArgs());
 
-        if (launchConfig.LogToFile)
+        if (Global.LaunchConfig.LogToFile)
         {
             var dir = Path.Combine(
                 AppDomain.CurrentDomain.BaseDirectory,
@@ -77,31 +77,31 @@ public partial class Application : Node2D
                 Formatter = formatter
             });
         }
-
+        
         LogManager.Initialize(logConfig);
 
         _logger = LogManager.GetLogger<Application>();
 
         var builder = new StateMachineDefinitionBuilder<State, Trigger>();
-        
+
         builder.In(State.Booting)
             .ExecuteOnEntry(() => Booting().Forget())
             .On(Trigger.Next)
             .Goto(State.InBootSplash);
 
         builder.In(State.InBootSplash)
-            .ExecuteOnEntry(() => InBootSplash(launchConfig))
+            .ExecuteOnEntry(() => InBootSplash(Global.LaunchConfig))
             .On(Trigger.Next)
             .Goto(State.InStartMenu);
 
         builder.In(State.InStartMenu)
-            .ExecuteOnEntry(() => InStartMenu(launchConfig))
+            .ExecuteOnEntry(() => InStartMenu(Global.LaunchConfig))
             .On(Trigger.Next)
-                .Goto(State.InGame)
+            .Goto(State.InGame)
             .On(Trigger.ToEnd)
-                .Goto(State.End)
+            .Goto(State.End)
             .On(Trigger.ToGame)
-                .Goto(State.InGame);
+            .Goto(State.InGame);
 
         builder.In(State.InGame)
             .ExecuteOnEntry(InGame)
@@ -110,20 +110,19 @@ public partial class Application : Node2D
             .On(Trigger.ToStartMenu)
             .Goto(State.InStartMenu);
 
-        builder.In(State.End)
-            .ExecuteOnEntry(InEnd);
-        
+        builder.In(State.End).ExecuteOnEntry(InEnd);
+
         builder.WithInitialState(State.Booting);
 
         StateMachine = builder.Build().CreatePassiveStateMachine();
-        
+
         StateMachine.TransitionCompleted += (_, transition) =>
         {
             _logger.Info(
                 $"Transitioned from {transition.StateId.ToString()} to {transition.NewStateId.ToString()}"
             );
         };
-        
+
         StateMachine.Start();
     }
 
@@ -136,10 +135,10 @@ public partial class Application : Node2D
     {
         base._Notification(what);
         if (what != NotificationWMCloseRequest) return;
-        
+
         LogManager.Shutdown();
         Global.World.Destroy();
-        
+
         GetTree().Quit();
     }
 
@@ -155,8 +154,8 @@ public partial class Application : Node2D
             new SaveManager(
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "saves"),
                 new FileSaveSystem()
-                )
-            );
+            )
+        );
 
         await Global.SaveManager.LoadUserPreferencesAsync();
         Global.SaveManager.ApplyUserPreferences();
@@ -167,7 +166,7 @@ public partial class Application : Node2D
         StartMenuScene = Wizard.LoadPackedScene(StartMenu.TscnFilePath);
 
         AddChild(new SoundsManager());
-        
+
         StateMachine.Fire(Trigger.Next);
     }
 
@@ -200,8 +199,7 @@ public partial class Application : Node2D
 
         BootSplashScene
             .CreatePanel<BootSplash>()
-            .OpenPanel(
-                () => { StateMachine.Fire(Trigger.Next); }
+            .OpenPanel(() => { StateMachine.Fire(Trigger.Next); }
             );
     }
 
