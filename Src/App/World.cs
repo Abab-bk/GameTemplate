@@ -30,6 +30,6 @@ public partial class World : Node2D
     public void Destroy()
     {
         Logger.Info("Destroy");
-        QueueFree();
+        if (IsInstanceValid(this)) QueueFree();
     }
 }
