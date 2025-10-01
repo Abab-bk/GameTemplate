@@ -8,6 +8,10 @@
 
 config_version=5
 
+[addons]
+
+imgui/config="uid://bn4aegyq0j2lx"
+
 [application]
 
 config/name="MyNewGame"
@@ -33,6 +37,7 @@ project/assembly_name="MyNewGame"
 
 [editor]
 
+run/main_run_args="--SkipStartMenu --SkipBootSplash"
 naming/scene_name_casing=1
 
 [editor_plugins]

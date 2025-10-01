@@ -30,7 +30,7 @@
     </Choose>
     
     <ItemGroup>
-        <ProjectReference Include="..\Libs\DataBase\DataBase.csproj"/>
+        <ProjectReference Include="..\Libs\Core\Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>

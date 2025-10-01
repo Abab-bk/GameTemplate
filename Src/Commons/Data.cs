@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using DataBase;
-using DataBase.Tables;
+using Core;
+using Core.Tables;
 using Godot;
 using MasterMemory;
 using VYaml.Serialization;

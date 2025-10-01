@@ -1,4 +1,4 @@
-﻿using DataBase.Items;
+﻿using Core.Items;
 using Godot;
 
 namespace Game.Items;

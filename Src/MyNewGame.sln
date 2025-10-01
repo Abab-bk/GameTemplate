@@ -2,7 +2,7 @@
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyNewGame", "MyNewGame.csproj", "{D42C9F8F-529A-4067-A9C1-A0EFD78209BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBase", "..\Libs\DataBase\DataBase.csproj", "{76D72D03-3E92-42EE-AA9B-E40886CF641A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "..\Libs\Core\Core.csproj", "{76D72D03-3E92-42EE-AA9B-E40886CF641A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

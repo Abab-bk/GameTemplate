@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ImGuiConfig" load_steps=5 format=3 uid="uid://bn4aegyq0j2lx"]
+
+[ext_resource type="FontFile" uid="uid://byb3m84un0y2c" path="res://Assets/Fonts/OppoSans4.ttf" id="1_7qk00"]
+[ext_resource type="Script" uid="uid://ddyycok8jw01x" path="res://addons/imgui-godot/scripts/ImGuiConfig.gd" id="1_k3y05"]
+[ext_resource type="Script" uid="uid://dvub1ch114gvx" path="res://addons/imgui-godot/scripts/ImGuiFont.gd" id="2_k376v"]
+
+[sub_resource type="Resource" id="Resource_5fveo"]
+script = ExtResource("2_k376v")
+FontData = ExtResource("1_7qk00")
+FontSize = 20
+metadata/_custom_type_script = "uid://dvub1ch114gvx"
+
+[resource]
+script = ExtResource("1_k3y05")
+Fonts = [SubResource("Resource_5fveo")]
+metadata/_custom_type_script = "uid://ddyycok8jw01x"

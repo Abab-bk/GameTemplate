@@ -1,6 +1,6 @@
 using Godot;
 using System;
-using DataBase.Items;
+using Core.Items;
 using Game.Items;
 
 namespace Game.UI;
