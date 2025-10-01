@@ -1,6 +1,4 @@
-﻿using DataBase;
-
-namespace Game.Combat;
+﻿namespace DataBase.Combat;
 
 public record struct Defense(
     DamageType Type,

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using DataBase;
+using DataBase.Tables;
 using Godot;
 using MasterMemory;
 using VYaml.Serialization;
@@ -10,7 +11,7 @@ namespace Game.Commons;
 
 public static class Data
 {
-    public static readonly MemoryDatabaseBase Tables;
+    public static readonly MemoryDatabase Tables;
 
     static Data()
     {

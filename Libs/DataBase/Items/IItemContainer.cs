@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Game.Items;
+﻿namespace DataBase.Items;
 
 public interface IItemContainer
 {

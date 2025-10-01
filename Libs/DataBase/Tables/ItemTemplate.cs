@@ -1,8 +1,9 @@
-﻿using MasterMemory;
+﻿using DataBase.Items;
+using MasterMemory;
 using MessagePack;
 using VYaml.Annotations;
 
-namespace DataBase;
+namespace DataBase.Tables;
 
 [YamlObject]
 [MemoryTable("ItemTemplates")]

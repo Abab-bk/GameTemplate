@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using DataBase;
-
-namespace Game.Items;
+﻿namespace DataBase.Items;
 
 public class ItemSlot : IItemContainer
 {

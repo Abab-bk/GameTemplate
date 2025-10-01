@@ -1,4 +1,4 @@
-﻿namespace Game.Items;
+﻿namespace DataBase.Items;
 
 public static class ItemTransfer
 {

@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace Game.Combat;
+﻿namespace DataBase.Combat;
 
 public readonly record struct ProcessedAttack(
     Damage[] DamageDone,

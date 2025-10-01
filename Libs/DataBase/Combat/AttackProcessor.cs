@@ -1,4 +1,4 @@
-﻿namespace Game.Combat;
+﻿namespace DataBase.Combat;
 
 public static class AttackProcessor
 {

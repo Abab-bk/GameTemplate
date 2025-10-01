@@ -1,5 +1,5 @@
 ﻿using System;
-using Game.Combat;
+using DataBase.Combat;
 using Godot;
 
 namespace Game.Commons;
